@@ -2,8 +2,11 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:38:03+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-23T03:38:57+02:00
+ * @Last modified time: 2017-07-23T05:14:27+02:00
  */
+
+#ifndef SHADER_HPP
+#define SHADER_HPP
 
 #include <string>
 #include <fstream>
@@ -27,3 +30,5 @@ private:
     GLuint      _fragmentID;
     GLuint      _programID;
 };
+
+#endif

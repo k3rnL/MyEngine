@@ -1,13 +1,14 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   danielb
-# @Last modified time: 2017-07-23T04:08:35+02:00
+# @Last modified time: 2017-07-23T05:13:18+02:00
 
 NAME 	=	MyEngine
 
 SRCS	=	main.cpp \
 				Window.cpp \
-				Shader.cpp
+				Shader.cpp \
+				Triangle.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
