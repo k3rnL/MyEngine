@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:22:41+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-23T05:21:41+02:00
+ * @Last modified time: 2017-07-23T06:25:57+02:00
  */
 
 #include "Window.hpp"
@@ -20,6 +20,7 @@ Window::Window(size_t width, size_t height, const std::string &title)
     if (!_window)
         throw std::exception();
     glfwMakeContextCurrent(_window);
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
         throw std::exception();
@@ -54,7 +55,19 @@ void Window::loop()
 
     glm::mat4 projection = glm::perspective<float>(45, (float) _width / (float) _height, 1.0, 100.0);
     glm::mat4 view = glm::lookAt(glm::vec3(4, 4, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-    glm::vec3 camPos(4, 4, 3);
+    glm::vec3 camPos(0, 0, 3);
+
+    float horizontalAngle = 3.14f;
+    // vertical angle : 0, look at the horizon
+    float verticalAngle = 0.0f;
+    // Initial Field of View
+    float initialFoV = 45.0f;
+
+    float speed = 4.f; // 3 units / second
+    float mouseSpeed = 0.005f;
+    double oldx = 0, oldy = 0;
+    glfwSetCursorPos(_window, 0, 0);
+
 
     clock_t current_tick, delta_tick;
     clock_t fps;
@@ -67,9 +80,19 @@ void Window::loop()
             glfwWindowShouldClose(_window) == 0)
             {
                 current_tick = clock();
+
                 glm::mat4 modelView(1.0);
                 // modelView = glm::translate(glm::vec3(0, 4, 0));
-                view = glm::lookAt(camPos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+                glm::vec3 direction(
+                    cos(verticalAngle) * sin(horizontalAngle),
+                    sin(verticalAngle),
+                    cos(verticalAngle) * cos(horizontalAngle));
+                glm::vec3 right = glm::vec3(
+                    sin(horizontalAngle - 3.14f/2.0f),
+                    0,
+                    cos(horizontalAngle - 3.14f/2.0f));
+                glm::vec3 up = glm::cross( right, direction );
+                view = glm::lookAt(camPos, camPos + direction, up);
                 modelView = projection * view * modelView;
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -96,10 +119,24 @@ void Window::loop()
                 if (glfwGetKey(_window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
                     triangle.position[1] -= 1. * (1.0 / fps);
 
+                double xpos = 0, ypos = 0;
+
+                glfwGetCursorPos(_window, &xpos, &ypos);
+                glfwSetCursorPos(_window, 0, 0);
+                // xpos = xpos - oldx;
+                // ypos = ypos - oldy;
+
+                horizontalAngle += mouseSpeed * (1. / fps) * xpos;
+                verticalAngle   += mouseSpeed * (1. / fps) * ypos;
+
+                if (xpos)
+                oldx = xpos;
+                oldy = oldy + ypos;
+
                 delta_tick = clock() - current_tick;
                 if (delta_tick > 0)
                     fps = CLOCKS_PER_SEC / delta_tick;
-                std::string title = "FPS: " + std::to_string(fps);
+                std::string title = "FPS: " + std::to_string(fps) + " x=" + std::to_string(oldx);
                 if (frame > (size_t) fps / 2)
                 {
                     frame = 0;
