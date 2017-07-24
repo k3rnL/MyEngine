@@ -2,7 +2,7 @@
 * @Author: danielb
 * @Date:   2017-07-22T23:22:41+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-24T01:08:20+02:00
+ * @Last modified time: 2017-07-24T03:01:09+02:00
 */
 
 #include "Window.hpp"
@@ -31,6 +31,36 @@ Window::Window(size_t width, size_t height, const std::string &title)
     }
     _width = width;
     _height = height;
+}
+
+bool            Window::pollEvent(SDL_Event &event)
+{
+    return (SDL_PollEvent(&event));
+}
+
+void            Window::flipScreen()
+{
+    SDL_GL_SwapWindow(_window);
+}
+
+const size_t    &Window::getWidth() {
+    return (_width);
+}
+
+const size_t    &Window::getHeight() {
+    return (_height);
+}
+
+void            Window::setTitle(const std::string &title)
+{
+    SDL_SetWindowTitle(_window, title.c_str());
+}
+
+void            Window::close()
+{
+    SDL_GL_DeleteContext(_context);
+    SDL_DestroyWindow(_window);
+    SDL_Quit();
 }
 
 void Window::loop()
@@ -74,7 +104,7 @@ void Window::loop()
     clock_t fps;
     size_t  frame = 0;
 
-    Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
+    mxe::scene::object::Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
 
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
     while (1)

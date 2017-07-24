@@ -2,11 +2,13 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-24T01:51:06+02:00
+ * @Last modified time: 2017-07-24T02:28:05+02:00
  */
 
 
 #include "Object.hpp"
+
+using namespace mxe::scene::object;
 
 Object::Object()
 {

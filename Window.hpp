@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:17:54+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-23T18:42:01+02:00
+ * @Last modified time: 2017-07-24T02:59:58+02:00
  */
 
 #ifndef WINDOW_HPP
@@ -26,6 +26,18 @@ public:
     Window(size_t width = 1280, size_t height = 720, const std::string &title = "My Window");
 
     void loop();
+
+    void                flipScreen();
+
+    bool                pollEvent(SDL_Event &event);
+
+    const size_t        &getWidth();
+    const size_t        &getHeight();
+
+    void                setTitle(const std::string &title);
+
+    void                close();
+
 private:
     SDL_Window         *_window;
     SDL_GLContext       _context;

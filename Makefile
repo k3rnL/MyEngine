@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   danielb
-# @Last modified time: 2017-07-24T01:54:02+02:00
+# @Last modified time: 2017-07-24T03:01:26+02:00
 
 NAME 	=	MyEngine
 
@@ -9,7 +9,8 @@ SRCS	=	main.cpp \
 				Window.cpp \
 				Shader.cpp \
 				Triangle.cpp \
-				Object.cpp
+				Object.cpp \
+				Renderer.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 

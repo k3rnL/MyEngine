@@ -2,11 +2,13 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-24T02:05:03+02:00
+ * @Last modified time: 2017-07-24T02:25:41+02:00
  */
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
+
+#include <list>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -34,6 +36,8 @@ namespace mxe {
                 GLuint      _buffer_id;
                 GLsizei     _buffer_size;
             };
+
+            typedef std::list<Object *> ObjectList;
 
         } // object
     } // scene
