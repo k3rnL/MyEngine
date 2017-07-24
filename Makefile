@@ -1,20 +1,21 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   danielb
-# @Last modified time: 2017-07-23T05:13:18+02:00
+# @Last modified time: 2017-07-24T01:54:02+02:00
 
 NAME 	=	MyEngine
 
 SRCS	=	main.cpp \
 				Window.cpp \
 				Shader.cpp \
-				Triangle.cpp
+				Triangle.cpp \
+				Object.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
 CPPFLAGS	=	-std=c++11 -g
 
-LDFLAGS		=	-lGL -lGLEW -lglfw
+LDFLAGS		=	-lSDL2 -lGL -lGLU -lGLEW
 
 all: $(NAME)
 

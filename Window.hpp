@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:17:54+02:00
  * @Last modified by:   danielb
- * @Last modified time: 2017-07-23T05:14:50+02:00
+ * @Last modified time: 2017-07-23T18:42:01+02:00
  */
 
 #ifndef WINDOW_HPP
@@ -12,7 +12,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
+#include <unistd.h>
 #include <exception>
 #include <string>
 
@@ -26,7 +27,8 @@ public:
 
     void loop();
 private:
-    GLFWwindow          *_window;
+    SDL_Window         *_window;
+    SDL_GLContext       _context;
     size_t              _width;
     size_t              _height;
 };
