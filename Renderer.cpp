@@ -60,12 +60,12 @@ void        Renderer::render(scene::object::ObjectList &objs)
 
     delta_tick = clock() - current_tick;
     if (delta_tick > 0)
-    fps = CLOCKS_PER_SEC / delta_tick;
-    if (frame > (size_t) fps / 2)
+      fps = CLOCKS_PER_SEC / delta_tick;
+    if (frame > 10)
     {
         frame = 0;
         std::string title = "FPS: " + std::to_string(fps);
-        // glfwSetWindowTitle(_window, title.c_str());
+        _window.setTitle(title);
     }
     frame++;
 }
