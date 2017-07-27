@@ -1,6 +1,6 @@
 # MyEngine
 
-Needed librairy: GLEW, GLFW, OpenGL.
+Needed librairy: GLEW, SDL2, OpenGL.
 Work on Linux.
 
 Simply make and execute ./MyEngine.
