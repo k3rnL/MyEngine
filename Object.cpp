@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:22:09+02:00
+ * @Last modified time: 2017-07-27T05:02:06+02:00
  */
 
 
@@ -28,9 +28,11 @@ Object::~Object()
 void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view)
 {
     glm::mat4   transform;
+    glm::quat   quat(rotation);
 
-    transform = glm::translate(position);
+    transform = glm::translate(position) * glm::toMat4(quat);
 
+    glUseProgram(_material.getShader().getProgram());
     // _material.applyMaterial(); // Also call glUseProgram()
 
     enableAttribute(_buffer_vertex_id, 0);
@@ -42,7 +44,7 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view)
 
     GLuint uniform_id;
 
-    glm::vec3 tmp2(100, 100, 10);
+    glm::vec3 tmp2(10, 10, 10);
     uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "light_pos");
     glUniform3fv(uniform_id, 1, &tmp2[0]);
 

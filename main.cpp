@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:23:47+02:00
+ * @Last modified time: 2017-07-27T05:03:25+02:00
  */
 
 #include "Window.hpp"
@@ -22,14 +22,17 @@ int main()
     float mouseSpeed = 0.05f;
     double oldx = 0, oldy = 0;
 
-    Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     Wavefront wavefront("Ressource/teapot.obj");
+    Wavefront wavefront2("Ressource/teapot.obj");
+    Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
 
     wavefront.position.y += 1;
+    wavefront.rotation.y += 90;
 
     objects.push_back(&triangle);
     objects.push_back(&wavefront);
+    objects.push_back(&wavefront2);
 
     while (1)
     {

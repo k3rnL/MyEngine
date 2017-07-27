@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:15:27+02:00
+ * @Last modified time: 2017-07-27T04:56:53+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -12,6 +12,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <GL/glew.h>
 
@@ -32,6 +34,7 @@ namespace mxe {
                 virtual void draw(const glm::mat4 &projection, const glm::mat4 &view);
 
                 glm::vec3   position;
+                glm::vec3   rotation;
 
             protected:
                 GLuint      _buffer_vertex_id;

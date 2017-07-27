@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:27:40+02:00
+ * @Last modified time: 2017-07-27T04:39:35+02:00
  */
 
 #include "Material.hpp"
