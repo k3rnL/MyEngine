@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
-# @Last modified by:   danielb
-# @Last modified time: 2017-07-24T03:01:26+02:00
+# @Last modified by:   daniel_b
+# @Last modified time: 2017-07-25T00:55:04+02:00
 
 NAME 	=	MyEngine
 
@@ -10,11 +10,13 @@ SRCS	=	main.cpp \
 				Shader.cpp \
 				Triangle.cpp \
 				Object.cpp \
-				Renderer.cpp
+				Renderer.cpp \
+				Material.cpp \
+				Scene/Object/Wavefront.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
-CPPFLAGS	=	-std=c++11 -g
+CPPFLAGS	=	-std=c++11 -I./ -g3
 
 LDFLAGS		=	-lSDL2 -lGL -lGLU -lGLEW
 

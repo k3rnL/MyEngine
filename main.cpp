@@ -1,14 +1,15 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
- * @Last modified by:   danielb
- * @Last modified time: 2017-07-24T02:58:40+02:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2017-07-27T01:53:38+02:00
  */
 
 #include "Window.hpp"
 #include "Renderer.hpp"
 #include "Object.hpp"
 #include "Triangle.hpp"
+#include "Scene/Object/Wavefront.hpp"
 
 using namespace mxe::scene::object;
 
@@ -21,31 +22,37 @@ int main()
     float mouseSpeed = 0.05f;
     double oldx = 0, oldy = 0;
 
+    Wavefront wavefront("Ressource/teapot.obj");
     Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
+    // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
+
+    wavefront.position.y += 1;
 
     objects.push_back(&triangle);
+    objects.push_back(&wavefront);
 
     while (1)
     {
         renderer.render(objects);
 
         SDL_Event event;
-        while (window.pollEvent(event))
+        // while (window.pollEvent(event))
+        window.pollEvent(event);
         {
             if (event.type == SDL_KEYDOWN)
             {
                 if (event.key.keysym.sym == SDLK_LEFT)
-                    renderer.camPos[0] -= 5. * (1.0 / renderer.fps);
+                    renderer.camPos[0] -= 25. * (1.0 / renderer.fps);
                 if (event.key.keysym.sym == SDLK_RIGHT)
-                    renderer.camPos[0] += 5. * (1.0 / renderer.fps);
+                    renderer.camPos[0] += 25. * (1.0 / renderer.fps);
                 if (event.key.keysym.sym == SDLK_UP)
-                    renderer.camPos[1] += 5. * (1.0 / renderer.fps);
+                    renderer.camPos[1] += 25. * (1.0 / renderer.fps);
                 if (event.key.keysym.sym == SDLK_DOWN)
-                    renderer.camPos[1] -= 5. * (1.0 / renderer.fps);
+                    renderer.camPos[1] -= 25. * (1.0 / renderer.fps);
                 if (event.key.keysym.sym == SDLK_PAGEDOWN)
-                    triangle.position[1] += 1. * (1.0 / renderer.fps);
+                    wavefront.position[1] += 11. * (1.0 / renderer.fps);
                 if (event.key.keysym.sym == SDLK_PAGEUP)
-                    triangle.position[1] -= 1. * (1.0 / renderer.fps);
+                    wavefront.position[1] -= 11. * (1.0 / renderer.fps);
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         window.close();

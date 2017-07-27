@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
- * @Last modified by:   danielb
- * @Last modified time: 2017-07-23T03:39:13+02:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2017-07-25T00:23:32+02:00
  */
 
 #include "Shader.hpp"
@@ -32,7 +32,6 @@ Shader::Shader(const std::string &vertex, const std::string &fragment)
         std::cerr << VertexShaderErrorMessage << "\n";
         throw std::exception();
     }
-    glUseProgram(_programID);
 }
 
 GLuint              Shader::compile(const std::string &source, GLenum type)

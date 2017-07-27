@@ -1,0 +1,34 @@
+/**
+ * @Author: daniel_b
+ * @Date:   2017-07-27T03:32:34+02:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2017-07-27T03:41:30+02:00
+ */
+
+
+
+#version 330 core
+
+in vec3 to_shade_vertex;
+
+uniform vec3 mat_color;
+uniform vec3 light_pos;
+
+out vec3 color;
+in vec3 normal;
+in vec3 vector_to_camera;
+
+void main(){
+
+  vec3 light_vector = normalize(light_pos - to_shade_vertex);
+
+  float angle = clamp(dot(light_vector, normalize(normal)), 0.0, 1.0);
+
+  color = mat_color * angle;
+
+  vec3 vector_light_reflected = reflect(-light_vector, normal);
+  angle = clamp(dot(vector_light_reflected, vector_to_camera), 0.0, 0.6);
+  angle = pow(1.5, angle);
+
+  color = color * angle;
+}
