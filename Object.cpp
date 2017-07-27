@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T03:42:43+02:00
+ * @Last modified time: 2017-07-27T04:22:09+02:00
  */
 
 
@@ -31,57 +31,37 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view)
 
     transform = glm::translate(position);
 
-    _material.applyMaterial(); // Also call glUseProgram()
+    // _material.applyMaterial(); // Also call glUseProgram()
 
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, _buffer_vertex_id);
-    glVertexAttribPointer(
-        0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-        3,                  // size
-        GL_FLOAT,           // type
-        GL_FALSE,           // normalized?
-        0,                  // stride
-        (void*)0            // array buffer offset
-        );
+    enableAttribute(_buffer_vertex_id, 0);
+    enableAttribute(_buffer_normal_id, 1);
 
-    // std::cout << "Array addres=" << glGetAttribLocation(_material.getShader().getProgram(), "vertex") << "\n";
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, _buffer_normal_id);
-    glVertexAttribPointer(
-        1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-        3,       // size
-        GL_FLOAT,           // type
-        GL_FALSE,           // normalized?
-        0,                  // stride
-        (void*)0            // array buffer offset
-        );
-
-    glm::mat4 tmp(1.);
-    glm::mat4 tmp1(1.);
-
-    tmp = transform;
+    _material.getShader().setUniformMatrix(projection, "projection");
+    _material.getShader().setUniformMatrix(view, "view");
+    _material.getShader().setUniformMatrix(transform, "model_view");
 
     GLuint uniform_id;
 
-    uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "projection");
-    glUniformMatrix4fv(uniform_id, 1, GL_FALSE, &projection[0][0]);
-
-    uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "view");
-    glUniformMatrix4fv(uniform_id, 1, GL_FALSE, &view[0][0]);
-
-    uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "model_view");
-    glUniformMatrix4fv(uniform_id, 1, GL_FALSE, &transform[0][0]);
-
     glm::vec3 tmp2(100, 100, 10);
-
     uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "light_pos");
     glUniform3fv(uniform_id, 1, &tmp2[0]);
-
-    // std::cout << "id=" << MatrixID << "\n";
-
 
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, _nb_vertex); // 3 indices starting at 0 -> 1 triangle
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+}
+
+void    Object::enableAttribute(GLuint buffer, GLuint attr)
+{
+  glEnableVertexAttribArray(attr);
+  glBindBuffer(GL_ARRAY_BUFFER, buffer);
+  glVertexAttribPointer(
+      attr,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+      3,                  // size
+      GL_FLOAT,           // type
+      GL_FALSE,           // normalized?
+      0,                  // stride
+      (void*)0            // array buffer offset
+      );
 }

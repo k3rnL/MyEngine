@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T01:41:17+02:00
+ * @Last modified time: 2017-07-27T04:15:27+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -41,6 +41,9 @@ namespace mxe {
                 size_t      _nb_vertex;
 
                 Material    _material;
+
+            private:
+              void          enableAttribute(GLuint buffer, GLuint attr);
             };
 
             typedef std::list<Object *> ObjectList;

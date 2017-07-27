@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T02:51:09+02:00
+ * @Last modified time: 2017-07-27T04:27:40+02:00
  */
 
 #include "Material.hpp"
@@ -12,14 +12,18 @@ using namespace mxe::scene::object;
 Material::Material()
 {
   _shader = new Shader("shader/basic_light.vert", "shader/basic_light.fragment");
+  std::cout << "material id = " << _shader->getProgram() << "\n";
 }
 
 void      Material::applyMaterial()
 {
   glUseProgram(_shader->getProgram());
+  std::cout << "material id = " << _shader->getProgram() << "\n";
 
   GLuint  attr_id = glGetUniformLocation(_shader->getProgram(), "mat_color");
   glUniform3fv(attr_id, 1, &_color[0]);
+
+  std::cout << "attr_id=" << attr_id << "\n";
 }
 
 Shader    &Material::getShader()

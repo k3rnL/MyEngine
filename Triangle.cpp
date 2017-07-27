@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T05:03:50+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T02:11:24+02:00
+ * @Last modified time: 2017-07-27T04:22:24+02:00
  */
 
 
@@ -30,7 +30,7 @@ Triangle::Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3
       n.x, n.y, n.z,
       n.x, n.y, n.z
     };
-    
+
     glGenBuffers(1, &_buffer_normal_id);
     glBindBuffer(GL_ARRAY_BUFFER, _buffer_normal_id);
     glBufferData(GL_ARRAY_BUFFER, sizeof (GLfloat) * 9, normals, GL_STATIC_DRAW);
@@ -40,4 +40,5 @@ Triangle::Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3
     _nb_vertex = 3;
 
     _material.setColor(0.5, 0., 1.);
+    _material.applyMaterial(); // Also call glUseProgram()
 }

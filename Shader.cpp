@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-25T00:23:32+02:00
+ * @Last modified time: 2017-07-27T04:00:58+02:00
  */
 
 #include "Shader.hpp"
@@ -32,6 +32,12 @@ Shader::Shader(const std::string &vertex, const std::string &fragment)
         std::cerr << VertexShaderErrorMessage << "\n";
         throw std::exception();
     }
+}
+
+void                Shader::setUniformMatrix(const glm::mat4 &matrix, const std::string &name)
+{
+  GLuint id = glGetUniformLocation(_programID, name.c_str());
+  glUniformMatrix4fv(id, 1, GL_FALSE, &matrix[0][0]);
 }
 
 GLuint              Shader::compile(const std::string &source, GLenum type)

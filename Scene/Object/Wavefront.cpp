@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T03:19:19+02:00
+ * @Last modified time: 2017-07-27T04:22:32+02:00
  */
 
 
@@ -89,6 +89,7 @@ Wavefront::Wavefront(const std::string &file)
   std::cout << "buffer normal = " << mesh_normal.size()   << "\n";
 
   _material.setColor(0.8, 1, 1);
+  _material.applyMaterial(); // Also call glUseProgram()
 }
 
 // void    Wavefront::draw(Shader &shader, const glm::mat4 &view)
