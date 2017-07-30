@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T01:43:29+02:00
+ * @Last modified time: 2017-07-30T22:30:20+02:00
  */
 
 
@@ -59,7 +59,7 @@ void        Renderer::render(scene::object::ObjectList &objs)
 
     for (auto obj : objs)
     {
-        obj->draw(projection, view);
+        obj->draw(projection, view, camPos);
     }
 
     _window.flipScreen();
@@ -70,7 +70,7 @@ void        Renderer::render(scene::object::ObjectList &objs)
     if (frame > 10)
     {
         frame = 0;
-        std::string title = "FPS: " + std::to_string(fps);
+        std::string title = "FPS: " + std::to_string(1. / fps);
         _window.setTitle(title);
     }
     frame++;

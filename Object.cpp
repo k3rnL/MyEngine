@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T05:02:06+02:00
+ * @Last modified time: 2017-07-30T20:49:29+02:00
  */
 
 
@@ -25,7 +25,7 @@ Object::~Object()
 
 }
 
-void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view)
+void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &cam_pos)
 {
     glm::mat4   transform;
     glm::quat   quat(rotation);
@@ -33,7 +33,6 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view)
     transform = glm::translate(position) * glm::toMat4(quat);
 
     glUseProgram(_material.getShader().getProgram());
-    // _material.applyMaterial(); // Also call glUseProgram()
 
     enableAttribute(_buffer_vertex_id, 0);
     enableAttribute(_buffer_normal_id, 1);
@@ -41,12 +40,15 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view)
     _material.getShader().setUniformMatrix(projection, "projection");
     _material.getShader().setUniformMatrix(view, "view");
     _material.getShader().setUniformMatrix(transform, "model_view");
+    _material.getShader().setUniformMatrix(glm::toMat4(quat), "model_rotation");
 
     GLuint uniform_id;
 
-    glm::vec3 tmp2(10, 10, 10);
+    glm::vec3 tmp2(0, 0, 10);
     uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "light_pos");
     glUniform3fv(uniform_id, 1, &tmp2[0]);
+
+    _material.getShader().setUniformVertex(cam_pos, "camera_position");
 
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, _nb_vertex); // 3 indices starting at 0 -> 1 triangle

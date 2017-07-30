@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T05:03:25+02:00
+ * @Last modified time: 2017-07-30T22:31:02+02:00
  */
 
 #include "Window.hpp"
@@ -27,6 +27,15 @@ int main()
     Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
 
+    for (int i = 0 ; i < 0 ; i++)
+    {
+      Wavefront *w = new Wavefront("Ressource/teapot.obj");
+      w->position[0] = rand() % 100 - 50;
+      w->position[1] = rand() % 100;
+      w->position[2] = rand() % 100 - 50;
+      objects.push_back(w);
+    }
+
     wavefront.position.y += 1;
     wavefront.rotation.y += 90;
 
@@ -39,7 +48,7 @@ int main()
         renderer.render(objects);
 
         SDL_Event event;
-        // while (window.pollEvent(event))
+        while (window.pollEvent(event))
         window.pollEvent(event);
         {
             if (event.type == SDL_KEYDOWN)

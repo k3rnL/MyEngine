@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:00:58+02:00
+ * @Last modified time: 2017-07-30T20:48:45+02:00
  */
 
 #include "Shader.hpp"
@@ -38,6 +38,12 @@ void                Shader::setUniformMatrix(const glm::mat4 &matrix, const std:
 {
   GLuint id = glGetUniformLocation(_programID, name.c_str());
   glUniformMatrix4fv(id, 1, GL_FALSE, &matrix[0][0]);
+}
+
+void                Shader::setUniformVertex(const glm::vec3 &vec, const std::string &name)
+{
+  GLuint id = glGetUniformLocation(_programID, name.c_str());
+  glUniform3fv(id, 1, &vec[0]);
 }
 
 GLuint              Shader::compile(const std::string &source, GLenum type)

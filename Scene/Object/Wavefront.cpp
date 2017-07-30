@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:22:32+02:00
+ * @Last modified time: 2017-07-29T17:24:41+02:00
  */
 
 
@@ -85,8 +85,6 @@ Wavefront::Wavefront(const std::string &file)
   _buffer_size = sizeof (glm::vec3) * mesh.size();
 
   _nb_vertex = mesh.size();
-
-  std::cout << "buffer normal = " << mesh_normal.size()   << "\n";
 
   _material.setColor(0.8, 1, 1);
   _material.applyMaterial(); // Also call glUseProgram()

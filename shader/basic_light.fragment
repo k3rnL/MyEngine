@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-27T03:32:34+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T03:41:30+02:00
+ * @Last modified time: 2017-07-30T20:32:03+02:00
  */
 
 
@@ -14,15 +14,19 @@ in vec3 to_shade_vertex;
 uniform vec3 mat_color;
 uniform vec3 light_pos;
 
+uniform mat4 model_rotation; // Camera view
+
 out vec3 color;
 in vec3 normal;
 in vec3 vector_to_camera;
 
 void main(){
 
-  vec3 light_vector = normalize(light_pos - to_shade_vertex);
+  vec3 light_vector = normalize((model_rotation * vec4(light_pos, 0)).xyz - to_shade_vertex);
 
-  float angle = clamp(dot(light_vector, normalize(normal)), 0.0, 1.0);
+  mat4 rot = model_rotation * model_rotation;
+  float angle = clamp(dot((model_rotation * vec4(light_vector, 0)).xyz, normalize(normal)), 0.0, 1.0);
+  // float angle = clamp(dot((rot * vec4(light_vector, 0)).xyz, normalize(normal)), 0.0, 1.0);
 
   color = mat_color * angle;
 

@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:56:53+02:00
+ * @Last modified time: 2017-07-30T20:43:08+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -31,7 +31,7 @@ namespace mxe {
 
                 virtual ~Object();
 
-                virtual void draw(const glm::mat4 &projection, const glm::mat4 &view);
+                virtual void draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &cam_pos);
 
                 glm::vec3   position;
                 glm::vec3   rotation;
