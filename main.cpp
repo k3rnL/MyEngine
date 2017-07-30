@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-30T23:45:55+02:00
+ * @Last modified time: 2017-07-31T01:08:20+02:00
  */
 
 #include "Window.hpp"
@@ -27,7 +27,7 @@ int main()
     Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
 
-    for (int i = 0 ; i < 0 ; i++)
+    for (int i = 0 ; i < 50 ; i++)
     {
       Wavefront *w = new Wavefront("Ressource/teapot.obj");
       w->position[0] = rand() % 100 - 50;
@@ -48,6 +48,8 @@ int main()
         renderer.render(objects);
 
         float   move_handle = 1. / renderer.fps.getFrameRate();
+
+        wavefront.rotation.y += 1 * move_handle;
 
         SDL_Event event;
         while (window.pollEvent(event))

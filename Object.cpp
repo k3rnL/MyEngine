@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-30T20:49:29+02:00
+ * @Last modified time: 2017-07-31T01:10:49+02:00
  */
 
 
@@ -48,8 +48,9 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view,
     uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "light_pos");
     glUniform3fv(uniform_id, 1, &tmp2[0]);
 
-    _material.getShader().setUniformVertex(cam_pos, "camera_position");
-
+    uniform_id = glGetUniformLocation(_material.getShader().getProgram(), "camera_position");
+    glUniform3fv(uniform_id, 1, &cam_pos[0]);
+    // _material.getShader().setUniformVertex(cam_pos, "camera_position");
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, _nb_vertex); // 3 indices starting at 0 -> 1 triangle
     glDisableVertexAttribArray(0);

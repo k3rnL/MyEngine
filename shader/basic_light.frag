@@ -15,24 +15,28 @@ uniform vec3 mat_color;
 uniform vec3 light_pos;
 
 uniform mat4 model_rotation; // Camera view
+uniform mat4 model_view;
 
 out vec3 color;
-in vec3 normal;
+in vec3 normal_input;
 in vec3 vector_to_camera;
 
 void main(){
 
-  vec3 light_vector = normalize((model_rotation * vec4(light_pos, 0)).xyz - to_shade_vertex);
+  vec3 normal = mat3(model_view) * normal_input;
+
+  vec3 light_vector = normalize(light_pos - to_shade_vertex);
 
   mat4 rot = model_rotation * model_rotation;
-  float angle = clamp(dot((model_rotation * vec4(light_vector, 0)).xyz, normalize(normal)), 0.0, 1.0);
+  float angle = clamp(dot(light_vector, normalize(normal)), 0.0, 1.0);
   // float angle = clamp(dot((rot * vec4(light_vector, 0)).xyz, normalize(normal)), 0.0, 1.0);
 
   color = mat_color * angle;
 
-  vec3 vector_light_reflected = reflect(-light_vector, normal);
+  vec3 vector_light_reflected = normalize(reflect(-light_vector, normal));
   angle = clamp(dot(vector_light_reflected, vector_to_camera), 0.0, 0.6);
   angle = pow(1.5, angle);
 
   color = color * angle;
+  // color = 0.5 + 0.5 * normal;
 }
