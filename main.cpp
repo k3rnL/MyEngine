@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-30T22:31:02+02:00
+ * @Last modified time: 2017-07-30T23:45:55+02:00
  */
 
 #include "Window.hpp"
@@ -47,6 +47,8 @@ int main()
     {
         renderer.render(objects);
 
+        float   move_handle = 1. / renderer.fps.getFrameRate();
+
         SDL_Event event;
         while (window.pollEvent(event))
         window.pollEvent(event);
@@ -58,20 +60,22 @@ int main()
                 sin(renderer.verticalAngle),
                 cos(renderer.verticalAngle) * cos(renderer.horizontalAngle));
 
-                double speed = 25;
+                direction = glm::normalize(direction);
+
+                double speed = 5;
 
                 if (event.key.keysym.sym == SDLK_LEFT)
-                    renderer.horizontalAngle += speed * (1.0 / renderer.fps);
+                    renderer.horizontalAngle += speed * (move_handle);
                 if (event.key.keysym.sym == SDLK_RIGHT)
-                    renderer.horizontalAngle -= speed * (1.0 / renderer.fps);
+                    renderer.horizontalAngle -= speed * (move_handle);
                 if (event.key.keysym.sym == SDLK_PAGEDOWN)
-                  renderer.verticalAngle -= speed * (1.0 / renderer.fps);
+                  renderer.verticalAngle -= speed * (move_handle);
                 if (event.key.keysym.sym == SDLK_PAGEUP)
-                  renderer.verticalAngle += speed * (1.0 / renderer.fps);
+                  renderer.verticalAngle += speed * (move_handle);
                 if (event.key.keysym.sym == SDLK_UP)
-                    renderer.camPos += glm::vec3(speed) * direction * glm::vec3(1.0 / renderer.fps);
+                    renderer.camPos += glm::vec3(speed) * direction * glm::vec3(move_handle);
                 if (event.key.keysym.sym == SDLK_DOWN)
-                  renderer.camPos -= glm::vec3(speed) * direction * glm::vec3(1.0 / renderer.fps);
+                  renderer.camPos -= glm::vec3(speed) * direction * glm::vec3(move_handle);
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         window.close();
@@ -94,10 +98,10 @@ int main()
                     xpos = oldx - event.motion.xrel;
 
                 std::cout << "xpos = " << xpos << " read pos: " << event.motion.x << " increase angle by " <<
-                mouseSpeed * (1. / renderer.fps) * xpos << std::endl;
+                mouseSpeed * (move_handle) * xpos << std::endl;
 
-                renderer.horizontalAngle += mouseSpeed * (1. / renderer.fps) * xpos;
-                renderer.verticalAngle   += mouseSpeed * (1. / renderer.fps) * ypos;
+                renderer.horizontalAngle += mouseSpeed * (move_handle) * xpos;
+                renderer.verticalAngle   += mouseSpeed * (move_handle) * ypos;
 
                 std::cout << "angle:" << renderer.horizontalAngle << std::endl;
 

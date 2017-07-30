@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-30T22:30:20+02:00
+ * @Last modified time: 2017-07-30T23:30:01+02:00
  */
 
 
@@ -36,8 +36,6 @@ Renderer::Renderer(Window &window) :
 
 void        Renderer::render(scene::object::ObjectList &objs)
 {
-    current_tick = clock();
-
     glm::mat4 modelView(1.0);
     // modelView = glm::translate(glm::vec3(0, 4, 0));
     glm::vec3 direction(
@@ -64,13 +62,11 @@ void        Renderer::render(scene::object::ObjectList &objs)
 
     _window.flipScreen();
 
-    delta_tick = clock() - current_tick;
-    if (delta_tick > 0)
-      fps = CLOCKS_PER_SEC / delta_tick;
+    fps.update();
     if (frame > 10)
     {
         frame = 0;
-        std::string title = "FPS: " + std::to_string(1. / fps);
+        std::string title = "FPS: " + std::to_string(fps.getFrameRate());
         _window.setTitle(title);
     }
     frame++;

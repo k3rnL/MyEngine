@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-24T02:18:04+02:00
- * @Last modified by:   danielb
- * @Last modified time: 2017-07-24T02:56:41+02:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2017-07-30T23:29:37+02:00
  */
 
 
@@ -14,6 +14,7 @@
 
 #include "Window.hpp"
 #include "Object.hpp"
+#include "Utils/FrameCounter.hpp"
 
 namespace mxe {
 
@@ -34,8 +35,7 @@ namespace mxe {
         // Initial Field of View
         float initialFoV = 45.0f;
 
-        clock_t current_tick, delta_tick;
-        clock_t fps;
+        utils::FrameCounter     fps;
         size_t  frame = 0;
 
         glm::mat4 projection;
