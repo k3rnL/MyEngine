@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-30T20:48:45+02:00
+ * @Last modified time: 2017-07-31T03:34:17+02:00
  */
 
 #include "Shader.hpp"

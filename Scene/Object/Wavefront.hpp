@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:30:23+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-25T14:13:54+02:00
+ * @Last modified time: 2017-07-31T03:22:47+02:00
  */
 
 
@@ -23,8 +23,6 @@ namespace mxe {
       {
       public:
         Wavefront(const std::string &file);
-
-        // virtual void  draw(Shader &shader, const glm::mat4 &view);
       };
 
     } // object
