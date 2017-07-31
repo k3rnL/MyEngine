@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T05:03:50+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-27T04:22:24+02:00
+ * @Last modified time: 2017-07-31T04:33:30+02:00
  */
 
 
@@ -11,7 +11,8 @@
 
 using namespace mxe::scene::object;
 
-Triangle::Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3)
+Triangle::Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3) :
+    _p1(v1), _p2(v2), _p3(v3)
 {
     GLfloat buffer_data[] = {
         v1.x, v1.y, v1.z,
@@ -41,4 +42,12 @@ Triangle::Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3
 
     _material.setColor(0.5, 0., 1.);
     _material.applyMaterial(); // Also call glUseProgram()
+
+}
+
+mxe::scene::INode           *Triangle::clone()
+{
+    mxe::scene::INode       *node = new Triangle(_p1, _p2, _p3);
+
+    return (node);
 }

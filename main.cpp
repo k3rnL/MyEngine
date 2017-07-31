@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T04:12:35+02:00
+ * @Last modified time: 2017-07-31T04:36:47+02:00
  */
 
 #include "Window.hpp"
@@ -52,7 +52,6 @@ int main()
 
         SDL_Event event;
         while (window.pollEvent(event))
-        window.pollEvent(event);
         {
             if (event.type == SDL_KEYDOWN)
             {

@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-23T04:58:34+02:00
- * @Last modified by:   danielb
- * @Last modified time: 2017-07-24T02:10:37+02:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2017-07-31T04:31:03+02:00
  */
 
 
@@ -26,6 +26,13 @@ namespace mxe {
             {
             public:
                 Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3);
+
+                virtual INode   *clone();
+
+            private:
+                const   glm::vec3   _p1;
+                const   glm::vec3   _p2;
+                const   glm::vec3   _p3;
             };
 
         } // object

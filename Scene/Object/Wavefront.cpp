@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T03:40:23+02:00
+ * @Last modified time: 2017-07-31T04:35:23+02:00
  */
 
 
@@ -11,25 +11,9 @@
 
 using namespace mxe::scene::object;
 
-static GLuint id1 = 0;
-static GLuint id2 = 0;
-static GLuint _size = 0;
-static GLuint vertex_nb = 0;
-
-Wavefront::Wavefront(const std::string &file)
+Wavefront::Wavefront(const std::string &file) :
+    _file_name(file)
 {
-    if (id1 && id2)
-    {
-        _buffer_vertex_id = id1;
-        _buffer_normal_id = id2;
-        _buffer_size = _size;
-        _nb_vertex = vertex_nb;
-
-        _material.setColor(0.8, 1, 1);
-        _material.applyMaterial(); // Also call glUseProgram()
-        return ;
-    }
-
   std::ifstream             file_stream(file);
   std::string               line;
 
@@ -103,43 +87,15 @@ Wavefront::Wavefront(const std::string &file)
 
   _nb_vertex = mesh.size();
 
-  if (!id1 && !id2)
-  {
-      id1 = _buffer_vertex_id;
-      id2 = _buffer_normal_id;
-      _size = _buffer_size;
-      vertex_nb = _nb_vertex;
-
-  }
-
   _material.setColor(0.8, 1, 1);
   _material.applyMaterial(); // Also call glUseProgram()
 }
 
-// void    Wavefront::draw(Shader &shader, const glm::mat4 &view)
-// {
-//   glm::mat4   transform;
-//
-//   transform *= glm::translate(position);
-//   transform *= view;
-//
-//   _material.applyMaterial(); // Also call glUseProgram()
-//
-//   glEnableVertexAttribArray(0);
-//   glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
-//   glVertexAttribPointer(
-//       0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-//       3,                  // size
-//       GL_FLOAT,           // type
-//       GL_FALSE,           // normalized?
-//       0,                  // stride
-//       (void*)0            // array buffer offset
-//       );
-//
-//   GLuint MatrixID = glGetUniformLocation(shader.getProgram(), "MVP");
-//   glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &transform[0][0]);
-//
-//   // Draw the triangle !
-//   glDrawArrays(GL_TRIANGLES, 0, _vertexes); // 3 indices starting at 0 -> 1 triangle
-//   glDisableVertexAttribArray(0);
-// }
+mxe::scene::INode       *Wavefront::clone()
+{
+    Wavefront           *node = new Wavefront(_file_name);
+
+    node->position = position;
+    node->rotation = rotation;
+    return (node);
+}
