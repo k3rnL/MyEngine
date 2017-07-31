@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T03:10:33+02:00
+ * @Last modified time: 2017-07-31T04:12:35+02:00
  */
 
 #include "Window.hpp"
@@ -19,15 +19,14 @@ int main()
     mxe::Renderer       renderer(window);
     ObjectList          objects;
     float speed = 4.f; // 3 units / second
-    float mouseSpeed = 0.05f;
-    double oldx = 0, oldy = 0;
+    float mouseSpeed = 1;
 
     Wavefront wavefront("Ressource/alduin.obj");
     Wavefront wavefront2("Ressource/teapot.obj");
     Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
 
-    for (int i = 0 ; i < 500 ; i++)
+    for (int i = 0 ; i < 5 ; i++)
     {
       Wavefront *w = new Wavefront("Ressource/alduin.obj");
       w->position[0] = rand() % 100 - 50;
@@ -64,8 +63,6 @@ int main()
 
                 direction = glm::normalize(direction);
 
-                double speed = 5;
-
                 if (event.key.keysym.sym == SDLK_LEFT)
                     renderer.horizontalAngle += speed * (move_handle);
                 if (event.key.keysym.sym == SDLK_RIGHT)
@@ -88,26 +85,10 @@ int main()
             if (event.type == SDL_MOUSEMOTION)
             {
                 int xpos = 0, ypos = 0;
+                SDL_GetRelativeMouseState(&xpos, &ypos);
 
-                // SDL_GetMouseState(&xpos, &ypos);
-                // xpos = _width / 2.0 - xpos;
-                // ypos = _width / 2.0 - ypos;
-                // ypos = ypos - oldy;
-                ypos = 0;
-
-                xpos = event.motion.xrel;
-                if (oldx != 0)
-                    xpos = oldx - event.motion.xrel;
-
-                std::cout << "xpos = " << xpos << " read pos: " << event.motion.x << " increase angle by " <<
-                mouseSpeed * (move_handle) * xpos << std::endl;
-
-                renderer.horizontalAngle += mouseSpeed * (move_handle) * xpos;
-                renderer.verticalAngle   += mouseSpeed * (move_handle) * ypos;
-
-                std::cout << "angle:" << renderer.horizontalAngle << std::endl;
-
-                oldx = oldx + xpos;
+                renderer.horizontalAngle += mouseSpeed * (move_handle) * -xpos;
+                renderer.verticalAngle   += mouseSpeed * (move_handle) * -ypos;
             }
         } // end event polling
     }

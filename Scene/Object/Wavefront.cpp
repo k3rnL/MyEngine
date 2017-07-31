@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-29T17:24:41+02:00
+ * @Last modified time: 2017-07-31T03:40:23+02:00
  */
 
 
@@ -11,8 +11,25 @@
 
 using namespace mxe::scene::object;
 
+static GLuint id1 = 0;
+static GLuint id2 = 0;
+static GLuint _size = 0;
+static GLuint vertex_nb = 0;
+
 Wavefront::Wavefront(const std::string &file)
 {
+    if (id1 && id2)
+    {
+        _buffer_vertex_id = id1;
+        _buffer_normal_id = id2;
+        _buffer_size = _size;
+        _nb_vertex = vertex_nb;
+
+        _material.setColor(0.8, 1, 1);
+        _material.applyMaterial(); // Also call glUseProgram()
+        return ;
+    }
+
   std::ifstream             file_stream(file);
   std::string               line;
 
@@ -85,6 +102,15 @@ Wavefront::Wavefront(const std::string &file)
   _buffer_size = sizeof (glm::vec3) * mesh.size();
 
   _nb_vertex = mesh.size();
+
+  if (!id1 && !id2)
+  {
+      id1 = _buffer_vertex_id;
+      id2 = _buffer_normal_id;
+      _size = _buffer_size;
+      vertex_nb = _nb_vertex;
+
+  }
 
   _material.setColor(0.8, 1, 1);
   _material.applyMaterial(); // Also call glUseProgram()
