@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:39:05+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T21:21:34+02:00
+ * @Last modified time: 2017-08-01T00:43:22+02:00
  */
 
 
@@ -15,6 +15,7 @@
 #include <string>
 
 #include "Scene/INode.hpp"
+#include "Scene/Object/Wavefront.hpp"
 
 namespace mxe {
     namespace scene {
@@ -22,10 +23,11 @@ namespace mxe {
         class SceneManager
         {
         public:
-            SceneManager() {}
+            SceneManager();
             ~SceneManager();
 
-            void    addWavefront(std::string const &file);
+            object::Wavefront    *addWavefront(std::string const &file);
+            object::Wavefront    *createWavefront(std::string const &file);
 
         private:
             std::map<std::string, INode *>     nodes_data;

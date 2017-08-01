@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T04:36:47+02:00
+ * @Last modified time: 2017-08-01T12:05:15+02:00
  */
 
 #include "Window.hpp"
@@ -10,35 +10,40 @@
 #include "Object.hpp"
 #include "Triangle.hpp"
 #include "Scene/Object/Wavefront.hpp"
+#include "Scene/SceneManager.hpp"
 
 using namespace mxe::scene::object;
 
 int main()
 {
-    Window              window;
-    mxe::Renderer       renderer(window);
-    ObjectList          objects;
+    Window                      window;
+    mxe::Renderer               renderer(window);
+    mxe::scene::SceneManager    scene;
+    ObjectList                  objects;
     float speed = 4.f; // 3 units / second
-    float mouseSpeed = 1;
+    float mouseSpeed = 0.25;
 
     Wavefront wavefront("Ressource/alduin.obj");
+    wavefront.getMaterial().setTexture("Ressource/alduin.bmp");
+
     Wavefront wavefront2("Ressource/teapot.obj");
-    Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
+    // Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
 
-    for (int i = 0 ; i < 5 ; i++)
+    for (int i = 0 ; i < 10 ; i++)
     {
-      Wavefront *w = new Wavefront("Ressource/alduin.obj");
+      Wavefront *w = scene.addWavefront("Ressource/alduin.obj");
       w->position[0] = rand() % 100 - 50;
       w->position[1] = rand() % 100;
       w->position[2] = rand() % 100 - 50;
+      w->getMaterial().setTexture("Ressource/alduin.bmp");
       objects.push_back(w);
     }
 
     wavefront.position.y += 1;
     wavefront.rotation.y += 90;
 
-    objects.push_back(&triangle);
+    // objects.push_back(&triangle);
     objects.push_back(&wavefront);
     objects.push_back(&wavefront2);
 
@@ -62,17 +67,17 @@ int main()
 
                 direction = glm::normalize(direction);
 
-                if (event.key.keysym.sym == SDLK_LEFT)
+                if (event.key.keysym.sym == SDLK_q)
                     renderer.horizontalAngle += speed * (move_handle);
-                if (event.key.keysym.sym == SDLK_RIGHT)
+                if (event.key.keysym.sym == SDLK_d)
                     renderer.horizontalAngle -= speed * (move_handle);
-                if (event.key.keysym.sym == SDLK_PAGEDOWN)
+                if (event.key.keysym.sym == SDLK_LSHIFT)
                   renderer.verticalAngle -= speed * (move_handle);
-                if (event.key.keysym.sym == SDLK_PAGEUP)
+                if (event.key.keysym.sym == SDLK_LCTRL)
                   renderer.verticalAngle += speed * (move_handle);
-                if (event.key.keysym.sym == SDLK_UP)
+                if (event.key.keysym.sym == SDLK_z)
                     renderer.camPos += glm::vec3(speed) * direction * glm::vec3(move_handle);
-                if (event.key.keysym.sym == SDLK_DOWN)
+                if (event.key.keysym.sym == SDLK_s)
                   renderer.camPos -= glm::vec3(speed) * direction * glm::vec3(move_handle);
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     {

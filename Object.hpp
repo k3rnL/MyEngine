@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T04:22:15+02:00
+ * @Last modified time: 2017-08-01T12:22:02+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -36,12 +36,12 @@ namespace mxe {
 
                 virtual INode   *clone() = 0;
 
-                glm::vec3       position;
-                glm::vec3       rotation;
+                Material        &getMaterial();
 
             protected:
                 GLuint          _buffer_vertex_id;
                 GLuint          _buffer_normal_id;
+                GLuint          _buffer_uv_id;
                 GLsizei         _buffer_size;
 
                 size_t          _nb_vertex;
@@ -49,7 +49,7 @@ namespace mxe {
                 Material        _material;
 
             private:
-              void              enableAttribute(GLuint buffer, GLuint attr);
+              void              enableAttribute(GLuint buffer, GLuint attr, GLuint size);
             };
 
             typedef std::list<Object *> ObjectList;

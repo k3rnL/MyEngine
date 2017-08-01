@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:30:23+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T04:25:58+02:00
+ * @Last modified time: 2017-08-01T00:39:08+02:00
  */
 
 
@@ -27,7 +27,7 @@ namespace mxe {
         virtual INode   *clone();
 
     private:
-        const   std::string     _file_name;
+        Wavefront();
       };
 
     } // object

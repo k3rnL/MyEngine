@@ -17,9 +17,12 @@ uniform vec3 light_pos;
 uniform mat4 model_rotation; // Camera view
 uniform mat4 model_view;
 
+uniform sampler2D diffuse_map;
+
 out vec3 color;
 in vec3 normal_input;
 in vec3 vector_to_camera;
+in vec2 uv;
 
 void main(){
 
@@ -32,6 +35,7 @@ void main(){
   // float angle = clamp(dot((rot * vec4(light_vector, 0)).xyz, normalize(normal)), 0.0, 1.0);
 
   color = mat_color * angle;
+  color = vec3(texture(diffuse_map, uv)) * angle;
 
   vec3 vector_light_reflected = normalize(reflect(-light_vector, normal));
   angle = clamp(dot(vector_light_reflected, vector_to_camera), 0.0, 0.6);

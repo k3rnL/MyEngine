@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-31T01:10:49+02:00
+ * @Last modified time: 2017-08-01T12:26:26+02:00
  */
 
 
@@ -14,6 +14,7 @@ Object::Object()
 {
     _buffer_vertex_id = 0;
     _buffer_normal_id = 0;
+    _buffer_uv_id = 0;
 }
 
 Object::~Object()
@@ -33,9 +34,11 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view,
     transform = glm::translate(position) * glm::toMat4(quat);
 
     glUseProgram(_material.getShader().getProgram());
+    _material.applyMaterial();
 
-    enableAttribute(_buffer_vertex_id, 0);
-    enableAttribute(_buffer_normal_id, 1);
+    enableAttribute(_buffer_vertex_id, 0, 3);
+    enableAttribute(_buffer_normal_id, 1, 3);
+    enableAttribute(_buffer_uv_id, 2, 2);
 
     _material.getShader().setUniformMatrix(projection, "projection");
     _material.getShader().setUniformMatrix(view, "view");
@@ -55,15 +58,23 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view,
     glDrawArrays(GL_TRIANGLES, 0, _nb_vertex); // 3 indices starting at 0 -> 1 triangle
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+
+    INode::draw(projection, view, cam_pos);
 }
 
-void    Object::enableAttribute(GLuint buffer, GLuint attr)
+Material    &Object::getMaterial()
+{
+    return (_material);
+}
+
+void    Object::enableAttribute(GLuint buffer, GLuint attr, GLuint size)
 {
   glEnableVertexAttribArray(attr);
   glBindBuffer(GL_ARRAY_BUFFER, buffer);
   glVertexAttribPointer(
       attr,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-      3,                  // size
+      size,                  // size
       GL_FLOAT,           // type
       GL_FALSE,           // normalized?
       0,                  // stride
