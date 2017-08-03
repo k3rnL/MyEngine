@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-01T12:05:15+02:00
+ * @Last modified time: 2017-08-03T16:34:06+02:00
  */
 
 #include "Window.hpp"
@@ -23,8 +23,9 @@ int main()
     float speed = 4.f; // 3 units / second
     float mouseSpeed = 0.25;
 
-    Wavefront wavefront("Ressource/alduin.obj");
+    Wavefront wavefront("Ressource/cube.obj");
     wavefront.getMaterial().setTexture("Ressource/alduin.bmp");
+
 
     Wavefront wavefront2("Ressource/teapot.obj");
     // Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));

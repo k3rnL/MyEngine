@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-01T14:07:20+02:00
+ * @Last modified time: 2017-08-03T16:28:25+02:00
  */
 
 #include "Material.hpp"
@@ -24,6 +24,7 @@ void        Material::setTexture(const std::string &file)
     glUseProgram(_shader->getProgram());
 
     glGenTextures(1, &_texture_id);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
 
     int x, y, n;
@@ -33,6 +34,10 @@ void        Material::setTexture(const std::string &file)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+    GLuint attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
+    glUniform1i(attr_id, 0);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    // applyMaterial();
 }
 
 void      Material::applyMaterial()
@@ -42,7 +47,7 @@ void      Material::applyMaterial()
   glUniform3fv(attr_id, 1, &_color[0]);
 
   attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
-  glUniform1i(attr_id, _texture_id);
+  glUniform1i(attr_id, 0);
 }
 
 Shader    &Material::getShader()
