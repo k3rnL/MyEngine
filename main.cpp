@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-03T16:34:06+02:00
+ * @Last modified time: 2017-08-10T00:44:16+02:00
  */
 
 #include "Window.hpp"
@@ -97,6 +97,7 @@ int main()
             }
         } // end event polling
     }
+
 
     return (0);
 }
