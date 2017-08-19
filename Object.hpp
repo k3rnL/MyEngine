@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-01T12:22:02+02:00
+ * @Last modified time: 2017-08-19T21:13:12+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -20,6 +20,7 @@
 #include "Shader.hpp"
 #include "Material.hpp"
 #include "Scene/INode.hpp"
+#include "GLItem/Mesh.hpp"
 
 namespace mxe {
     namespace scene {
@@ -32,13 +33,16 @@ namespace mxe {
 
                 virtual ~Object();
 
-                virtual void    draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::vec3 &cam_pos);
+                virtual void    draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos);
 
                 virtual INode   *clone() = 0;
 
                 Material        &getMaterial();
 
             protected:
+
+              mxe::gl_item::Mesh  _mesh;
+
                 GLuint          _buffer_vertex_id;
                 GLuint          _buffer_normal_id;
                 GLuint          _buffer_uv_id;

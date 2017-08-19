@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-03T16:28:25+02:00
+ * @Last modified time: 2017-08-19T18:25:39+02:00
  */
 
 #include "Material.hpp"
@@ -14,9 +14,12 @@
 
 using namespace mxe::scene::object;
 
+Shader *Material::_shader = 0;
+
 Material::Material()
 {
-  _shader = new Shader("shader/basic_light.vert", "shader/basic_light.frag");
+  if (!_shader)
+    _shader = new Shader("shader/basic_light.vert", "shader/basic_light.frag");
 }
 
 void        Material::setTexture(const std::string &file)
@@ -34,8 +37,6 @@ void        Material::setTexture(const std::string &file)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-    GLuint attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
-    glUniform1i(attr_id, 0);
     glGenerateMipmap(GL_TEXTURE_2D);
     // applyMaterial();
 }
@@ -43,11 +44,13 @@ void        Material::setTexture(const std::string &file)
 void      Material::applyMaterial()
 {
   glUseProgram(_shader->getProgram());
-  GLuint  attr_id = glGetUniformLocation(_shader->getProgram(), "mat_color");
-  glUniform3fv(attr_id, 1, &_color[0]);
+  _shader->setUniformValue(_color, "mt_data.diffuse_color");
 
-  attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
-  glUniform1i(attr_id, 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, _texture_id);
+  _shader->setUniformValue(0, "diffuse_map");
+
+  _shader->setUniformValue(_texture_id ? 1 : 0, "mt_data.diffuse_map");
 }
 
 Shader    &Material::getShader()
