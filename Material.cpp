@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-03T22:14:28+02:00
+ * @Last modified time: 2017-08-21T00:27:44+02:00
  */
 
 #include "Material.hpp"
@@ -64,7 +64,7 @@ void      Material::applyMaterial()
   glBindBuffer(GL_UNIFORM_BUFFER, _mt_data_buffer_id);
   glBufferData(GL_UNIFORM_BUFFER, sizeof (MaterialData), &_data, GL_DYNAMIC_DRAW);
   glBindBufferBase(GL_UNIFORM_BUFFER, 0, _mt_data_buffer_id); // 0 is binding point id
-  
+
   // attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
   // glUniform1i(attr_id, 0);
 }

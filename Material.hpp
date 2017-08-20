@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-03T22:05:09+02:00
+ * @Last modified time: 2017-08-21T00:26:41+02:00
  */
 
 #ifndef MATERIAL_HPP
