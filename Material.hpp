@@ -2,11 +2,14 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-21T00:26:41+02:00
+ * @Last modified time: 2017-08-21T00:31:15+02:00
  */
 
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
+
+#include <string>
+#include <memory>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -17,10 +20,22 @@ namespace mxe {
   namespace scene {
     namespace object {
 
+      class Texture
+      {
+      public:
+        glm::vec2     Size;
+        std::string   Name;
+        GLuint        Texture_id;
+        unsigned char *Texture_data;
+
+      };
+
       class Material
       {
       public:
         Material();
+        Material(Material &mat);
+        ~Material();
 
         void        setColor(const float &r, const float &g, const float &b);
 
@@ -29,22 +44,13 @@ namespace mxe {
 
         Shader      &getShader();
 
+        Material    &operator=(Material &mat);
       private:
+        static Shader         *_shader;
 
-        struct      MaterialData
-        {
-            GLfloat diffuse_color;
-            GLint   diffuse_map;
-        };
+        std::shared_ptr<Texture>               _texture;
 
-        MaterialData    _data;
-
-        Shader          *_shader;
-
-        GLuint          _texture_id;
-        GLuint          _mt_data_buffer_id;
-
-        glm::vec3       _color;
+        glm::vec3             _color;
       };
 
     } // object

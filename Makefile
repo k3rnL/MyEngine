@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-08-03T18:28:36+02:00
+# @Last modified time: 2017-08-20T23:58:37+02:00
 
 NAME 	=	MyEngine
 
@@ -13,7 +13,9 @@ SRCS	=	Window.cpp \
 				Material.cpp \
 				Scene/Object/Wavefront.cpp \
 				Scene/SceneManager.cpp \
-				Scene/INode.cpp
+				Scene/INode.cpp \
+				Scene/CameraFPS.cpp \
+				GLItem/Mesh.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -23,7 +25,7 @@ SRCS_SAMPLE = main.cpp \
 OBJS_SAMPLE	=	$(SRCS_SAMPLE:.cpp=.o)
 
 
-CPPFLAGS	=	-std=c++11 -I./ -g
+CPPFLAGS	=	-std=c++11 -I./
 
 LDFLAGS		=	-lSDL2 -lGL -lGLU -lGLEW
 

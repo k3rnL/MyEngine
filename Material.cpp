@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-21T00:27:44+02:00
+ * @Last modified time: 2017-08-21T00:31:18+02:00
  */
 
 #include "Material.hpp"
@@ -14,59 +14,73 @@
 
 using namespace mxe::scene::object;
 
+Shader *Material::_shader = 0;
+
 Material::Material()
 {
-  _shader = new Shader("shader/basic_light.vert", "shader/basic_light.frag");
-
-  GLuint block_id = glGetUniformBlockIndex(_shader->getProgram(), "mt_data");
-  glUniformBlockBinding(_shader->getProgram(), block_id, 0); // 0 is binding point id
-
-  glGenBuffers(1, &_mt_data_buffer_id);
-  glBindBuffer(GL_UNIFORM_BUFFER, _mt_data_buffer_id);
-
-  glBufferData(GL_UNIFORM_BUFFER, sizeof (MaterialData), &_data, GL_STATIC_DRAW);
-  glBindBufferBase(GL_UNIFORM_BUFFER, 0, _mt_data_buffer_id); // 0 is binding point id
+  if (!_shader)
+    _shader = new Shader("shader/basic_light.vert", "shader/basic_light.frag");
+  _texture = 0;
 }
 
-void        Material::setTexture(const std::string &file)
+Material::Material(Material &mat)
 {
-    glUseProgram(_shader->getProgram());
+  _texture = mat._texture;
+  _color = mat._color;
+}
 
-    glGenTextures(1, &_texture_id);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, _texture_id);
+Material::~Material()
+{
+  if (_texture)
+    {
+      delete[] _texture->Texture_data;
+      glDeleteBuffers(1, &_texture->Texture_id);
+    }
+}
 
-    int x, y, n;
-    unsigned char   *data = stbi_load(file.c_str(), &x, &y, &n, 0);
+void          Material::setTexture(const std::string &file)
+{
+  std::cout << "Load " << file << "\n";
+  _texture = std::make_shared<Texture>();
+  _texture->Name = file;
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glUseProgram(_shader->getProgram());
 
-    GLuint attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
-    glUniform1i(attr_id, 0);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    // applyMaterial();
+  glGenTextures(1, &_texture->Texture_id);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, _texture->Texture_id);
+
+  int x, y, n;
+  unsigned char   *data = stbi_load(file.c_str(), &x, &y, &n, 0);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  if (data)
+    _texture->Texture_data = data;
 }
 
 void      Material::applyMaterial()
 {
   glUseProgram(_shader->getProgram());
-  GLuint  attr_id = glGetUniformLocation(_shader->getProgram(), "mat_color");
-  glUniform3fv(attr_id, 1, &_color[0]);
+  _shader->setUniformValue(_color, "mt_data.diffuse_color");
 
-  if (_texture_id)
-    _data.diffuse_map = 1;
+  if (_texture)
+  {
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, _texture->Texture_id);
+    // _shader->setUniformValue(0, "diffuse_map");
+    // _shader->setUniformValue(1, "mt_data.diffuse_map");
+
+  }
   else
-    _data.diffuse_map = 0;
-  memcpy(&_data.diffuse_color, &_color[0], sizeof (float) * 3);
+  {
+    _shader->setUniformValue(0, "mt_data.diffuse_map");
+  }
 
-  glBindBuffer(GL_UNIFORM_BUFFER, _mt_data_buffer_id);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof (MaterialData), &_data, GL_DYNAMIC_DRAW);
-  glBindBufferBase(GL_UNIFORM_BUFFER, 0, _mt_data_buffer_id); // 0 is binding point id
-
-  // attr_id = glGetUniformLocation(_shader->getProgram(), "diffuse_map");
-  // glUniform1i(attr_id, 0);
 }
 
 Shader    &Material::getShader()
@@ -79,4 +93,11 @@ void      Material::setColor(const float &r, const float &g, const float &b)
   _color[0] = r;
   _color[1] = g;
   _color[2] = b;
+}
+
+Material  &Material::operator=(Material &mat)
+{
+  _texture = mat._texture;
+  _color = mat._color;
+  return (*this);
 }

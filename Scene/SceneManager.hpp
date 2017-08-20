@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:39:05+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-01T00:43:22+02:00
+ * @Last modified time: 2017-08-16T17:05:10+02:00
  */
 
 
@@ -15,6 +15,8 @@
 #include <string>
 
 #include "Scene/INode.hpp"
+#include "Object.hpp"
+#include "Scene/ICamera.hpp"
 #include "Scene/Object/Wavefront.hpp"
 
 namespace mxe {
@@ -29,9 +31,14 @@ namespace mxe {
             object::Wavefront    *addWavefront(std::string const &file);
             object::Wavefront    *createWavefront(std::string const &file);
 
+            ICamera                           *camera;
+
+            const std::vector<object::Object *>        &getDrawable();
+
         private:
             std::map<std::string, INode *>     nodes_data;
-            std::vector<INode *>                nodes;
+            std::vector<object::Object *>                nodes;
+
         };
 
     }

@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-10T00:44:33+02:00
+ * @Last modified time: 2017-08-20T23:56:55+02:00
  */
 
 
@@ -17,10 +17,6 @@ Renderer::Renderer(Window &window) :
     projection = glm::perspective<float>(45, // fov
                     (float) window.getWidth() / (float) window.getHeight(), // ratio
                     1.0, 100.0); // near / far
-    view = glm::lookAt(glm::vec3(4, 4, 3),
-                       glm::vec3(0, 0, 0),
-                       glm::vec3(0, 1, 0));
-    camPos = glm::vec3(0, 0, 3);
 
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
@@ -32,32 +28,22 @@ Renderer::Renderer(Window &window) :
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
 
-void        Renderer::render(scene::object::ObjectList &objs)
+void        Renderer::render(scene::SceneManager &scene)
 {
-    glm::mat4 modelView(1.0);
-    // modelView = glm::translate(glm::vec3(0, 4, 0));
-    glm::vec3 direction(
-      cos(verticalAngle) * sin(horizontalAngle),
-      sin(verticalAngle),
-      cos(verticalAngle) * cos(horizontalAngle));
-    glm::vec3 right = glm::vec3(
-      sin(horizontalAngle - 3.14f/2.0f),
-      0,
-      cos(horizontalAngle - 3.14f/2.0f));
-      glm::vec3 up = glm::cross( right, direction );
-    view = glm::lookAt(camPos, camPos + direction, up);
-
-    // modelView =  view * modelView;
-    modelView = projection * view * modelView;
+    const glm::mat4 &view = scene.camera->getView();
+    // glm::mat4 modelView = projection * view;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // glUseProgram(_shader.getProgram());
 
-    for (auto obj : objs)
+    for (auto obj : scene.getDrawable())
     {
-        obj->draw(projection, view, camPos);
+        obj->draw(projection, view, glm::mat4(1.0), scene.camera->getPosition());
     }
 
     _window.flipScreen();

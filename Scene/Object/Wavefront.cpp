@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-01T12:27:49+02:00
+ * @Last modified time: 2017-08-20T20:28:25+02:00
  */
 
 
@@ -13,8 +13,8 @@ using namespace mxe::scene::object;
 
 Wavefront::Wavefront()
 {
-    _material.setColor(0.8, 1, 1);
-    _material.applyMaterial(); // Also call glUseProgram()
+    // _material.setColor(0.8, 1, 1);
+    _material->applyMaterial(); // Also call glUseProgram()
 }
 
 Wavefront::Wavefront(const std::string &file)
@@ -97,36 +97,51 @@ Wavefront::Wavefront(const std::string &file)
     }
   }
 
-  glGenBuffers(1, &_buffer_vertex_id);
-  glBindBuffer(GL_ARRAY_BUFFER, _buffer_vertex_id);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec3) * mesh.size() , &mesh[0], GL_STATIC_DRAW);
+  _mesh = std::make_shared<gl_item::Mesh>();
 
-  glGenBuffers(1, &_buffer_normal_id);
-  glBindBuffer(GL_ARRAY_BUFFER, _buffer_normal_id);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec3) * mesh_normal.size() , &mesh_normal[0], GL_STATIC_DRAW);
+  for (size_t i = 0 ; i < mesh.size() ; i++)
+  {
+    _mesh->addVertex(mesh[i]);
+    if (i < mesh_normal.size())
+      _mesh->addNormal(mesh_normal[i]);
+    if (i < mesh_uv.size())
+      _mesh->addUV(mesh_uv[i]);
+  }
 
-  glGenBuffers(1, &_buffer_uv_id);
-  glBindBuffer(GL_ARRAY_BUFFER, _buffer_uv_id);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec2) * mesh_normal.size() , &mesh_uv[0], GL_STATIC_DRAW);
+  _mesh->finish();
 
-  _buffer_size = sizeof (glm::vec3) * mesh.size();
+  // glGenBuffers(1, &_buffer_vertex_id);
+  // glBindBuffer(GL_ARRAY_BUFFER, _buffer_vertex_id);
+  // glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec3) * mesh.size() , &mesh[0], GL_STATIC_DRAW);
+  //
+  // glGenBuffers(1, &_buffer_normal_id);
+  // glBindBuffer(GL_ARRAY_BUFFER, _buffer_normal_id);
+  // glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec3) * mesh_normal.size() , &mesh_normal[0], GL_STATIC_DRAW);
+  //
+  // glGenBuffers(1, &_buffer_uv_id);
+  // glBindBuffer(GL_ARRAY_BUFFER, _buffer_uv_id);
+  // glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec2) * mesh_normal.size() , &mesh_uv[0], GL_STATIC_DRAW);
+  //
+  // _buffer_size = sizeof (glm::vec3) * mesh.size();
+  //
+  // _nb_vertex = mesh.size();
 
-  _nb_vertex = mesh.size();
-
-  _material.setColor(0.8, 1, 1);
-  _material.applyMaterial(); // Also call glUseProgram()
+  _material->setColor(0.8, 1, 1);
+  _material->applyMaterial(); // Also call glUseProgram()
 }
 
 mxe::scene::INode       *Wavefront::clone()
 {
     Wavefront           *node = new Wavefront();
 
-    node->position = position;
-    node->rotation = rotation;
-    node->_buffer_normal_id = _buffer_normal_id;
-    node->_buffer_size = _buffer_size;
-    node->_buffer_vertex_id = _buffer_vertex_id;
-    node->_buffer_uv_id = _buffer_uv_id;
-    node->_nb_vertex = _nb_vertex;
+    node->_mesh = this->_mesh;
+    node->_material = _material;
+    // node->_position = _position;
+    // node->_rotation = _rotation;
+    // node->_buffer_normal_id = _buffer_normal_id;
+    // node->_buffer_size = _buffer_size;
+    // node->_buffer_vertex_id = _buffer_vertex_id;
+    // node->_buffer_uv_id = _buffer_uv_id;
+    // node->_nb_vertex = _nb_vertex;
     return (node);
 }
