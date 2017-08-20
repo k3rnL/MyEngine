@@ -2,13 +2,14 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-19T21:13:12+02:00
+ * @Last modified time: 2017-08-20T23:05:22+02:00
  */
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
 #include <list>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -37,20 +38,21 @@ namespace mxe {
 
                 virtual INode   *clone() = 0;
 
-                Material        &getMaterial();
+                std::shared_ptr<Material>   getMaterial();
+                void                        applyMaterial(std::shared_ptr<Material> mat);
 
             protected:
 
-              mxe::gl_item::Mesh  _mesh;
+              std::shared_ptr<mxe::gl_item::Mesh>  _mesh;
 
-                GLuint          _buffer_vertex_id;
-                GLuint          _buffer_normal_id;
-                GLuint          _buffer_uv_id;
-                GLsizei         _buffer_size;
+              GLuint          _buffer_vertex_id;
+              GLuint          _buffer_normal_id;
+              GLuint          _buffer_uv_id;
+              GLsizei         _buffer_size;
 
-                size_t          _nb_vertex;
+              size_t          _nb_vertex;
 
-                Material        _material;
+              std::shared_ptr<Material>        _material;
 
             private:
               void              enableAttribute(GLuint buffer, GLuint attr, GLuint size);

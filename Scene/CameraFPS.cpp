@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-16T16:25:47+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-18T16:06:15+02:00
+ * @Last modified time: 2017-08-20T23:49:05+02:00
  */
 
 
@@ -26,6 +26,8 @@ void          CameraFPS::mouseInput(const int x_relative, const int y_relative, 
 {
   _horizontal_angle -= _mouse_speed * x_relative * deltaT;
   _vertical_angle -= _mouse_speed * y_relative * deltaT;
+
+  _vertical_angle = glm::clamp((double) _vertical_angle, -M_PI / 2., M_PI + M_PI / 2);
 
   _direction = glm::vec3(cos(_vertical_angle) * sin(_horizontal_angle),
                         sin(_vertical_angle),

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T19:54:53+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-19T21:19:11+02:00
+ * @Last modified time: 2017-08-20T18:25:13+02:00
  */
 
 
@@ -30,13 +30,17 @@ namespace mxe {
       Mesh();
       ~Mesh() {};
 
-      void        addVertex(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv);
+      void        addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv);
+      void        addVertex(const glm::vec3 &vertex);
+      void        addNormal(const glm::vec3 &normal);
+      void        addUV(const glm::vec2 &uv);
       void        finish();
 
       void        bindToShader();
       void        detachFromShader();
 
       size_t          _nb_vertex;
+
     private:
       std::vector<glm::vec3>  _mesh_vertexes;
       std::vector<glm::vec3>  _mesh_normals;
@@ -46,7 +50,6 @@ namespace mxe {
       GLuint          _buffer_normal_id;
       GLuint          _buffer_uv_id;
       GLsizei         _buffer_size;
-
 
       void            enableAttribute(GLuint buffer, GLuint attr, GLuint size);
     };

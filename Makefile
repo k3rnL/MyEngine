@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-08-19T21:19:00+02:00
+# @Last modified time: 2017-08-20T23:58:37+02:00
 
 NAME 	=	MyEngine
 
@@ -25,7 +25,7 @@ SRCS_SAMPLE = main.cpp \
 OBJS_SAMPLE	=	$(SRCS_SAMPLE:.cpp=.o)
 
 
-CPPFLAGS	=	-std=c++11 -I./ -g
+CPPFLAGS	=	-std=c++11 -I./
 
 LDFLAGS		=	-lSDL2 -lGL -lGLU -lGLEW
 

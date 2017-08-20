@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-18T15:53:15+02:00
+ * @Last modified time: 2017-08-20T23:56:55+02:00
  */
 
 
@@ -28,6 +28,9 @@ Renderer::Renderer(Window &window) :
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
 
 void        Renderer::render(scene::SceneManager &scene)

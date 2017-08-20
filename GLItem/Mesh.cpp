@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-19T21:12:08+02:00
+ * @Last modified time: 2017-08-20T18:40:16+02:00
  */
 
 
@@ -18,6 +18,8 @@ Mesh::Mesh()
   _buffer_uv_id = GL_INVALID_VALUE;
   _buffer_size = 0;
   _nb_vertex = 0;
+
+  std::cout << "New Mesh ! \n";
 }
 
 void    Mesh::finish()
@@ -60,10 +62,25 @@ void    Mesh::detachFromShader()
   glDisableVertexAttribArray(2);
 }
 
-void    Mesh::addVertex(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv)
+void    Mesh::addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv)
 {
   _mesh_vertexes.push_back(vertex);
   _mesh_normals.push_back(normal);
+  _mesh_uvs.push_back(uv);
+}
+
+void    Mesh::addVertex(const glm::vec3 &vertex)
+{
+  _mesh_vertexes.push_back(vertex);
+}
+
+void    Mesh::addNormal(const glm::vec3 &normal)
+{
+  _mesh_normals.push_back(normal);
+}
+
+void    Mesh::addUV(const glm::vec2 &uv)
+{
   _mesh_uvs.push_back(uv);
 }
 

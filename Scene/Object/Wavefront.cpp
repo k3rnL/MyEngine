@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-19T21:17:06+02:00
+ * @Last modified time: 2017-08-20T20:28:25+02:00
  */
 
 
@@ -14,7 +14,7 @@ using namespace mxe::scene::object;
 Wavefront::Wavefront()
 {
     // _material.setColor(0.8, 1, 1);
-    _material.applyMaterial(); // Also call glUseProgram()
+    _material->applyMaterial(); // Also call glUseProgram()
 }
 
 Wavefront::Wavefront(const std::string &file)
@@ -97,12 +97,18 @@ Wavefront::Wavefront(const std::string &file)
     }
   }
 
+  _mesh = std::make_shared<gl_item::Mesh>();
+
   for (size_t i = 0 ; i < mesh.size() ; i++)
   {
-      _mesh.addVertex(mesh[i], mesh_normal[i], mesh_uv[i]);
+    _mesh->addVertex(mesh[i]);
+    if (i < mesh_normal.size())
+      _mesh->addNormal(mesh_normal[i]);
+    if (i < mesh_uv.size())
+      _mesh->addUV(mesh_uv[i]);
   }
 
-  _mesh.finish();
+  _mesh->finish();
 
   // glGenBuffers(1, &_buffer_vertex_id);
   // glBindBuffer(GL_ARRAY_BUFFER, _buffer_vertex_id);
@@ -120,14 +126,16 @@ Wavefront::Wavefront(const std::string &file)
   //
   // _nb_vertex = mesh.size();
 
-  _material.setColor(0.8, 1, 1);
-  _material.applyMaterial(); // Also call glUseProgram()
+  _material->setColor(0.8, 1, 1);
+  _material->applyMaterial(); // Also call glUseProgram()
 }
 
 mxe::scene::INode       *Wavefront::clone()
 {
     Wavefront           *node = new Wavefront();
 
+    node->_mesh = this->_mesh;
+    node->_material = _material;
     // node->_position = _position;
     // node->_rotation = _rotation;
     // node->_buffer_normal_id = _buffer_normal_id;
