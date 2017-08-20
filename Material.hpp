@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-01T12:17:42+02:00
+ * @Last modified time: 2017-08-03T22:05:09+02:00
  */
 
 #ifndef MATERIAL_HPP
@@ -30,11 +30,21 @@ namespace mxe {
         Shader      &getShader();
 
       private:
-        Shader      *_shader;
 
-        GLuint      _texture_id;
+        struct      MaterialData
+        {
+            GLfloat diffuse_color;
+            GLint   diffuse_map;
+        };
 
-        glm::vec3   _color;
+        MaterialData    _data;
+
+        Shader          *_shader;
+
+        GLuint          _texture_id;
+        GLuint          _mt_data_buffer_id;
+
+        glm::vec3       _color;
       };
 
     } // object
