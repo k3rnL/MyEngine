@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-22T23:35:22+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-18T15:52:17+02:00
+ * @Last modified time: 2017-08-21T00:48:49+02:00
  */
 
 #include "Window.hpp"
@@ -34,7 +34,7 @@ int main()
     // Triangle triangle(glm::vec3(-1, 1, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 0));
     // Wavefront wavefront("/home/daniel_b/gfx_raytracer2/Wavefront/cow.obj");
 
-    for (int i = 0 ; i < 00 ; i++)
+    for (int i = 0 ; i < 000 ; i++)
     {
       Wavefront *w = scene.addWavefront("Ressource/alduin.obj");
       w->getPosition()[0] = rand() % 100 - 50;

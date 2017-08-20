@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-20T23:56:55+02:00
+ * @Last modified time: 2017-08-21T00:53:42+02:00
  */
 
 
@@ -40,6 +40,14 @@ void        Renderer::render(scene::SceneManager &scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // glUseProgram(_shader.getProgram());
+
+    scene.getDrawable()[0]->getMaterial()->getShader().setUniformValue(projection, "projection");
+    scene.getDrawable()[0]->getMaterial()->getShader().setUniformValue(view, "view");
+
+    glm::vec3 tmp2(0, 04, 10);
+    scene.getDrawable()[0]->getMaterial()->getShader().setUniformValue(tmp2, "light_pos");
+
+    scene.getDrawable()[0]->getMaterial()->getShader().setUniformValue(scene.camera->getPosition(), "camera_position");
 
     for (auto obj : scene.getDrawable())
     {

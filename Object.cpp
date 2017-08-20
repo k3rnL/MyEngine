@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-20T23:58:22+02:00
+ * @Last modified time: 2017-08-21T00:52:05+02:00
  */
 
 
@@ -42,26 +42,19 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view,
     // enableAttribute(_buffer_uv_id, 2, 2);
     _mesh->bindToShader();
 
-    _material->getShader().setUniformValue(projection, "projection");
-    _material->getShader().setUniformValue(view, "view");
+    // _material->getShader().setUniformValue(projection, "projection");
+    // _material->getShader().setUniformValue(view, "view");
     _material->getShader().setUniformValue(transform, "model_view");
     _material->getShader().setUniformValue(glm::toMat4(quat), "model_rotation");
 
-    GLuint uniform_id;
-
-    glm::vec3 tmp2(0, 04, 10);
-    uniform_id = glGetUniformLocation(_material->getShader().getProgram(), "light_pos");
-    glUniform3fv(uniform_id, 1, &tmp2[0]);
-
-    uniform_id = glGetUniformLocation(_material->getShader().getProgram(), "camera_position");
-    glUniform3fv(uniform_id, 1, &cam_pos[0]);
+    
     // _material.getShader().setUniformVertex(cam_pos, "camera_position");
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, _mesh->_nb_vertex); // 3 indices starting at 0 -> 1 triangle
     // glDisableVertexAttribArray(0);
     // glDisableVertexAttribArray(1);
     // glDisableVertexAttribArray(2);
-    // _mesh->detachFromShader();
+    _mesh->detachFromShader();
 
     INode::draw(projection, view, parent_transform, cam_pos);
 }
