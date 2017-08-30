@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-21T00:31:15+02:00
+ * @Last modified time: 2017-08-23T19:10:42+02:00
  */
 
 #ifndef MATERIAL_HPP
@@ -39,15 +39,11 @@ namespace mxe {
 
         void        setColor(const float &r, const float &g, const float &b);
 
-        void        applyMaterial();
+        void        applyMaterial(Shader *shader);
         void        setTexture(const std::string &file);
-
-        Shader      &getShader();
 
         Material    &operator=(Material &mat);
       private:
-        static Shader         *_shader;
-
         std::shared_ptr<Texture>               _texture;
 
         glm::vec3             _color;

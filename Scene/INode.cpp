@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-01T00:33:57+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-18T15:50:58+02:00
+ * @Last modified time: 2017-08-30T05:04:17+02:00
  */
 
 
@@ -11,13 +11,13 @@
 
 using namespace mxe::scene;
 
-void    INode::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos)
-{
-    for (auto child : childs)
-    {
-        child->draw(projection, view, transform, cam_pos);
-    }
-}
+// void    INode::draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos)
+// {
+//     for (auto child : childs)
+//     {
+//         child->draw(shaders, projection, view, transform, cam_pos);
+//     }
+// }
 
 void    INode::setPosition(const glm::vec3 &position) {
   _position = position;

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-20T18:40:16+02:00
+ * @Last modified time: 2017-08-30T05:16:48+02:00
  */
 
 
@@ -20,6 +20,7 @@ Mesh::Mesh()
   _nb_vertex = 0;
 
   std::cout << "New Mesh ! \n";
+
 }
 
 void    Mesh::finish()

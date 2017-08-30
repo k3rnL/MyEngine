@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T05:03:50+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-20T20:28:58+02:00
+ * @Last modified time: 2017-08-23T19:11:44+02:00
  */
 
 
@@ -51,8 +51,6 @@ Triangle::Triangle(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3
     _nb_vertex = 3;
 
     _material->setColor(0.5, 0., 1.);
-    _material->applyMaterial(); // Also call glUseProgram()
-
 }
 
 mxe::scene::INode           *Triangle::clone()

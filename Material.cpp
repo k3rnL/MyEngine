@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-21T00:47:53+02:00
+ * @Last modified time: 2017-08-30T05:28:47+02:00
  */
 
 #include "Material.hpp"
@@ -14,16 +14,8 @@
 
 using namespace mxe::scene::object;
 
-Shader *Material::_shader = 0;
-
 Material::Material()
 {
-  if (!_shader)
-  {
-      _shader = new Shader("shader/basic_light.vert", "shader/basic_light.frag");
-      glUseProgram(_shader->getProgram());
-  }
-
   _texture = 0;
 }
 
@@ -67,29 +59,29 @@ void          Material::setTexture(const std::string &file)
     _texture->Texture_data = data;
 }
 
-void      Material::applyMaterial()
+void      Material::applyMaterial(Shader *shader)
 {
-  _shader->setUniformValue(_color, "mt_data.diffuse_color");
+  shader->setUniformValue(_color, "mt_data.diffuse_color");
 
   if (_texture)
   {
     // glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture->Texture_id);
-    _shader->setUniformValue(0, "diffuse_map");
-    _shader->setUniformValue(1, "mt_data.diffuse_map");
+    shader->setUniformValue(0, "diffuse_map");
+    shader->setUniformValue(1, "mt_data.diffuse_map");
 
   }
   else
   {
-    _shader->setUniformValue(0, "mt_data.diffuse_map");
+    shader->setUniformValue(0, "mt_data.diffuse_map");
   }
 
 }
 
-Shader    &Material::getShader()
-{
-  return (*_shader);
-}
+// Shader    &Material::getShader()
+// {
+//   return (*_shader);
+// }
 
 void      Material::setColor(const float &r, const float &g, const float &b)
 {

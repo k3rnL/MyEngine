@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:39:05+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-16T17:05:10+02:00
+ * @Last modified time: 2017-08-30T04:46:49+02:00
  */
 
 
@@ -33,11 +33,14 @@ namespace mxe {
 
             ICamera                           *camera;
 
-            const std::vector<object::Object *>        &getDrawable();
+            const std::vector<std::shared_ptr<gl_item::Mesh>>   &getDrawable();
+            const std::vector<object::Object *>                   &getObjects();
 
         private:
             std::map<std::string, INode *>     nodes_data;
             std::vector<object::Object *>                nodes;
+
+            std::vector<std::shared_ptr<gl_item::Mesh>>   _instancied_mesh;
 
         };
 

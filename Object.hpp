@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-20T23:05:22+02:00
+ * @Last modified time: 2017-08-30T05:15:53+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -34,12 +34,16 @@ namespace mxe {
 
                 virtual ~Object();
 
-                virtual void    draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos);
+                virtual void    draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos);
 
                 virtual INode   *clone() = 0;
 
                 std::shared_ptr<Material>   getMaterial();
                 void                        applyMaterial(std::shared_ptr<Material> mat);
+
+                virtual void                setPosition(const glm::vec3 &pos);
+
+                std::shared_ptr<gl_item::Mesh> getMesh() { return (_mesh); }
 
             protected:
 

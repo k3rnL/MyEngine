@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-21T00:52:05+02:00
+ * @Last modified time: 2017-08-30T05:15:58+02:00
  */
 
 
@@ -16,6 +16,7 @@ Object::Object()
     _buffer_normal_id = 0;
     _buffer_uv_id = 0;
     _material = std::make_shared<Material>();
+    _mesh = 0;
 }
 
 Object::~Object()
@@ -27,15 +28,21 @@ Object::~Object()
 
 }
 
-void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &parent_transform, const glm::vec3 &cam_pos)
+void            Object::setPosition(const glm::vec3 &position)
+{
+    _position = position;
+}
+
+void            Object::draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &parent_transform, const glm::vec3 &cam_pos)
 {
     glm::mat4   transform;
     glm::quat   quat(_rotation);
 
     transform = parent_transform * glm::translate(_position) * glm::toMat4(quat);
 
+    shaders.useDefaultProgram();
     // glUseProgram(_material->getShader().getProgram());
-    _material->applyMaterial();
+    _material->applyMaterial(shaders.getActualShader());
 
     // enableAttribute(_buffer_vertex_id, 0, 3);
     // enableAttribute(_buffer_normal_id, 1, 3);
@@ -44,10 +51,10 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view,
 
     // _material->getShader().setUniformValue(projection, "projection");
     // _material->getShader().setUniformValue(view, "view");
-    _material->getShader().setUniformValue(transform, "model_view");
-    _material->getShader().setUniformValue(glm::toMat4(quat), "model_rotation");
+    shaders.getActualShader()->setUniformValue(transform, "model_view");
+    shaders.getActualShader()->setUniformValue(glm::toMat4(quat), "model_rotation");
 
-    
+
     // _material.getShader().setUniformVertex(cam_pos, "camera_position");
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, _mesh->_nb_vertex); // 3 indices starting at 0 -> 1 triangle
@@ -56,7 +63,7 @@ void            Object::draw(const glm::mat4 &projection, const glm::mat4 &view,
     // glDisableVertexAttribArray(2);
     _mesh->detachFromShader();
 
-    INode::draw(projection, view, parent_transform, cam_pos);
+    // INode::draw(shaders, projection, view, parent_transform, cam_pos);
 }
 
 std::shared_ptr<Material>    Object::getMaterial()

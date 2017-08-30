@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-20T20:28:25+02:00
+ * @Last modified time: 2017-08-30T05:16:34+02:00
  */
 
 
@@ -14,7 +14,6 @@ using namespace mxe::scene::object;
 Wavefront::Wavefront()
 {
     // _material.setColor(0.8, 1, 1);
-    _material->applyMaterial(); // Also call glUseProgram()
 }
 
 Wavefront::Wavefront(const std::string &file)
@@ -127,7 +126,6 @@ Wavefront::Wavefront(const std::string &file)
   // _nb_vertex = mesh.size();
 
   _material->setColor(0.8, 1, 1);
-  _material->applyMaterial(); // Also call glUseProgram()
 }
 
 mxe::scene::INode       *Wavefront::clone()

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:18:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-18T15:49:23+02:00
+ * @Last modified time: 2017-08-29T23:37:51+02:00
  */
 
 
@@ -14,6 +14,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Mxe/ShaderManager.hpp"
+
 namespace mxe {
     namespace scene {
 
@@ -24,7 +26,6 @@ namespace mxe {
             virtual ~INode() {}
 
             virtual INode   *clone() = 0;
-            virtual void    draw(const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos);
 
             virtual void          setPosition(const glm::vec3 &position);
             virtual void          setRotation(const glm::vec3 &rotation);

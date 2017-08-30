@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T23:52:43+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-18T16:18:15+02:00
+ * @Last modified time: 2017-08-30T04:46:50+02:00
  */
 
 
@@ -43,10 +43,16 @@ object::Wavefront           *SceneManager::createWavefront(const std::string &fi
     obj = new object::Wavefront(file);
     nodes_data[file] = obj;
     nodes.push_back(obj);
+    _instancied_mesh.push_back(obj->getMesh());
     return (obj);
 }
 
-const std::vector<object::Object *>   &SceneManager::getDrawable()
+const std::vector<std::shared_ptr<mxe::gl_item::Mesh>>   &SceneManager::getDrawable()
 {
-  return (nodes);
+  return (_instancied_mesh);
+}
+
+const std::vector<object::Object *>       &SceneManager::getObjects()
+{
+    return (nodes);
 }
