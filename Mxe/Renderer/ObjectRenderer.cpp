@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-30T00:27:25+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T14:33:01+02:00
+ * @Last modified time: 2017-09-18T16:30:45+02:00
  */
 
 
@@ -27,22 +27,25 @@ void    ObjectRenderer::drawAll()
 {
     auto &objects = _callback.objects;
 
-    for (auto mat_to_obj : objects)
+    for (auto shader_to_mat : objects)
     {
-        shaders.useDefaultProgram();
-        mat_to_obj.first->applyMaterial(shaders.getActualShader());
+      shader_to_mat.first->useProgram();
+      for (auto mat_to_obj : shader_to_mat.second)
+      {
+        mat_to_obj.first->useMaterial();
         for (auto mesh : mat_to_obj.second)
         {
-            mesh.first->bindToShader();
-            for (auto transform : mesh.second)
-            {
-                // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
+          mesh.first->bindToShader();
+          for (auto transform : mesh.second)
+          {
+            // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
 
-                shaders.getActualShader()->setUniformValue(transform, "model_view");
-                glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
-            }
-            mesh.first->detachFromShader();
+            shader_to_mat.first->setUniformValue(transform, "model_view");
+            glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
+          }
+          mesh.first->detachFromShader();
         }
+      }
     }
 }
 

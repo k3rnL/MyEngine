@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:33:51+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-10T22:12:44+02:00
+ * @Last modified time: 2017-09-18T16:41:33+02:00
  */
 
 
@@ -83,7 +83,8 @@ mxe::scene::object::Object *Wavefront::load(const std::string &file)
     Object               *root_obj = 0;
     Assimp::Importer    importer;
 
-    importer.SetExtraVerbose(true);
+    // importer.SetExtraVerbose(true);
+    // const aiScene *scene = importer.ReadFile(file, 0);
     const aiScene *scene = importer.ReadFile(file, aiProcess_GenUVCoords | aiProcess_FlipUVs | aiProcessPreset_TargetRealtime_MaxQuality);
     std::cout << "scene:" << importer.GetErrorString() << "\n";
     std::vector<std::shared_ptr<Material>>  materials;

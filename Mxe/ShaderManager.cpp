@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:46:29+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T14:30:45+02:00
+ * @Last modified time: 2017-09-18T16:57:16+02:00
  */
 
 
@@ -10,6 +10,8 @@
 #include "Mxe/ShaderManager.hpp"
 
 using namespace mxe;
+
+ShaderManager   ShaderManager::_manager = ShaderManager();
 
 ShaderManager::ShaderManager()
 {
@@ -39,6 +41,9 @@ std::shared_ptr<Shader>     ShaderManager::addShader(const std::string &name)
             return (shader.ptr);
     }
 
+    std::shared_ptr<Shader>   shader = std::make_shared<Shader>("shader/" + name + ".vert",
+                                                                "shader/" + name + ".frag");
+    _shaders.push_back({name, shader});
     return (0);
 }
 

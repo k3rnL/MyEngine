@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-17T23:46:43+02:00
+ * @Last modified time: 2017-09-18T16:47:51+02:00
  */
 
 #ifndef MATERIAL_HPP
@@ -15,6 +15,7 @@
 #include <glm/glm.hpp>
 
 #include "Shader.hpp"
+#include "Mxe/ShaderManager.hpp"
 
 namespace mxe {
   namespace scene {

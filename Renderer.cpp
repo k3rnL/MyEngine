@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T14:32:16+02:00
+ * @Last modified time: 2017-09-18T16:53:56+02:00
  */
 
 
@@ -32,7 +32,7 @@ Renderer::Renderer(Window &window) :
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    ShaderManager::getInstance().addShader("default_shader_basic_light");
+    ShaderManager::getInstance().addShader("basic_light");
 }
 
 void        Renderer::render(scene::SceneManager &scene)

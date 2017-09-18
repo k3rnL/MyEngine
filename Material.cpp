@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-17T23:47:45+02:00
+ * @Last modified time: 2017-09-18T17:16:53+02:00
  */
 
 #include "Material.hpp"
@@ -16,7 +16,7 @@ using namespace mxe::scene::object;
 
 Material::Material()
 {
-    _shader = std::make_shared<Shader>("shader/basic_light.vert", "shader/basic_light.frag");
+    _shader = ShaderManager::getInstance().getDefaultShader();
     _texture = 0;
 }
 
@@ -42,6 +42,7 @@ void          Material::setTexture(const std::string &file)
   _texture = std::make_shared<Texture>();
   _texture->Name = file;
 
+  _shader->useProgram();
 
   glGenTextures(1, &_texture->Texture_id);
   glActiveTexture(GL_TEXTURE0);
@@ -61,10 +62,13 @@ void          Material::setTexture(const std::string &file)
     _texture->Texture_data = data;
 }
 
+void      Material::setShader(std::shared_ptr<Shader> shader) {
+  _shader = shader;
+}
+
 void      Material::useMaterial()
 {
-    _shader->useProgram();
-    _shader->setUniformValue(_color, "mt_data.diffuse_color");
+  _shader->setUniformValue(_color, "mt_data.diffuse_color");
 
   if (_texture)
   {
