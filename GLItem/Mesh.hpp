@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T19:54:53+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-30T05:15:03+02:00
+ * @Last modified time: 2017-09-13T22:55:09+02:00
  */
 
 
@@ -30,13 +30,25 @@ namespace mxe {
     {
     public:
       Mesh();
+
+      Mesh(Mesh &mesh);
       ~Mesh() {};
 
-      void        addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv);
-      void        addVertex(const glm::vec3 &vertex);
-      void        addNormal(const glm::vec3 &normal);
-      void        addUV(const glm::vec2 &uv);
-      void        finish();
+      void          addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv);
+      size_t        addVertex(const glm::vec3 &vertex);
+      size_t        addFace(const glm::vec3 &indices);
+      size_t        addNormal(const glm::vec3 &normal);
+      size_t        addUV(const glm::vec2 &uv);
+      void          finish();
+
+      std::vector<glm::vec3>      &getVertexes();
+      std::vector<glm::vec3>      &getNormals();
+      std::vector<glm::vec2>      &getUVs();
+      std::vector<unsigned int>   &getIndices();
+
+      void          clear();
+
+      int         getElementCount();
 
       void        bindToShader();
       void        detachFromShader();
@@ -45,16 +57,18 @@ namespace mxe {
 
     private:
 
-      std::vector<glm::vec3>  _mesh_vertexes;
-      std::vector<glm::vec3>  _mesh_normals;
-      std::vector<glm::vec2>  _mesh_uvs;
+      std::vector<glm::vec3>    _mesh_vertexes;
+      std::vector<unsigned int> _mesh_indices;
+      std::vector<glm::vec3>    _mesh_normals;
+      std::vector<glm::vec2>    _mesh_uvs;
 
       GLuint          _buffer_vertex_id;
+      GLuint          _buffer_indices_id;
       GLuint          _buffer_normal_id;
       GLuint          _buffer_uv_id;
       GLsizei         _buffer_size;
 
-      void            enableAttribute(GLuint buffer, GLuint attr, GLuint size);
+      void            enableAttribute(GLuint buffer, GLuint attr, GLuint size, GLint buffer_type = GL_ARRAY_BUFFER);
     };
 
   }

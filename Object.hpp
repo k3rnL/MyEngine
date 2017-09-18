@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-30T05:15:53+02:00
+ * @Last modified time: 2017-09-06T02:30:46+02:00
  */
 
 #ifndef OBJECT_HPP
@@ -29,14 +29,16 @@ namespace mxe {
 
             class Object : public INode
             {
+                friend class Wavefront;
             public:
                 Object();
 
                 virtual ~Object();
 
-                virtual void    draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &transform, const glm::vec3 &cam_pos);
+                virtual void    draw(renderer::ObjectsToDrawCallback &callback,
+                                     const glm::mat4 &transform);
 
-                virtual INode   *clone() = 0;
+                virtual INode   *clone();
 
                 std::shared_ptr<Material>   getMaterial();
                 void                        applyMaterial(std::shared_ptr<Material> mat);

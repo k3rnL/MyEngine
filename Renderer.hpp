@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:18:04+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-30T04:37:21+02:00
+ * @Last modified time: 2017-09-18T14:28:50+02:00
  */
 
 
@@ -28,16 +28,17 @@ namespace mxe {
 
         void    render(scene::SceneManager &scene);
 
-    // private:
+        const utils::FrameCounter     &getFrameCounter();
+
+    private:
         Window          &_window;
-        ShaderManager   _shader_manager;
 
         renderer::ObjectRenderer    _object_renderer;
 
         // Initial Field of View
         float initialFoV = 45.0f;
 
-        utils::FrameCounter     fps;
+        utils::FrameCounter     _fps;
         size_t  frame = 0;
 
         glm::mat4 projection;

@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-30T05:03:03+02:00
+ * @Last modified time: 2017-09-18T14:32:16+02:00
  */
 
 
@@ -12,11 +12,11 @@
 using namespace mxe;
 
 Renderer::Renderer(Window &window) :
-    _window(window), _object_renderer(projection)
+    _window(window), _object_renderer()
 {
     projection = glm::perspective<float>(45, // fov
                     (float) window.getWidth() / (float) window.getHeight(), // ratio
-                    1.0, 100.0); // near / far
+                    0.1, 100.0); // near / far
 
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
@@ -31,6 +31,8 @@ Renderer::Renderer(Window &window) :
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+
+    ShaderManager::getInstance().addShader("default_shader_basic_light");
 }
 
 void        Renderer::render(scene::SceneManager &scene)
@@ -40,35 +42,35 @@ void        Renderer::render(scene::SceneManager &scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    _shader_manager.useDefaultProgram();
-
-    for (auto obj : scene.getObjects())
-    {
-        glm::quat   quat(obj->getRotation());
-        auto transform = glm::translate(obj->getPosition()) * glm::toMat4(quat);
-
-        _object_renderer.addObject(obj->getMaterial(), obj->getMesh(), transform);
+    for (auto node : scene.getNodes()) {
+        _object_renderer.addNode(node);
     }
 
-    _shader_manager.getActualShader()->setUniformValue(projection, "projection");
-    _shader_manager.getActualShader()->setUniformValue(view, "view");
+    ShaderManager::getInstance().setUniformValue(projection, "projection");
+    ShaderManager::getInstance().setUniformValue(view, "view");
 
-    glm::vec3 tmp2(0, 04, 10);
-    _shader_manager.getActualShader()->setUniformValue(tmp2, "light_pos");
+    glm::vec3 tmp2(0, 10, 10);
+    ShaderManager::getInstance().setUniformValue(tmp2, "light_pos");
 
-    _shader_manager.getActualShader()->setUniformValue(scene.camera->getPosition(), "camera_position");
+    ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
 
-    _object_renderer.drawAll(_shader_manager);
+    _object_renderer.drawAll();
     _object_renderer.clean();
 
     _window.flipScreen();
 
-    fps.update();
+    _fps.update();
     if (frame > 10)
     {
         frame = 0;
-        std::string title = "FPS: " + std::to_string(fps.getFrameRate());
+        std::string title = "FPS: " + std::to_string(_fps.getFrameRate());
         _window.setTitle(title);
     }
     frame++;
+}
+
+
+const utils::FrameCounter     &Renderer::getFrameCounter()
+{
+    return (_fps);
 }

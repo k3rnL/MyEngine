@@ -1,11 +1,12 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-08-30T05:03:23+02:00
+# @Last modified time: 2017-09-18T14:45:17+02:00
 
 NAME 	=	MyEngine
 
 SRCS	=	Window.cpp \
+Mxe/Renderer/ObjectsToDrawCallback.cpp \
 				Shader.cpp \
 				Triangle.cpp \
 				Object.cpp \
@@ -17,7 +18,7 @@ SRCS	=	Window.cpp \
 				Scene/CameraFPS.cpp \
 				GLItem/Mesh.cpp \
 				Mxe/ShaderManager.cpp \
-				Mxe/Renderer/ObjectRenderer.cpp
+				Mxe/Renderer/ObjectRenderer.cpp 
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -27,9 +28,9 @@ SRCS_SAMPLE = main.cpp \
 OBJS_SAMPLE	=	$(SRCS_SAMPLE:.cpp=.o)
 
 
-CPPFLAGS	=	-std=c++11 -I./ -O3
+CPPFLAGS	=	-std=c++11 -I./ -O3 -g
 
-LDFLAGS		=	-lSDL2 -lGL -lGLU -lGLEW
+LDFLAGS		=	-lassimp -lSDL2 -lGL -lGLU -lGLEW
 
 all: $(NAME)
 

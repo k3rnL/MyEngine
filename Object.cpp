@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-30T05:15:58+02:00
+ * @Last modified time: 2017-09-07T01:13:24+02:00
  */
 
 
@@ -28,43 +28,68 @@ Object::~Object()
 
 }
 
+mxe::scene::INode       *Object::clone()
+{
+    Object           *node = new Object();
+
+    node->_scale = _scale;
+    node->_mesh = this->_mesh;
+    node->_material = _material;
+    return (node);
+}
+
 void            Object::setPosition(const glm::vec3 &position)
 {
     _position = position;
 }
 
-void            Object::draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &parent_transform, const glm::vec3 &cam_pos)
+void                Object::draw(renderer::ObjectsToDrawCallback &callback,
+                                 const glm::mat4 &transform)
 {
-    glm::mat4   transform;
+    glm::mat4   node_transform;
     glm::quat   quat(_rotation);
 
-    transform = parent_transform * glm::translate(_position) * glm::toMat4(quat);
+    node_transform = transform * glm::translate(_position) * glm::scale(_scale) * glm::toMat4(quat);
+    callback.addObject(_material, _mesh, node_transform);
 
-    shaders.useDefaultProgram();
-    // glUseProgram(_material->getShader().getProgram());
-    _material->applyMaterial(shaders.getActualShader());
-
-    // enableAttribute(_buffer_vertex_id, 0, 3);
-    // enableAttribute(_buffer_normal_id, 1, 3);
-    // enableAttribute(_buffer_uv_id, 2, 2);
-    _mesh->bindToShader();
-
-    // _material->getShader().setUniformValue(projection, "projection");
-    // _material->getShader().setUniformValue(view, "view");
-    shaders.getActualShader()->setUniformValue(transform, "model_view");
-    shaders.getActualShader()->setUniformValue(glm::toMat4(quat), "model_rotation");
-
-
-    // _material.getShader().setUniformVertex(cam_pos, "camera_position");
-    // Draw the triangle !
-    glDrawArrays(GL_TRIANGLES, 0, _mesh->_nb_vertex); // 3 indices starting at 0 -> 1 triangle
-    // glDisableVertexAttribArray(0);
-    // glDisableVertexAttribArray(1);
-    // glDisableVertexAttribArray(2);
-    _mesh->detachFromShader();
-
-    // INode::draw(shaders, projection, view, parent_transform, cam_pos);
+    for (auto child : childs)
+    {
+        child->draw(callback, node_transform);
+    }
 }
+
+// void            Object::draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &parent_transform, const glm::vec3 &cam_pos)
+// {
+//     glm::mat4   transform;
+//     glm::quat   quat(_rotation);
+//
+//     transform = parent_transform * glm::translate(_position) * glm::toMat4(quat);
+//
+//     shaders.useDefaultProgram();
+//     // glUseProgram(_material->getShader().getProgram());
+//     _material->applyMaterial(shaders.getActualShader());
+//
+//     // enableAttribute(_buffer_vertex_id, 0, 3);
+//     // enableAttribute(_buffer_normal_id, 1, 3);
+//     // enableAttribute(_buffer_uv_id, 2, 2);
+//     _mesh->bindToShader();
+//
+//     // _material->getShader().setUniformValue(projection, "projection");
+//     // _material->getShader().setUniformValue(view, "view");
+//     shaders.getActualShader()->setUniformValue(transform, "model_view");
+//     shaders.getActualShader()->setUniformValue(glm::toMat4(quat), "model_rotation");
+//
+//
+//     // _material.getShader().setUniformVertex(cam_pos, "camera_position");
+//     // Draw the triangle !
+//     glDrawArrays(GL_TRIANGLES, 0, _mesh->_nb_vertex); // 3 indices starting at 0 -> 1 triangle
+//     // glDisableVertexAttribArray(0);
+//     // glDisableVertexAttribArray(1);
+//     // glDisableVertexAttribArray(2);
+//     _mesh->detachFromShader();
+//
+//     // INode::draw(shaders, projection, view, parent_transform, cam_pos);
+// }
 
 std::shared_ptr<Material>    Object::getMaterial()
 {

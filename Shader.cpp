@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-19T18:11:11+02:00
+ * @Last modified time: 2017-09-17T04:42:47+02:00
  */
 
 #include "Shader.hpp"
@@ -32,6 +32,11 @@ Shader::Shader(const std::string &vertex, const std::string &fragment)
         std::cerr << VertexShaderErrorMessage << "\n";
         throw std::exception();
     }
+}
+
+void                Shader::useProgram()
+{
+    glUseProgram(_programID);
 }
 
 void                Shader::setUniformValue(const glm::mat4 &matrix, const std::string &name)

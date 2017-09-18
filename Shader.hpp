@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:38:03+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-19T18:11:08+02:00
+ * @Last modified time: 2017-09-17T04:41:57+02:00
  */
 
 #ifndef SHADER_HPP
@@ -22,6 +22,7 @@ public:
     Shader(const std::string &vertex, const std::string &frag);
 
     GLuint  getProgram();
+    void    useProgram();
 
     void    setUniformValue(const glm::mat4 &matrix, const std::string &name);
     void    setUniformValue(const glm::vec3 &vec, const std::string &name);

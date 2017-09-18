@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-30T23:16:53+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-07-30T23:46:40+02:00
+ * @Last modified time: 2017-09-05T01:22:39+02:00
  */
 
 
@@ -37,7 +37,7 @@ namespace mxe {
                 }
             }
 
-            const unsigned int    &getFrameRate() { return (_fps); }
+            const unsigned int    &getFrameRate() const { return (_fps); }
 
         private:
             unsigned int    _fps = 60;

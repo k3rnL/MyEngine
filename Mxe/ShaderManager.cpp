@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:46:29+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-08-22T22:04:00+02:00
+ * @Last modified time: 2017-09-18T14:30:45+02:00
  */
 
 
@@ -11,33 +11,58 @@
 
 using namespace mxe;
 
-ShaderManager::ShaderManager() :
-    _default_shader("shader/basic_light.vert", "shader/basic_light.frag")
+ShaderManager::ShaderManager()
 {
-    _special_shader = 0;
     _actual_shader = 0;
 }
 
-Shader  *ShaderManager::getActualShader()
+ShaderManager   &ShaderManager::getInstance() {
+    return (_manager);
+}
 
-{
+std::shared_ptr<Shader>     ShaderManager::getActualShader() {
     return (_actual_shader);
 }
 
-void    ShaderManager::useDefaultProgram()
+std::shared_ptr<Shader>     ShaderManager::getDefaultShader() {
+    if (_shaders.size())
+        return (_shaders[0].ptr);
+    else
+        return (0);
+}
+
+std::shared_ptr<Shader>     ShaderManager::addShader(const std::string &name)
 {
-    if (_actual_shader != &_default_shader)
+    for (auto shader : _shaders)
     {
-        glUseProgram(_default_shader.getProgram());
-        _actual_shader = &_default_shader;
+        if (shader.name == name)
+            return (shader.ptr);
+    }
+
+    return (0);
+}
+
+void    ShaderManager::destroyAll() {
+    _shaders.clear();
+}
+
+void    ShaderManager::setUniformValue(const glm::mat4 &matrix, const std::string &name)
+{
+    for (auto shader : _shaders) {
+        shader.ptr->setUniformValue(matrix, name);
     }
 }
 
-void    ShaderManager::useSpecialProgram(Shader *shader)
+void    ShaderManager::setUniformValue(const glm::vec3 &vec, const std::string &name)
 {
-    if (_actual_shader != shader)
-    {
-        glUseProgram(shader->getProgram());
-        _actual_shader = shader;
+    for (auto shader : _shaders) {
+        shader.ptr->setUniformValue(vec, name);
+    }
+}
+
+void    ShaderManager::setUniformValue(const int value, const std::string &name)
+{
+    for (auto shader : _shaders) {
+        shader.ptr->setUniformValue(value, name);
     }
 }
