@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T17:16:53+02:00
+ * @Last modified time: 2017-09-20T02:05:19+02:00
  */
 
 #include "Material.hpp"
@@ -42,7 +42,7 @@ void          Material::setTexture(const std::string &file)
   _texture = std::make_shared<Texture>();
   _texture->Name = file;
 
-  _shader->useProgram();
+  ShaderManager::getInstance().useShader(_shader);
 
   glGenTextures(1, &_texture->Texture_id);
   glActiveTexture(GL_TEXTURE0);

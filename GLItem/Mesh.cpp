@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-14T20:30:14+02:00
+ * @Last modified time: 2017-09-20T02:18:55+02:00
  */
 
 
@@ -18,6 +18,7 @@ Mesh::Mesh()
   _buffer_uv_id = GL_INVALID_VALUE;
   _buffer_size = 0;
   _nb_vertex = 0;
+  _shader = ShaderManager::getInstance().getDefaultShader();
 
   std::cout << "New Mesh ! \n";
 
@@ -36,6 +37,7 @@ Mesh::Mesh(Mesh &mesh)
     _mesh_normals = mesh._mesh_normals;
     _mesh_uvs = mesh._mesh_uvs;
     _mesh_vertexes = mesh._mesh_vertexes;
+    _shader = mesh._shader;
     finish();
 }
 
@@ -46,6 +48,8 @@ int     Mesh::getElementCount()
 
 void    Mesh::finish()
 {
+  ShaderManager::getInstance().useShader(_shader);
+
   if (_buffer_vertex_id != GL_INVALID_VALUE)
     glDeleteBuffers(1, &_buffer_vertex_id);
   if (_buffer_normal_id != GL_INVALID_VALUE)
@@ -78,6 +82,15 @@ void    Mesh::finish()
 
 void    Mesh::bindToShader()
 {
+    if (ShaderManager::getInstance().getActualShader() != _shader)
+    {
+        auto shader = ShaderManager::getInstance().getActualShader();
+        ShaderManager::getInstance().useShader(_shader);
+        clearGPU();
+        _shader = shader;
+        finish();
+    }
+
   enableAttribute(_buffer_vertex_id, 0, 3);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_indices_id);
   enableAttribute(_buffer_normal_id, 1, 3);
@@ -89,6 +102,16 @@ void    Mesh::detachFromShader()
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(2);
+}
+
+void        Mesh::clearGPU()
+{
+    if (_buffer_vertex_id != GL_INVALID_VALUE)
+      glDeleteBuffers(1, &_buffer_vertex_id);
+    if (_buffer_normal_id != GL_INVALID_VALUE)
+      glDeleteBuffers(1, &_buffer_normal_id);
+    if (_buffer_uv_id != GL_INVALID_VALUE)
+      glDeleteBuffers(1, &_buffer_uv_id);
 }
 
 void    Mesh::addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv)

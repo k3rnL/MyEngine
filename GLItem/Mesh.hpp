@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T19:54:53+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-13T22:55:09+02:00
+ * @Last modified time: 2017-09-18T22:52:22+02:00
  */
 
 
@@ -56,11 +56,13 @@ namespace mxe {
       size_t          _nb_vertex;
 
     private:
+        std::shared_ptr<Shader>     _shader;
 
-      std::vector<glm::vec3>    _mesh_vertexes;
-      std::vector<unsigned int> _mesh_indices;
-      std::vector<glm::vec3>    _mesh_normals;
-      std::vector<glm::vec2>    _mesh_uvs;
+
+      std::vector<glm::vec3>        _mesh_vertexes;
+      std::vector<unsigned int>     _mesh_indices;
+      std::vector<glm::vec3>        _mesh_normals;
+      std::vector<glm::vec2>        _mesh_uvs;
 
       GLuint          _buffer_vertex_id;
       GLuint          _buffer_indices_id;
@@ -69,6 +71,7 @@ namespace mxe {
       GLsizei         _buffer_size;
 
       void            enableAttribute(GLuint buffer, GLuint attr, GLuint size, GLint buffer_type = GL_ARRAY_BUFFER);
+      void            clearGPU();
     };
 
   }

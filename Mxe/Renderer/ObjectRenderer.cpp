@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-30T00:27:25+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T16:30:45+02:00
+ * @Last modified time: 2017-09-18T22:57:17+02:00
  */
 
 
@@ -29,7 +29,7 @@ void    ObjectRenderer::drawAll()
 
     for (auto shader_to_mat : objects)
     {
-      shader_to_mat.first->useProgram();
+      ShaderManager::getInstance().useShader(shader_to_mat.first);
       for (auto mat_to_obj : shader_to_mat.second)
       {
         mat_to_obj.first->useMaterial();

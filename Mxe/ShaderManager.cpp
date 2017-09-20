@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:46:29+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T16:57:16+02:00
+ * @Last modified time: 2017-09-20T01:57:06+02:00
  */
 
 
@@ -16,6 +16,15 @@ ShaderManager   ShaderManager::_manager = ShaderManager();
 ShaderManager::ShaderManager()
 {
     _actual_shader = 0;
+}
+
+void            ShaderManager::useShader(std::shared_ptr<Shader> shader)
+{
+    if (_actual_shader != shader)
+    {
+        shader->useProgram();
+        _actual_shader = shader;
+    }
 }
 
 ShaderManager   &ShaderManager::getInstance() {
@@ -44,7 +53,7 @@ std::shared_ptr<Shader>     ShaderManager::addShader(const std::string &name)
     std::shared_ptr<Shader>   shader = std::make_shared<Shader>("shader/" + name + ".vert",
                                                                 "shader/" + name + ".frag");
     _shaders.push_back({name, shader});
-    return (0);
+    return (shader);
 }
 
 void    ShaderManager::destroyAll() {

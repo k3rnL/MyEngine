@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-09-18T14:45:17+02:00
+# @Last modified time: 2017-09-18T14:49:40+02:00
 
 NAME 	=	MyEngine
 
@@ -18,7 +18,7 @@ Mxe/Renderer/ObjectsToDrawCallback.cpp \
 				Scene/CameraFPS.cpp \
 				GLItem/Mesh.cpp \
 				Mxe/ShaderManager.cpp \
-				Mxe/Renderer/ObjectRenderer.cpp 
+				Mxe/Renderer/ObjectRenderer.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 

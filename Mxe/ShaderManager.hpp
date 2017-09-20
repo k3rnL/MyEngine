@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:40:12+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T14:30:21+02:00
+ * @Last modified time: 2017-09-18T22:25:20+02:00
  */
 
 
@@ -24,6 +24,7 @@ namespace mxe {
         std::shared_ptr<Shader>     addShader(const std::string &name);
         std::shared_ptr<Shader>     getActualShader();
         std::shared_ptr<Shader>     getDefaultShader();
+        void                        useShader(std::shared_ptr<Shader> shader);
 
         void                        destroyAll();
 
