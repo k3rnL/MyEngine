@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-30T00:27:25+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T22:57:17+02:00
+ * @Last modified time: 2017-09-20T18:12:51+02:00
  */
 
 
@@ -29,7 +29,7 @@ void    ObjectRenderer::drawAll()
 
     for (auto shader_to_mat : objects)
     {
-      ShaderManager::getInstance().useShader(shader_to_mat.first);
+      shader_to_mat.first->useProgram();
       for (auto mat_to_obj : shader_to_mat.second)
       {
         mat_to_obj.first->useMaterial();
@@ -39,7 +39,6 @@ void    ObjectRenderer::drawAll()
           for (auto transform : mesh.second)
           {
             // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
-
             shader_to_mat.first->setUniformValue(transform, "model_view");
             glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
           }

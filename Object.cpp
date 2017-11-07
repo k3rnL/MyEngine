@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-07T01:13:24+02:00
+ * @Last modified time: 2017-09-20T15:29:56+02:00
  */
 
 
@@ -23,9 +23,8 @@ Object::~Object()
 {
     if (_buffer_vertex_id)
         glDeleteBuffers(_buffer_size, &_buffer_vertex_id);
-      if (_buffer_normal_id)
-          glDeleteBuffers(_buffer_size, &_buffer_normal_id);
-
+    if (_buffer_normal_id)
+        glDeleteBuffers(_buffer_size, &_buffer_normal_id);
 }
 
 mxe::scene::INode       *Object::clone()

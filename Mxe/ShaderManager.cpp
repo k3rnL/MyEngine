@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:46:29+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-20T01:57:06+02:00
+ * @Last modified time: 2017-11-07T10:27:04+01:00
  */
 
 
@@ -53,6 +53,8 @@ std::shared_ptr<Shader>     ShaderManager::addShader(const std::string &name)
     std::shared_ptr<Shader>   shader = std::make_shared<Shader>("shader/" + name + ".vert",
                                                                 "shader/" + name + ".frag");
     _shaders.push_back({name, shader});
+    if (_shaders.size() == 1)
+      useShader(shader);
     return (shader);
 }
 

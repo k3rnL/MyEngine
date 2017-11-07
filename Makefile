@@ -1,9 +1,12 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-09-18T14:49:40+02:00
+# @Last modified time: 2017-11-07T11:31:09+01:00
 
 NAME 	=	MyEngine
+
+SRC_PATH	=	./
+OBJ_PATH	=	./obj/
 
 SRCS	=	Window.cpp \
 Mxe/Renderer/ObjectsToDrawCallback.cpp \

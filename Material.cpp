@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-20T02:05:19+02:00
+ * @Last modified time: 2017-11-07T11:39:11+01:00
  */
 
 #include "Material.hpp"
@@ -52,8 +52,9 @@ void          Material::setTexture(const std::string &file)
   unsigned char   *data = stbi_load(file.c_str(), &x, &y, &n, 0);
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5); // pick mipmap level 7 or lower
 
   glGenerateMipmap(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE0);

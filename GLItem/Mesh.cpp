@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-20T02:18:55+02:00
+ * @Last modified time: 2017-09-20T15:41:33+02:00
  */
 
 
@@ -84,6 +84,7 @@ void    Mesh::bindToShader()
 {
     if (ShaderManager::getInstance().getActualShader() != _shader)
     {
+      std::cout << "Mesh:" << this << " changed program\n";
         auto shader = ShaderManager::getInstance().getActualShader();
         ShaderManager::getInstance().useShader(_shader);
         clearGPU();
