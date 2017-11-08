@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:38:03+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-17T04:41:57+02:00
+ * @Last modified time: 2017-11-08T18:22:28+01:00
  */
 
 #ifndef SHADER_HPP
@@ -27,6 +27,7 @@ public:
     void    setUniformValue(const glm::mat4 &matrix, const std::string &name);
     void    setUniformValue(const glm::vec3 &vec, const std::string &name);
     void    setUniformValue(const int value, const std::string &name);
+    void    setUniformValue(const float value, const std::string &name);
 
 private:
 

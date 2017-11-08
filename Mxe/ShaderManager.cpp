@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:46:29+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-07T10:27:04+01:00
+ * @Last modified time: 2017-11-08T18:20:31+01:00
  */
 
 
@@ -77,6 +77,13 @@ void    ShaderManager::setUniformValue(const glm::vec3 &vec, const std::string &
 }
 
 void    ShaderManager::setUniformValue(const int value, const std::string &name)
+{
+    for (auto shader : _shaders) {
+        shader.ptr->setUniformValue(value, name);
+    }
+}
+
+void    ShaderManager::setUniformValue(const float value, const std::string &name)
 {
     for (auto shader : _shaders) {
         shader.ptr->setUniformValue(value, name);

@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T17:24:32+02:00
+ * @Last modified time: 2017-11-08T18:33:22+01:00
  */
 
 
@@ -45,6 +45,8 @@ void        Renderer::render(scene::SceneManager &scene)
     for (auto node : scene.getNodes()) {
         _object_renderer.addNode(node);
     }
+    static float time_i = 0;
+    ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
 
     ShaderManager::getInstance().setUniformValue(projection, "projection");
     ShaderManager::getInstance().setUniformValue(view, "view");

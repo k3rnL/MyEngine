@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-22T21:40:12+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-18T22:25:20+02:00
+ * @Last modified time: 2017-11-08T18:19:45+01:00
  */
 
 
@@ -31,6 +31,7 @@ namespace mxe {
         void    setUniformValue(const glm::mat4 &matrix, const std::string &name);
         void    setUniformValue(const glm::vec3 &vec, const std::string &name);
         void    setUniformValue(const int value, const std::string &name);
+        void    setUniformValue(const float value, const std::string &name);
 
     private:
         ShaderManager();

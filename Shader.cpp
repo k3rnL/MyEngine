@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-07T10:29:22+01:00
+ * @Last modified time: 2017-11-08T18:22:54+01:00
  */
 
 #include "Shader.hpp"
@@ -55,6 +55,12 @@ void                Shader::setUniformValue(const int value, const std::string &
 {
   GLuint id = glGetUniformLocation(_programID, name.c_str());
   glProgramUniform1i(_programID, id, value);
+}
+
+void                Shader::setUniformValue(const float value, const std::string &name)
+{
+  GLuint id = glGetUniformLocation(_programID, name.c_str());
+  glProgramUniform1f(_programID, id, value);
 }
 
 GLuint              Shader::compile(const std::string &source, GLenum type)
