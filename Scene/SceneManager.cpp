@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T23:52:43+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-09-12T23:07:35+02:00
+ * @Last modified time: 2017-11-09T11:16:39+01:00
  */
 
 
@@ -54,4 +54,8 @@ void                        SceneManager::addChild(INode *node)
 std::vector<INode *>        &SceneManager::getNodes()
 {
     return (nodes);
+}
+
+glm::vec3                   &SceneManager::getLight() {
+  return (light);
 }

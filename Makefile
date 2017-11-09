@@ -1,9 +1,11 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-11-07T11:31:09+01:00
+# @Last modified time: 2017-11-09T20:51:31+01:00
 
 NAME 	=	MyEngine
+
+LIB 	= libmxe.so
 
 SRC_PATH	=	./
 OBJ_PATH	=	./obj/
@@ -38,7 +40,7 @@ LDFLAGS		=	-lassimp -lSDL2 -lGL -lGLU -lGLEW
 all: $(NAME)
 
 lib: $(OBJS) $(eval CPPFLAGS += -fPIC)
-	g++ -shared -fPIC -o libmxe.so $(OBJS) $(LDFLAGS)
+	g++ -shared -fPIC -o $(LIB) $(OBJS) $(LDFLAGS)
 
 install:
 	cp libmxe.so /usr/lib
@@ -52,5 +54,6 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME)
+	rm -rf $(LIB)
 
 re: fclean all

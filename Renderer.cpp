@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-08T18:33:22+01:00
+ * @Last modified time: 2017-11-09T11:22:26+01:00
  */
 
 
@@ -51,8 +51,7 @@ void        Renderer::render(scene::SceneManager &scene)
     ShaderManager::getInstance().setUniformValue(projection, "projection");
     ShaderManager::getInstance().setUniformValue(view, "view");
 
-    glm::vec3 tmp2(0, 10, 10);
-    ShaderManager::getInstance().setUniformValue(tmp2, "light_pos");
+    ShaderManager::getInstance().setUniformValue(scene.getLight(), "light_pos");
 
     ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
 
