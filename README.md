@@ -1,4 +1,4 @@
-# MyEngine
+# FSE : Fast and Simple Engine
 
 This is a simple real-time 3D engine who actually provide some basic features easily.
 
