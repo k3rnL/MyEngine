@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T23:52:43+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:47:16+01:00
+ * @Last modified time: 2017-11-13T03:24:45+01:00
  */
 
 
@@ -13,7 +13,6 @@ using namespace fse::scene;
 
 SceneManager::SceneManager()
 {
-
 }
 
 SceneManager::~SceneManager()
@@ -56,6 +55,10 @@ std::vector<INode *>        &SceneManager::getNodes()
     return (nodes);
 }
 
-glm::vec3                   &SceneManager::getLight() {
+std::shared_ptr<Light>      SceneManager::getLight() {
   return (light);
+}
+
+void                    SceneManager::setLight(std::shared_ptr<Light> light) {
+    this->light = light;
 }

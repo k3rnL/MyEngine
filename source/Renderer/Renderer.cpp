@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:46:58+01:00
+ * @Last modified time: 2017-11-13T03:51:38+01:00
  */
 
 
@@ -46,12 +46,16 @@ void        Renderer::render(scene::SceneManager &scene)
         _object_renderer.addNode(node);
     }
     static float time_i = 0;
+
+    scene.getLight()->updateShadowMap(_object_renderer);
+
     ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
 
     ShaderManager::getInstance().setUniformValue(projection, "projection");
     ShaderManager::getInstance().setUniformValue(view, "view");
 
-    ShaderManager::getInstance().setUniformValue(scene.getLight(), "light_pos");
+    ShaderManager::getInstance().setUniformValue(scene.getLight()->getPosition(), "light_pos");
+    ShaderManager::getInstance().setUniformValue(scene.getLight()->getMVP(), "light_mvp");
 
     ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
 

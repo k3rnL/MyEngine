@@ -1,11 +1,9 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-11-13T01:08:35+01:00
+# @Last modified time: 2017-11-13T03:01:01+01:00
 
-NAME 	=	MyEngine
-
-LIB 	= libfse.so
+NAME 	= libfse.so
 
 SRC_PATH	=	./source/
 OBJ_PATH	=	./obj/
@@ -19,8 +17,10 @@ SRCS	=	source/Window.cpp \
 				source/Scene/SceneManager.cpp \
 				source/Scene/INode.cpp \
 				source/Scene/CameraFPS.cpp \
+				source/Scene/Light.cpp \
 				source/GLItem/Shader.cpp \
 				source/GLItem/Mesh.cpp \
+				source/GLItem/Texture.cpp \
 				source/Renderer/Renderer.cpp \
 				source/Renderer/ObjectRenderer.cpp \
 				source/Renderer/ObjectsToDrawCallback.cpp
@@ -41,15 +41,15 @@ LDFLAGS		=	-lassimp -lSDL2 -lGL -lGLU -lGLEW
 all: $(NAME)
 
 lib: $(OBJS) $(eval CPPFLAGS += -fPIC)
-	g++ -shared -fPIC -o $(LIB) $(OBJS) $(LDFLAGS)
+	g++ -shared -fPIC -o $(NAME) $(OBJS) $(LDFLAGS)
 
 install:
-	cp libmxe.so /usr/lib
+	cp libfse.so /usr/lib
 	mkdir -p /usr/include/fse
 	cp -r include/ /usr/
 
-$(NAME): $(OBJS_SAMPLE)
-	g++ -o $(NAME) $(OBJS_SAMPLE) $(LDFLAGS)
+$(NAME): $(OBJS) $(eval CPPFLAGS += -fPIC)
+	lib
 
 clean:
 	rm -rf $(OBJS)
@@ -60,3 +60,5 @@ fclean: clean
 	rm -rf $(LIB)
 
 re: fclean all
+
+.PHONY: lib install clean fclean all re

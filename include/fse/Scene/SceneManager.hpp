@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:39:05+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:46:01+01:00
+ * @Last modified time: 2017-11-13T03:24:08+01:00
  */
 
 
@@ -16,6 +16,7 @@
 
 #include "fse/Scene/INode.hpp"
 #include "fse/Scene/ICamera.hpp"
+#include "fse/Scene/Light.hpp"
 #include "fse/Scene/Object/Object.hpp"
 #include "fse/Scene/Object/Wavefront.hpp"
 
@@ -34,14 +35,15 @@ namespace fse {
             object::Object        *createWavefront(std::string const &file);
 
             std::vector<INode *>  &getNodes();
-            glm::vec3             &getLight();
+            std::shared_ptr<Light>  getLight();
+            void                    setLight(std::shared_ptr<Light>);
 
             ICamera                           *camera;
 
         private:
             std::map<std::string, INode *>      nodes_data;
             std::vector<INode *>                nodes;
-            glm::vec3                           light;
+            std::shared_ptr<Light>              light;
         };
 
     }

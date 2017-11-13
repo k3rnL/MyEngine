@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:46:13+01:00
+ * @Last modified time: 2017-11-13T03:42:27+01:00
  */
 
 #ifndef MATERIAL_HPP
@@ -15,21 +15,12 @@
 #include <glm/glm.hpp>
 
 #include "fse/GLItem/Shader.hpp"
+#include "fse/GLItem/Texture.hpp"
 #include "fse/ShaderManager.hpp"
 
 namespace fse {
   namespace scene {
     namespace object {
-
-      class Texture
-      {
-      public:
-        glm::vec2     Size;
-        std::string   Name;
-        GLuint        Texture_id;
-        unsigned char *Texture_data;
-
-      };
 
       class Material
       {
@@ -40,6 +31,7 @@ namespace fse {
 
         void            setColor(const float &r, const float &g, const float &b);
         void            setTexture(const std::string &file);
+        void            setTexture(std::shared_ptr<gl_item::Texture> texture);
         void            setShader(std::shared_ptr<gl_item::Shader> shader);
 
         std::shared_ptr<gl_item::Shader>     getShader();
@@ -49,7 +41,7 @@ namespace fse {
         Material        &operator=(Material &mat);
 
         protected:
-          std::shared_ptr<Texture>          _texture;
+          std::shared_ptr<gl_item::Texture> _texture;
           std::shared_ptr<gl_item::Shader>  _shader;
 
           glm::vec3                         _color;
