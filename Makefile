@@ -1,29 +1,30 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-11-09T20:51:31+01:00
+# @Last modified time: 2017-11-13T01:08:35+01:00
 
 NAME 	=	MyEngine
 
-LIB 	= libmxe.so
+LIB 	= libfse.so
 
-SRC_PATH	=	./
+SRC_PATH	=	./source/
 OBJ_PATH	=	./obj/
+INC_PATH 	= ./include/
 
-SRCS	=	Window.cpp \
-Mxe/Renderer/ObjectsToDrawCallback.cpp \
-				Shader.cpp \
-				Triangle.cpp \
-				Object.cpp \
-				Renderer.cpp \
-				Material.cpp \
-				Scene/Object/Wavefront.cpp \
-				Scene/SceneManager.cpp \
-				Scene/INode.cpp \
-				Scene/CameraFPS.cpp \
-				GLItem/Mesh.cpp \
-				Mxe/ShaderManager.cpp \
-				Mxe/Renderer/ObjectRenderer.cpp
+SRCS	=	source/Window.cpp \
+				source/ShaderManager.cpp \
+				source/Material.cpp \
+				source/Scene/Object/Object.cpp \
+				source/Scene/Object/Wavefront.cpp \
+				source/Scene/SceneManager.cpp \
+				source/Scene/INode.cpp \
+				source/Scene/CameraFPS.cpp \
+				source/GLItem/Shader.cpp \
+				source/GLItem/Mesh.cpp \
+				source/Renderer/Renderer.cpp \
+				source/Renderer/ObjectRenderer.cpp \
+				source/Renderer/ObjectsToDrawCallback.cpp
+
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -33,7 +34,7 @@ SRCS_SAMPLE = main.cpp \
 OBJS_SAMPLE	=	$(SRCS_SAMPLE:.cpp=.o)
 
 
-CPPFLAGS	=	-std=c++11 -I./ -O3 -g
+CPPFLAGS	=	-std=c++11 -I$(INC_PATH) -O3 -g
 
 LDFLAGS		=	-lassimp -lSDL2 -lGL -lGLU -lGLEW
 
@@ -44,6 +45,8 @@ lib: $(OBJS) $(eval CPPFLAGS += -fPIC)
 
 install:
 	cp libmxe.so /usr/lib
+	mkdir -p /usr/include/fse
+	cp -r include/ /usr/
 
 $(NAME): $(OBJS_SAMPLE)
 	g++ -o $(NAME) $(OBJS_SAMPLE) $(LDFLAGS)
