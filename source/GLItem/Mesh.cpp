@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:46:44+01:00
+ * @Last modified time: 2017-11-14T01:13:05+01:00
  */
 
 
@@ -48,8 +48,6 @@ int     Mesh::getElementCount()
 
 void    Mesh::finish()
 {
-  ShaderManager::getInstance().useShader(_shader);
-
   if (_buffer_vertex_id != GL_INVALID_VALUE)
     glDeleteBuffers(1, &_buffer_vertex_id);
   if (_buffer_normal_id != GL_INVALID_VALUE)
@@ -82,18 +80,18 @@ void    Mesh::finish()
 
 void    Mesh::bindToShader()
 {
-    if (ShaderManager::getInstance().getActualShader() != _shader)
-    {
-      std::cout << "Mesh:" << this << " changed program\n";
-        auto shader = ShaderManager::getInstance().getActualShader();
-        ShaderManager::getInstance().useShader(_shader);
-        clearGPU();
-        _shader = shader;
-        finish();
-    }
+    // if (ShaderManager::getInstance().getActualShader() != _shader)
+    // {
+    //   std::cout << "Mesh:" << this << " changed program\n";
+    //     auto shader = ShaderManager::getInstance().getActualShader();
+    //     ShaderManager::getInstance().useShader(_shader);
+    //     clearGPU();
+    //     _shader = shader;
+    //     finish();
+    // }
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_indices_id);
   enableAttribute(_buffer_vertex_id, 0, 3);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_indices_id);
   enableAttribute(_buffer_normal_id, 1, 3);
   enableAttribute(_buffer_uv_id, 2, 2);
 }

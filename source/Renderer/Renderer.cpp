@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T03:51:38+01:00
+ * @Last modified time: 2017-11-15T15:43:25+01:00
  */
 
 
@@ -16,6 +16,10 @@ Renderer::Renderer(Window &window) :
 {
     projection = glm::perspective<float>(45, // fov
                     (float) window.getWidth() / (float) window.getHeight(), // ratio
+                    0.1, 100.0); // near / far
+
+    projection = glm::perspective<float>(45, // fov
+                    (float) 1024 / (float) 1024, // ratio
                     0.1, 100.0); // near / far
 
     GLuint VertexArrayID;
@@ -42,6 +46,7 @@ void        Renderer::render(scene::SceneManager &scene)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    _object_renderer.setShadowMap(scene.getLight()->getTexture());
     for (auto node : scene.getNodes()) {
         _object_renderer.addNode(node);
     }
@@ -59,6 +64,9 @@ void        Renderer::render(scene::SceneManager &scene)
 
     ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
 
+    glViewport(0, 0, _window.getWidth(), _window.getHeight());
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     _object_renderer.drawAll();
     _object_renderer.clean();
 

@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-11-13T03:01:01+01:00
+# @Last modified time: 2017-11-13T15:47:49+01:00
 
 NAME 	= libfse.so
 
@@ -49,7 +49,7 @@ install:
 	cp -r include/ /usr/
 
 $(NAME): $(OBJS) $(eval CPPFLAGS += -fPIC)
-	lib
+	g++ -shared -fPIC -o $(NAME) $(OBJS) $(LDFLAGS)
 
 clean:
 	rm -rf $(OBJS)

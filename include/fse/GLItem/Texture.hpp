@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-11-13T01:18:27+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T02:20:42+01:00
+ * @Last modified time: 2017-11-14T00:03:23+01:00
  */
 
 #ifndef FSE_TEXTURE_HPP
@@ -25,7 +25,7 @@ namespace fse {
                           RGB = GL_RGB,
                           BGR = GL_BGR, RGBA = GL_RGBA,
                           BGRA = GL_BGRA,
-                          DETPH = GL_DEPTH
+                          DETPH_COMPONENT = GL_DEPTH_COMPONENT
                         };
 
             enum InternalFormat { DEPTH = GL_DEPTH_COMPONENT,
@@ -36,12 +36,12 @@ namespace fse {
                                   RGB10 = GL_RGB10
                                 };
 
-            enum Type { UNSIGNED_BYTE,
-                        BYTE,
-                        FLOAT
+            enum Type { UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
+                        BYTE = GL_BYTE,
+                        FLOAT = GL_FLOAT
                       };
 
-            static std::shared_ptr<Texture> create(size_t x, size_t y, InternalFormat format, Type type);
+            static std::shared_ptr<Texture> create(size_t x, size_t y, InternalFormat in_format, Format format, Type type);
             static std::shared_ptr<Texture> load(std::string const &file);
 
             Texture();
@@ -49,6 +49,7 @@ namespace fse {
 
             void    setMipMapLevel();
             void    bind();
+            void    unbind();
             void    activate(int slot);
             GLuint  getId();
             void    loadImage(std::string const &name);

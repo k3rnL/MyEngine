@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-16T16:25:47+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:47:20+01:00
+ * @Last modified time: 2017-11-14T22:18:11+01:00
  */
 
 
@@ -44,6 +44,8 @@ void          CameraFPS::mouseInput(const int x_relative, const int y_relative, 
 }
 
 const glm::mat4       &CameraFPS::getView() {
+    // _view = glm::lookAt(getPosition(), getPosition() + glm::vec3(0,-1,0), glm::vec3(0,0,1));
+
   return (_view);
 }
 

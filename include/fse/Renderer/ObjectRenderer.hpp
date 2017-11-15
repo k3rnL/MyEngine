@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-29T23:40:59+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:44:23+01:00
+ * @Last modified time: 2017-11-13T15:14:57+01:00
  */
 
 
@@ -35,8 +35,12 @@ namespace fse {
             void    addNode(scene::INode *node);
 
             void    drawAll();
+            void    drawAll(std::shared_ptr<gl_item::Shader> shader);
+
+            void    setShadowMap(std::shared_ptr<gl_item::Texture> texture);
 
         private:
+            std::shared_ptr<gl_item::Texture>   _shadow;
             // const glm::mat4     &_projection;
             ObjectsToDrawCallback   _callback;
 

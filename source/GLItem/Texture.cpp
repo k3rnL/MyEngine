@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-11-13T01:37:42+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T03:04:26+01:00
+ * @Last modified time: 2017-11-14T00:04:03+01:00
  */
 
 #include "fse/GLItem/Texture.hpp"
@@ -17,14 +17,15 @@ using namespace fse::gl_item;
 #include <iostream>
 
 std::shared_ptr<Texture>    Texture::create(size_t x, size_t y,
-                                            InternalFormat format,
+                                            InternalFormat in_format,
+                                            Format format,
                                             Type type)
 {
     std::shared_ptr<Texture>        texture;
 
     texture = std::make_shared<Texture>();
     texture->bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, format, x, y, 0, 0, type, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, in_format, x, y, 0, format, type, 0);
     return (texture);
 }
 
@@ -60,13 +61,16 @@ Texture::~Texture() {
 }
 
 void    Texture::activate(int slot) {
-    bind();
     glActiveTexture(GL_TEXTURE0 + slot);
+    bind();
 }
 
 void    Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, _id);
-    GLenum err;
+}
+
+void    Texture::unbind() {
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 GLuint  Texture::getId() {

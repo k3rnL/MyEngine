@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-30T00:27:25+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:46:51+01:00
+ * @Last modified time: 2017-11-15T01:41:54+01:00
  */
 
 
@@ -15,7 +15,7 @@ ObjectRenderer::ObjectRenderer()
     // ObjectRenderer::ObjectRenderer(const glm::mat4 &projection) :
     //     _projection(projection)
 {
-
+    _shadow = 0;
 }
 
 void    ObjectRenderer::addNode(scene::INode *node)
@@ -29,7 +29,8 @@ void    ObjectRenderer::drawAll()
 
     for (auto shader_to_mat : objects)
     {
-      shader_to_mat.first->useProgram();
+        ShaderManager::getInstance().useShader(shader_to_mat.first);
+      // shader_to_mat.first->useProgram();
       for (auto mat_to_obj : shader_to_mat.second)
       {
         mat_to_obj.first->useMaterial();
@@ -39,7 +40,11 @@ void    ObjectRenderer::drawAll()
           for (auto transform : mesh.second)
           {
             // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
-            shader_to_mat.first->setUniformValue(transform, "model_view");
+            ShaderManager::getInstance().getActualShader()->setUniformValue(transform, "model_view");
+            if (_shadow) {
+                _shadow->activate(1);
+                ShaderManager::getInstance().getActualShader()->setUniformValue(1, "shadow_map");
+            }
             glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
           }
           mesh.first->detachFromShader();
@@ -48,30 +53,38 @@ void    ObjectRenderer::drawAll()
     }
 }
 
-// void    ObjectRenderer::addObject(std::shared_ptr<scene::object::Material>  mat,
-//                                   std::shared_ptr<gl_item::Mesh>            mesh,
-//                                   const glm::mat4                           &transform)
-// {
-//     auto material_to_models = objects.insert(std::make_pair(mat, std::list<std::pair<std::shared_ptr<gl_item::Mesh>,
-//                                                                             std::list<glm::mat4>>>()));
-//     auto mat_to_models_it = material_to_models.first;
-//
-//     auto it = mat_to_models_it->second.begin();
-//     while (it != mat_to_models_it->second.end())
-//     {
-//         if (it->first == mesh)
-//         {
-//             it->second.push_back(transform);
-//             break;
-//         }
-//     }
-//     if (it == mat_to_models_it->second.end())
-//     {
-//         mat_to_models_it->second.push_back(std::make_pair(mesh, std::list<glm::mat4>()));
-//         mat_to_models_it->second.back().second.push_back(transform);
-//     }
-// }
+void    ObjectRenderer::drawAll(std::shared_ptr<gl_item::Shader> shader)
+{
+    auto &objects = _callback.objects;
 
+    for (auto shader_to_mat : objects)
+    {
+      ShaderManager::getInstance().useShader(shader);
+      for (auto mat_to_obj : shader_to_mat.second)
+      {
+        // mat_to_obj.first->useMaterial();
+        for (auto mesh : mat_to_obj.second)
+        {
+          mesh.first->bindToShader();
+          for (auto transform : mesh.second)
+          {
+            // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
+            ShaderManager::getInstance().getActualShader()->setUniformValue(transform, "model_view");
+            if (_shadow) {
+                _shadow->activate(1);
+                ShaderManager::getInstance().getActualShader()->setUniformValue(1, "shadow_map");
+            }
+            glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
+          }
+          mesh.first->detachFromShader();
+        }
+      }
+    }
+}
+
+void    ObjectRenderer::setShadowMap(std::shared_ptr<gl_item::Texture> texture) {
+    _shadow = texture;
+}
 
 void    ObjectRenderer::clean()
 {
