@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-01T00:33:57+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:47:19+01:00
+ * @Last modified time: 2017-11-20T23:56:16+01:00
  */
 
 
@@ -71,6 +71,10 @@ glm::vec3   &INode::getRotation() {
 
 glm::vec3   &INode::getScale() {
     return (_scale);
+}
+
+std::list<INode *>    &INode::getChilds() {
+    return childs;
 }
 
 void        INode::addChild(fse::scene::INode *child) {

@@ -2,7 +2,7 @@
 * @Author: daniel_b
 * @Date:   2017-11-13T02:59:18+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-15T16:03:37+01:00
+ * @Last modified time: 2017-11-20T03:17:24+01:00
 */
 
 #include "fse/Scene/Light.hpp"
@@ -17,25 +17,18 @@ Light::Light() {
     glBindFramebuffer(GL_FRAMEBUFFER, _frame_buffer);
 
     _texture = Texture::create(_quality, _quality, Texture::DEPTH, Texture::DETPH_COMPONENT, Texture::FLOAT);
-    // _texture = Texture::create(256, 256, Texture::RGB8, Texture::RGB, Texture::UNSIGNED_BYTE);
 
     _texture->bind();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-    // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 
     _texture->unbind();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _texture->getId(), 0);
-    // glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, _texture->getId(), 0);
-
-    // glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texture->getId(), 0);
 
     glDrawBuffer(GL_NONE);
-    // glReadBuffer(GL_NONE);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -49,9 +42,7 @@ Light::Light() {
                     (float) 256 / (float) 256, // ratio
                     0.1, 100.0); // near / far
 
-    // glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, getPosition(), glm::vec3(0,1,0));
     _view = glm::lookAt(getPosition(), getPosition() + glm::vec3(0,-1,0), glm::vec3(0,0,1));
-
 
     _shader = ShaderManager::getInstance().addShader("shadow");
 }

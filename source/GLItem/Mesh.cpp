@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-14T01:13:05+01:00
+ * @Last modified time: 2017-11-20T23:38:42+01:00
  */
 
 
@@ -11,34 +11,58 @@
 
 using namespace fse::gl_item;
 
-Mesh::Mesh()
+Mesh::Mesh() : _buffer_indices(Buffer::ElementBuffer)
 {
-  _buffer_vertex_id = GL_INVALID_VALUE;
-  _buffer_normal_id = GL_INVALID_VALUE;
-  _buffer_uv_id = GL_INVALID_VALUE;
-  _buffer_size = 0;
   _nb_vertex = 0;
+  _min = glm::vec3(0);
+  _max = glm::vec3(0);
   _shader = ShaderManager::getInstance().getDefaultShader();
-
-  std::cout << "New Mesh ! \n";
-
 }
 
 Mesh::Mesh(Mesh &mesh)
 {
-    _buffer_vertex_id = GL_INVALID_VALUE;
-    _buffer_normal_id = GL_INVALID_VALUE;
-    _buffer_uv_id = GL_INVALID_VALUE;
-    _buffer_size = 0;
-    _nb_vertex = 0;
-
-    std::cout << "New Mesh ! \n";
     _mesh_indices = mesh._mesh_indices;
     _mesh_normals = mesh._mesh_normals;
+    _mesh_tangents = mesh._mesh_tangents;
+    _mesh_bitangents = mesh._mesh_bitangents;
     _mesh_uvs = mesh._mesh_uvs;
     _mesh_vertexes = mesh._mesh_vertexes;
     _shader = mesh._shader;
     finish();
+}
+
+void    Mesh::smoothNormal()
+{
+    std::vector<unsigned int> indices = _mesh_indices;
+
+    while (indices.size()) {
+        std::list<unsigned int> index_to_use;
+
+        int i = 0;
+        while (i < indices.size())
+        {
+            if (_mesh_vertexes[indices[i]] == _mesh_vertexes[indices[0]]){
+                index_to_use.push_back(indices[i]);
+                indices.erase(indices.begin() + i);
+            }
+            else
+                i++;
+        }
+
+        bool first_pass = true;
+        glm::vec3 normal;
+        for (unsigned int index : index_to_use)
+        {
+            if (first_pass) {
+                first_pass = false;
+                normal = _mesh_normals[index];
+            }
+            normal = (normal + _mesh_normals[index]) / glm::vec3(2.0);
+        }
+
+        for (unsigned int index : index_to_use)
+            _mesh_normals[index] = normal;
+    }
 }
 
 int     Mesh::getElementCount()
@@ -46,54 +70,80 @@ int     Mesh::getElementCount()
     return (_mesh_indices.size());
 }
 
-void    Mesh::finish()
+void    Mesh::genNormals()
 {
-  if (_buffer_vertex_id != GL_INVALID_VALUE)
-    glDeleteBuffers(1, &_buffer_vertex_id);
-  if (_buffer_normal_id != GL_INVALID_VALUE)
-    glDeleteBuffers(1, &_buffer_normal_id);
-  if (_buffer_uv_id != GL_INVALID_VALUE)
-    glDeleteBuffers(1, &_buffer_uv_id);
+    _mesh_normals.resize(_mesh_indices.size());
+    _mesh_normals.clear();
+    for (int i = 0 ; i < _mesh_indices.size() ; i += 3) {
+        glm::vec3 v0 = _mesh_vertexes[_mesh_indices[i]];
+        glm::vec3 delta1 = _mesh_vertexes[_mesh_indices[i + 1]] - v0;
+        glm::vec3 delta2 = _mesh_vertexes[_mesh_indices[i + 2]] - v0;
 
-  glGenBuffers(1, &_buffer_vertex_id);
-  glBindBuffer(GL_ARRAY_BUFFER, _buffer_vertex_id);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec3) * _mesh_vertexes.size() , &_mesh_vertexes[0], GL_STATIC_DRAW);
-
-  glGenBuffers(1, &_buffer_indices_id);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_indices_id);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof (glm::vec3) * _mesh_indices.size() , &_mesh_indices[0], GL_STATIC_DRAW);
-
-  glGenBuffers(1, &_buffer_normal_id);
-  glBindBuffer(GL_ARRAY_BUFFER, _buffer_normal_id);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec3) * _mesh_normals.size() , &_mesh_normals[0], GL_STATIC_DRAW);
-
-  glGenBuffers(1, &_buffer_uv_id);
-  glBindBuffer(GL_ARRAY_BUFFER, _buffer_uv_id);
-  glBufferData(GL_ARRAY_BUFFER, sizeof (glm::vec2) * _mesh_uvs.size() , &_mesh_uvs[0], GL_STATIC_DRAW);
-
-  _buffer_size = sizeof (glm::vec3) * _mesh_vertexes.size();
-
-  _nb_vertex = _mesh_vertexes.size();
-
-  std::cout << "Face: " << _mesh_indices.size() / 3 << " Vertex: " << _mesh_vertexes.size() << "\n";
+        glm::vec3 normal = normalize(delta1 * delta2);
+        _mesh_normals[_mesh_indices[i]] += normal;
+        _mesh_normals[_mesh_indices[i+1]] += normal;
+        _mesh_normals[_mesh_indices[i+2]] += normal;
+        _mesh_normals[_mesh_indices[i]] = normalize(_mesh_normals[_mesh_indices[i]]);
+        _mesh_normals[_mesh_indices[i+1]] = normalize(_mesh_normals[_mesh_indices[i+1]]);
+        _mesh_normals[_mesh_indices[i+2]] = normalize(_mesh_normals[_mesh_indices[i+2]]);
+    }
 }
 
-void    Mesh::bindToShader()
+void    Mesh::genTangentSpace()
 {
-    // if (ShaderManager::getInstance().getActualShader() != _shader)
-    // {
-    //   std::cout << "Mesh:" << this << " changed program\n";
-    //     auto shader = ShaderManager::getInstance().getActualShader();
-    //     ShaderManager::getInstance().useShader(_shader);
-    //     clearGPU();
-    //     _shader = shader;
-    //     finish();
-    // }
+    _mesh_tangents.clear();
+    _mesh_bitangents.clear();
+    _mesh_tangents.resize(_mesh_vertexes.size());
+    _mesh_bitangents.resize(_mesh_vertexes.size());
+    for (int i = 0 ; i < _mesh_indices.size() ; i += 3) {
+        glm::vec3 v0 = _mesh_vertexes[_mesh_indices[i]];
+        glm::vec3 delta1 = _mesh_vertexes[_mesh_indices[i + 1]] - v0;
+        glm::vec3 delta2 = _mesh_vertexes[_mesh_indices[i + 2]] - v0;
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer_indices_id);
-  enableAttribute(_buffer_vertex_id, 0, 3);
-  enableAttribute(_buffer_normal_id, 1, 3);
-  enableAttribute(_buffer_uv_id, 2, 2);
+        glm::vec2 uv0 = _mesh_uvs[_mesh_indices[i]];
+        glm::vec2 deltaUV1 = _mesh_uvs[_mesh_indices[i + 1]] - uv0;
+        glm::vec2 deltaUV2 = _mesh_uvs[_mesh_indices[i + 2]] - uv0;
+
+        float r = 1. / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        glm::vec3 tangent = glm::normalize((delta1 * deltaUV2.y - delta2 * deltaUV1.y) * r);
+        glm::vec3 bitangent = glm::normalize((delta2 * deltaUV1.x - delta1 * deltaUV2.x) * r);
+        _mesh_tangents[_mesh_indices[i]] = tangent;
+        _mesh_tangents[_mesh_indices[i+1]] = tangent;
+        _mesh_tangents[_mesh_indices[i+2]] = tangent;
+        _mesh_bitangents[_mesh_indices[i]] = bitangent;
+        _mesh_bitangents[_mesh_indices[i+1]] = bitangent;
+        _mesh_bitangents[_mesh_indices[i+2]] = bitangent;
+    }
+}
+
+void    Mesh::finish()
+{
+    if (_mesh_normals.size() == 0)
+        genNormals();
+    if (_mesh_tangents.size() == 0)
+        genTangentSpace();
+        std::cout << "Tangent size " << _mesh_tangents.size() << "\n";
+    _buffer_vertex.send(sizeof (glm::vec3) * _mesh_vertexes.size(), &_mesh_vertexes[0]);
+    _buffer_tangent.send(sizeof (glm::vec3) * _mesh_tangents.size(), &_mesh_tangents[0]);
+    _buffer_bitangent.send(sizeof (glm::vec3) * _mesh_bitangents.size(), &_mesh_bitangents[0]);
+    _buffer_normal.send(sizeof (glm::vec3) * _mesh_normals.size(), &_mesh_normals[0]);
+    _buffer_indices.send(sizeof (glm::vec3) * _mesh_indices.size(), &_mesh_indices[0]);
+    _buffer_uv.send(sizeof (glm::vec2) * _mesh_uvs.size(), &_mesh_uvs[0]);
+
+    _nb_vertex = _mesh_vertexes.size();
+
+    std::cout << "Face: " << _mesh_indices.size() / 3 << " Vertex: " << _mesh_vertexes.size() << "\n";
+
+}
+
+void    Mesh::bindToShader(std::shared_ptr<gl_item::Shader> shader)
+{
+  shader->setAttribute(_buffer_vertex, 0, 3);
+  shader->setAttribute(_buffer_normal, 1, 3);
+  shader->setAttribute(_buffer_uv, 2, 2);
+  shader->setAttribute(_buffer_tangent, 3, 3);
+  shader->setAttribute(_buffer_bitangent, 4, 3);
+  _buffer_indices.bind();
 }
 
 void    Mesh::detachFromShader()
@@ -101,16 +151,13 @@ void    Mesh::detachFromShader()
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(2);
+  glDisableVertexAttribArray(3);
+  glDisableVertexAttribArray(4);
 }
 
 void        Mesh::clearGPU()
 {
-    if (_buffer_vertex_id != GL_INVALID_VALUE)
-      glDeleteBuffers(1, &_buffer_vertex_id);
-    if (_buffer_normal_id != GL_INVALID_VALUE)
-      glDeleteBuffers(1, &_buffer_normal_id);
-    if (_buffer_uv_id != GL_INVALID_VALUE)
-      glDeleteBuffers(1, &_buffer_uv_id);
+
 }
 
 void    Mesh::addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &uv)
@@ -122,8 +169,34 @@ void    Mesh::addAll(const glm::vec3 &vertex, const glm::vec3 &normal, const glm
 
 size_t    Mesh::addVertex(const glm::vec3 &vertex)
 {
+    if (vertex.x < _min.x)
+        _min.x = vertex.x;
+    if (vertex.y < _min.y)
+        _min.y = vertex.y;
+    if (vertex.z < _min.z)
+        _min.z = vertex.z;
+
+    if (vertex.x > _max.x)
+        _max.x = vertex.x;
+    if (vertex.y > _max.y)
+        _max.y = vertex.y;
+    if (vertex.z > _max.z)
+        _max.z = vertex.z;
+
   _mesh_vertexes.push_back(vertex);
   return (_mesh_vertexes.size() - 1);
+}
+
+size_t    Mesh::addTangent(const glm::vec3 &vertex)
+{
+  _mesh_tangents.push_back(vertex);
+  return (_mesh_tangents.size() - 1);
+}
+
+size_t    Mesh::addBitangent(const glm::vec3 &vertex)
+{
+  _mesh_bitangents.push_back(vertex);
+  return (_mesh_bitangents.size() - 1);
 }
 
 size_t    Mesh::addNormal(const glm::vec3 &normal)
@@ -171,14 +244,14 @@ void    Mesh::clear() {
 
 void    Mesh::enableAttribute(GLuint buffer, GLuint attr, GLuint size, GLint buffer_type)
 {
-  glEnableVertexAttribArray(attr);
-  glBindBuffer(buffer_type, buffer);
-  glVertexAttribPointer(
-      attr,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-      size,                  // size
-      GL_FLOAT,           // type
-      GL_FALSE,           // normalized?
-      0,                  // stride
-      (void*)0            // array buffer offset
-      );
+  // glEnableVertexAttribArray(attr);
+  // glBindBuffer(buffer_type, buffer);
+  // glVertexAttribPointer(
+  //     attr,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+  //     size,                  // size
+  //     GL_FLOAT,           // type
+  //     GL_FALSE,           // normalized?
+  //     0,                  // stride
+  //     (void*)0            // array buffer offset
+  //     );
 }

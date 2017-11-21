@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-11-13T15:47:49+01:00
+# @Last modified time: 2017-11-16T05:34:40+01:00
 
 NAME 	= libfse.so
 
@@ -20,6 +20,7 @@ SRCS	=	source/Window.cpp \
 				source/Scene/Light.cpp \
 				source/GLItem/Shader.cpp \
 				source/GLItem/Mesh.cpp \
+				source/GLItem/Buffer.cpp \
 				source/GLItem/Texture.cpp \
 				source/Renderer/Renderer.cpp \
 				source/Renderer/ObjectRenderer.cpp \

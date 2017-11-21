@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-11-13T01:37:42+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-14T00:04:03+01:00
+ * @Last modified time: 2017-11-19T20:33:45+01:00
  */
 
 #include "fse/GLItem/Texture.hpp"
@@ -77,9 +77,13 @@ GLuint  Texture::getId() {
     return (_id);
 }
 
-void    Texture::setMipMapLevel() {
+void    Texture::setMipMapLevel(int level) {
     bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    if (level)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    else
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5); // pick mipmap level 7 or lower
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, level); // pick mipmap level 7 or lower
 }

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:39:05+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T03:24:08+01:00
+ * @Last modified time: 2017-11-20T23:35:14+01:00
  */
 
 
@@ -37,6 +37,8 @@ namespace fse {
             std::vector<INode *>  &getNodes();
             std::shared_ptr<Light>  getLight();
             void                    setLight(std::shared_ptr<Light>);
+
+            object::Object      *launchRay(int x, int y, glm::mat4 &projection);
 
             ICamera                           *camera;
 

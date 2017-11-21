@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-11-13T01:18:27+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-14T00:03:23+01:00
+ * @Last modified time: 2017-11-19T20:30:16+01:00
  */
 
 #ifndef FSE_TEXTURE_HPP
@@ -47,7 +47,7 @@ namespace fse {
             Texture();
             ~Texture();
 
-            void    setMipMapLevel();
+            void    setMipMapLevel(int level);
             void    bind();
             void    unbind();
             void    activate(int slot);

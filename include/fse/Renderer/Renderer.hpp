@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:18:04+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:44:59+01:00
+ * @Last modified time: 2017-11-20T23:58:04+01:00
  */
 
 
@@ -30,6 +30,7 @@ namespace fse {
 
         const utils::FrameCounter     &getFrameCounter();
 
+        glm::mat4 projection;
     private:
         Window          &_window;
 
@@ -41,7 +42,6 @@ namespace fse {
         utils::FrameCounter     _fps;
         size_t  frame = 0;
 
-        glm::mat4 projection;
     };
 
 }

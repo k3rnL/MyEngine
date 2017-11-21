@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:36:09+01:00
+ * @Last modified time: 2017-11-16T06:08:59+01:00
  */
 
 #include "fse/GLItem/Shader.hpp"
@@ -36,9 +36,24 @@ Shader::Shader(const std::string &vertex, const std::string &fragment)
     }
 }
 
+
 void                Shader::useProgram()
 {
     glUseProgram(_programID);
+}
+
+void                Shader::setAttribute(Buffer &buffer, GLuint attr, GLuint n_component)
+{
+    glEnableVertexAttribArray(attr);
+    buffer.bind();
+    glVertexAttribPointer(
+        attr,               // attribute must match the layout in the shader.
+        n_component,      // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
+        );
 }
 
 void                Shader::setUniformValue(const glm::mat4 &matrix, const std::string &name)

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:18:19+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:45:52+01:00
+ * @Last modified time: 2017-11-20T23:56:05+01:00
  */
 
 
@@ -41,6 +41,7 @@ namespace fse {
             virtual glm::vec3     &getScale();
 
             virtual void          addChild(INode *child);
+            std::list<INode *>    &getChilds();
 
         protected:
 
