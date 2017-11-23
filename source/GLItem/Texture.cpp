@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-11-13T01:37:42+01:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T20:33:45+01:00
+ * @Last modified by:
+ * @Last modified time: 2017-11-23T19:35:36+01:00
  */
 
 #include "fse/GLItem/Texture.hpp"
@@ -26,6 +26,11 @@ std::shared_ptr<Texture>    Texture::create(size_t x, size_t y,
     texture = std::make_shared<Texture>();
     texture->bind();
     glTexImage2D(GL_TEXTURE_2D, 0, in_format, x, y, 0, format, type, 0);
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+      std::cout << "[ERROR] gl err = " << err << "\n";
+    }
     return (texture);
 }
 
@@ -40,11 +45,19 @@ std::shared_ptr<Texture>    Texture::load(const std::string &file) {
         return 0;
     }
     texture->activate(0);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+      std::cout << "[ERROR] gl err = " << err << "\n";
+      if (x * y > glm::pow(GL_MAX_TEXTURE_BUFFER_SIZE, 2))
+        std::cout << "Trop gros\n\n";
+    }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5); // pick mipmap level 7 or lower
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 2); // pick mipmap level 7 or lower
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

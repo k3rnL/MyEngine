@@ -2,7 +2,7 @@
 * @Author: daniel_b
 * @Date:   2017-11-13T02:59:18+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T03:17:24+01:00
+ * @Last modified time: 2017-11-22T00:59:07+01:00
 */
 
 #include "fse/Scene/Light.hpp"
@@ -11,7 +11,7 @@ using namespace fse::scene;
 using namespace fse::gl_item;
 
 Light::Light() {
-    setQuality(15);
+    setQuality(4);
 
     glGenFramebuffers(1, &_frame_buffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _frame_buffer);
@@ -50,7 +50,7 @@ Light::Light() {
 void    Light::updateShadowMap(fse::renderer::ObjectRenderer &obj_renderer) {
     glBindFramebuffer(GL_FRAMEBUFFER, _frame_buffer);
     // glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _texture->getId(), 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
     glm::vec3 lightInvDir = glm::vec3(0.5f,2,2);
 

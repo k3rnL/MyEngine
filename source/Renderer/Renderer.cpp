@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T03:34:43+01:00
+ * @Last modified time: 2017-11-22T01:01:11+01:00
  */
 
 
@@ -83,7 +83,7 @@ void        Renderer::render(scene::SceneManager &scene)
     }
     static float time_i = 0;
 
-    scene.getLight()->updateShadowMap(_object_renderer);
+    // scene.getLight()->updateShadowMap(_object_renderer);
 
     ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
 
@@ -98,9 +98,9 @@ void        Renderer::render(scene::SceneManager &scene)
     glViewport(0, 0, _window.getWidth(), _window.getHeight());
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glEnable(GL_MULTISAMPLE);
-     glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-    glEnable(GL_DEBUG_OUTPUT);
+    // glEnable(GL_MULTISAMPLE);
+    //  glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+    // glEnable(GL_DEBUG_OUTPUT);
     _object_renderer.drawAll();
     _object_renderer.clean();
 
