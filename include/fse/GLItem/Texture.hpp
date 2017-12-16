@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-11-13T01:18:27+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T20:30:16+01:00
+ * @Last modified time: 2017-12-14T22:30:18+01:00
  */
 
 #ifndef FSE_TEXTURE_HPP
@@ -23,7 +23,8 @@ namespace fse {
             enum Format { RED = GL_RED,
                           RG = GL_RG,
                           RGB = GL_RGB,
-                          BGR = GL_BGR, RGBA = GL_RGBA,
+                          RGBA = GL_RGBA,
+                          BGR = GL_BGR,
                           BGRA = GL_BGRA,
                           DETPH_COMPONENT = GL_DEPTH_COMPONENT
                         };
@@ -33,7 +34,8 @@ namespace fse {
                                   DEPTH24 = GL_DEPTH_COMPONENT24,
                                   DEPTH32 = GL_DEPTH_COMPONENT32,
                                   RGB8 = GL_RGB8,
-                                  RGB10 = GL_RGB10
+                                  RGB10 = GL_RGB10,
+                                  RGBA32F = GL_RGBA32F
                                 };
 
             enum Type { UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
@@ -54,9 +56,9 @@ namespace fse {
             GLuint  getId();
             void    loadImage(std::string const &name);
 
+            glm::vec2   _size;
         private:
             GLuint      _id;
-            glm::vec2   _size;
         };
 
     }

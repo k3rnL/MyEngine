@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T03:34:43+01:00
+ * @Last modified time: 2017-12-02T00:48:08+01:00
  */
 
 
@@ -12,7 +12,7 @@
 using namespace fse;
 
 Renderer::Renderer(Window &window) :
-    _window(window), _object_renderer()
+    _window(window), _object_renderer(), _shader("shader/ray_trace.comp")
 {
     projection = glm::perspective<float>(45, // fov
                     (float) window.getWidth() / (float) window.getHeight(), // ratio
@@ -33,6 +33,8 @@ Renderer::Renderer(Window &window) :
     glCullFace(GL_BACK);
 
     ShaderManager::getInstance().addShader("basic_light");
+    // _shader.addShader("shader/ray_trace.comp", gl_item::Shader::COMPUTE);
+    _texture = gl_item::Texture::load("Ressource/alduin.jpg");
 }
 
 bool GetFirstNMessages(GLuint numMsgs)
@@ -95,14 +97,16 @@ void        Renderer::render(scene::SceneManager &scene)
 
     ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
 
-    glViewport(0, 0, _window.getWidth(), _window.getHeight());
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glEnable(GL_MULTISAMPLE);
-     glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-    glEnable(GL_DEBUG_OUTPUT);
-    _object_renderer.drawAll();
-    _object_renderer.clean();
+    GLuint readFboId = 0;
+    glGenFramebuffers(1, &readFboId);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                           GL_TEXTURE_2D, _texture->getId(), 0);
+    glBlitFramebuffer(0, 0, _texture->_size.x, _texture->_size.y,
+                      0, 0, _window.getWidth(), _window.getHeight(),
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    glDeleteFramebuffers(1, &readFboId);
 
     _window.flipScreen();
 

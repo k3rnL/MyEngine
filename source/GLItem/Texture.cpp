@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-11-13T01:37:42+01:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T20:33:45+01:00
+ * @Last modified time: 2017-12-01T20:21:42+01:00
  */
 
 #include "fse/GLItem/Texture.hpp"
@@ -25,6 +25,8 @@ std::shared_ptr<Texture>    Texture::create(size_t x, size_t y,
 
     texture = std::make_shared<Texture>();
     texture->bind();
+    texture->_size.x = x;
+    texture->_size.y = y;
     glTexImage2D(GL_TEXTURE_2D, 0, in_format, x, y, 0, format, type, 0);
     return (texture);
 }
@@ -41,6 +43,8 @@ std::shared_ptr<Texture>    Texture::load(const std::string &file) {
     }
     texture->activate(0);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    texture->_size.x = x;
+    texture->_size.y = y;
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

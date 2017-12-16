@@ -2,7 +2,7 @@
 * @Author: danielb
 * @Date:   2017-07-22T23:22:41+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:48:07+01:00
+ * @Last modified time: 2017-12-02T01:12:36+01:00
 */
 
 #include "fse/Window.hpp"
@@ -16,7 +16,7 @@ Window::Window(size_t width, size_t height, const std::string &title)
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);

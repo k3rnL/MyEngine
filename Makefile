@@ -1,7 +1,7 @@
 # @Author: danielb
 # @Date:   2017-07-22T23:36:04+02:00
 # @Last modified by:   daniel_b
-# @Last modified time: 2017-11-16T05:34:40+01:00
+# @Last modified time: 2017-12-16T02:04:22+01:00
 
 NAME 	= libfse.so
 
@@ -23,6 +23,7 @@ SRCS	=	source/Window.cpp \
 				source/GLItem/Buffer.cpp \
 				source/GLItem/Texture.cpp \
 				source/Renderer/Renderer.cpp \
+				source/Renderer/TextureRenderer.cpp \
 				source/Renderer/ObjectRenderer.cpp \
 				source/Renderer/ObjectsToDrawCallback.cpp
 

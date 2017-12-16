@@ -2,23 +2,57 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-16T06:08:59+01:00
+ * @Last modified time: 2017-12-16T01:53:44+01:00
  */
 
 #include "fse/GLItem/Shader.hpp"
 
 using namespace fse::gl_item;
 
+Shader::Shader()
+{
+    _programID = glCreateProgram();
+}
+
+Shader::~Shader()
+{
+    glDeleteProgram(_programID);
+}
+
+Shader::Shader(const std::string &compute)
+{
+    _programID = glCreateProgram();
+
+    GLuint computeID = compile(compute, GL_COMPUTE_SHADER);
+    _attached_shader[GL_COMPUTE_SHADER] = computeID;
+
+    link();
+}
+
 Shader::Shader(const std::string &vertex, const std::string &fragment)
 {
     _programID = glCreateProgram();
 
-    _vertexID = compile(vertex, GL_VERTEX_SHADER);
-    _fragmentID = compile(fragment, GL_FRAGMENT_SHADER);
+    GLuint vertexID = compile(vertex, GL_VERTEX_SHADER);
+    GLuint fragmentID = compile(fragment, GL_FRAGMENT_SHADER);
 
-    glAttachShader(_programID, _vertexID);
-    glAttachShader(_programID, _fragmentID);
+    _attached_shader[GL_VERTEX_SHADER] = vertexID;
+    _attached_shader[GL_FRAGMENT_SHADER] = fragmentID;
 
+    link();
+}
+
+void                Shader::addShader(const std::string &file, const fse::gl_item::Shader::ShaderType &type)
+{
+    _attached_shader[type] = compile(file, type);
+}
+
+void                Shader::link()
+{
+    for (auto shader : _attached_shader) {
+        glAttachShader(_programID, shader.second);
+        std::cout << "Attached " << shader.first << " at " << shader.second << '\n';
+    }
     glLinkProgram(_programID);
 
     GLint error = 0;
@@ -28,14 +62,13 @@ Shader::Shader(const std::string &vertex, const std::string &fragment)
         std::cerr << "Cannot link shader.\n";
         int log_length = 0;
         glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &log_length);
-        std::string VertexShaderErrorMessage;
-        VertexShaderErrorMessage.resize(log_length + 1);
-		    glGetShaderInfoLog(_programID, log_length, NULL, &VertexShaderErrorMessage[0]);
-        std::cerr << VertexShaderErrorMessage << "\n";
+        std::string error_msg;
+        error_msg.resize(log_length + 1);
+		    glGetShaderInfoLog(_programID, log_length, NULL, &error_msg[0]);
+        std::cerr << error_msg << "\n";
         throw std::exception();
     }
 }
-
 
 void                Shader::useProgram()
 {

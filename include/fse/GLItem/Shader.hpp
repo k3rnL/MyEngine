@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:38:03+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-16T05:48:53+01:00
+ * @Last modified time: 2017-12-16T01:54:14+01:00
  */
 
 #ifndef SHADER_HPP
@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -24,7 +25,16 @@ namespace fse {
         class Shader
         {
         public:
+
+            enum ShaderType { VERTEX = GL_VERTEX_SHADER,
+                              FRAGMENT = GL_FRAGMENT_SHADER,
+                              COMPUTE = GL_COMPUTE_SHADER };
+
+            Shader();
+            Shader(const std::string &compute);
             Shader(const std::string &vertex, const std::string &frag);
+
+            ~Shader();
 
             GLuint  getProgram();
             void    useProgram();
@@ -36,13 +46,15 @@ namespace fse {
 
             void    setAttribute(Buffer &buffer, GLuint attr, GLuint n_component);
 
+            void    addShader(const std::string &file, const ShaderType &type);
+
+            void    link();
         private:
+            std::map<GLenum, GLuint>    _attached_shader;
+            GLuint      _programID;
 
             GLuint      compile(const std::string &source, GLenum type);
 
-            GLuint      _vertexID;
-            GLuint      _fragmentID;
-            GLuint      _programID;
         };
     }
 }
