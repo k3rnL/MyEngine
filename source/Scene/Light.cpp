@@ -11,7 +11,7 @@ using namespace fse::scene;
 using namespace fse::gl_item;
 
 Light::Light() {
-    setQuality(4);
+    setQuality(12);
 
     glGenFramebuffers(1, &_frame_buffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _frame_buffer);

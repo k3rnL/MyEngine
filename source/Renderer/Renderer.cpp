@@ -83,7 +83,7 @@ void        Renderer::render(scene::SceneManager &scene)
   }
   static float time_i = 0;
 
-  // scene.getLight()->updateShadowMap(_object_renderer);
+  scene.getLight()->updateShadowMap(_object_renderer);
 
   ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
 
