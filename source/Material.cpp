@@ -60,9 +60,8 @@ void      Material::useMaterial()
   {
       _texture->activate(0);
       _texture->bind();
-
-    _shader->setUniformValue(0, "diffuse_map");
-    _shader->setUniformValue(1, "mt_data.diffuse_map");
+      _shader->setUniformValue(0, "diffuse_map");
+      _shader->setUniformValue(1, "mt_data.diffuse_map");
 
   }
   else
@@ -79,7 +78,6 @@ void      Material::useMaterial()
   }
   else
     _shader->setUniformValue(0, "mt_data.normal_map");
-
 }
 
 std::shared_ptr<Shader>    Material::getShader()

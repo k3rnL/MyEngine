@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-22T01:01:11+01:00
+ * @Last modified time: 2017-12-02T00:48:08+01:00
  */
 
 
@@ -12,27 +12,27 @@
 using namespace fse;
 
 Renderer::Renderer(Window &window) :
-    _window(window), _object_renderer()
+    _window(window), _object_renderer()//, _shader("shader/ray_trace.comp")
 {
-    projection = glm::perspective<float>(45, // fov
-                    (float) window.getWidth() / (float) window.getHeight(), // ratio
-                    0.1, 100.0); // near / far
+  projection = glm::perspective<float>(45, // fov
+                  (float) window.getWidth() / (float) window.getHeight(), // ratio
+                  0.1, 100.0); // near / far
 
-    GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
+  GLuint VertexArrayID;
+  glGenVertexArrays(1, &VertexArrayID);
+  glBindVertexArray(VertexArrayID);
 
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+  glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-    // Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
+  // Enable depth test
+  glEnable(GL_DEPTH_TEST);
+  // Accept fragment if it closer to the camera than the former one
+  glDepthFunc(GL_LESS);
 
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
 
-    ShaderManager::getInstance().addShader("basic_light");
+  ShaderManager::getInstance().addShader("basic_light");
 }
 
 bool GetFirstNMessages(GLuint numMsgs)
@@ -72,49 +72,49 @@ bool GetFirstNMessages(GLuint numMsgs)
 
 void        Renderer::render(scene::SceneManager &scene)
 {
-    const glm::mat4 &view = scene.camera->getView();
-    // glm::mat4 modelView = projection * view;
+  const glm::mat4 &view = scene.camera->getView();
+  // glm::mat4 modelView = projection * view;
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    _object_renderer.setShadowMap(scene.getLight()->getTexture());
-    for (auto node : scene.getNodes()) {
-        _object_renderer.addNode(node);
-    }
-    static float time_i = 0;
+  _object_renderer.setShadowMap(scene.getLight()->getTexture());
+  for (auto node : scene.getNodes()) {
+      _object_renderer.addNode(node);
+  }
+  static float time_i = 0;
 
-    // scene.getLight()->updateShadowMap(_object_renderer);
+  // scene.getLight()->updateShadowMap(_object_renderer);
 
-    ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
+  ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
 
-    ShaderManager::getInstance().setUniformValue(projection, "projection");
-    ShaderManager::getInstance().setUniformValue(view, "view");
+  ShaderManager::getInstance().setUniformValue(projection, "projection");
+  ShaderManager::getInstance().setUniformValue(view, "view");
 
-    ShaderManager::getInstance().setUniformValue(scene.getLight()->getPosition(), "light_pos");
-    ShaderManager::getInstance().setUniformValue(scene.getLight()->getMVP(), "light_mvp");
+  ShaderManager::getInstance().setUniformValue(scene.getLight()->getPosition(), "light_pos");
+  ShaderManager::getInstance().setUniformValue(scene.getLight()->getMVP(), "light_mvp");
 
-    ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
+  ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
 
-    glViewport(0, 0, _window.getWidth(), _window.getHeight());
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    // glEnable(GL_MULTISAMPLE);
-    //  glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-    // glEnable(GL_DEBUG_OUTPUT);
-    _object_renderer.drawAll();
-    _object_renderer.clean();
+  glViewport(0, 0, _window.getWidth(), _window.getHeight());
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  // glEnable(GL_MULTISAMPLE);
+   // glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+  // glEnable(GL_DEBUG_OUTPUT);
+  _object_renderer.drawAll();
+  _object_renderer.clean();
 
-    _window.flipScreen();
+  _window.flipScreen();
 
 
-    _fps.update();
-    if (frame > 10)
-    {
-        frame = 0;
-        std::string title = "FPS: " + std::to_string(_fps.getFrameRate());
-        _window.setTitle(title);
-    }
-    frame++;
+  _fps.update();
+  if (frame > 10)
+  {
+      frame = 0;
+      std::string title = "FPS: " + std::to_string(_fps.getFrameRate());
+      _window.setTitle(title);
+  }
+  frame++;
 }
 
 

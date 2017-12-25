@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T02:18:04+02:00
  * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T23:58:04+01:00
+ * @Last modified time: 2017-12-01T20:23:50+01:00
  */
 
 
@@ -18,6 +18,7 @@
 #include "fse/Utils/FrameCounter.hpp"
 #include "fse/ShaderManager.hpp"
 #include "fse/Renderer/ObjectRenderer.hpp"
+#include "fse/GLItem/Texture.hpp"
 
 namespace fse {
 
@@ -33,6 +34,8 @@ namespace fse {
         glm::mat4 projection;
     private:
         Window          &_window;
+        std::shared_ptr<gl_item::Texture> _texture;
+        // gl_item::Shader                   _shader;
 
         renderer::ObjectRenderer    _object_renderer;
 
