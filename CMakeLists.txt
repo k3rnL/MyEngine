@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 include(GNUInstallDirs)
 
 project(fse VERSION 1.0)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories("include")
@@ -37,5 +37,9 @@ find_package(GLM REQUIRED)
 if (GLM_FOUND)
   include_directories(${GLM_INCLUDE_DIRS})
 endif()
-message(${GLEW_LIBRARY})
+
+find_package(OpenGL REQUIRED)
+
+target_link_libraries(fse ${GLEW_LIBRARIES})
+
 SET_TARGET_PROPERTIES (fse PROPERTIES DEFINE_SYMBOL  "COMPILING_DLL" )

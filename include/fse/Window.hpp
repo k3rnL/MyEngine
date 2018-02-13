@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-22T23:17:54+02:00
- * @Last modified by:
- * @Last modified time: 2018-02-05T02:32:28+01:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2018-02-13T01:05:11+01:00
  */
 
 #ifndef WINDOW_HPP
@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 //#include <unistd.h>
 #include <exception>
 #include <string>

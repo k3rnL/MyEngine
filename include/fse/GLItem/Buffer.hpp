@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-09-22T00:10:27+02:00
- * @Last modified by:
- * @Last modified time: 2018-02-05T02:51:46+01:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2018-02-12T07:10:23+01:00
  */
 
 
@@ -45,10 +45,10 @@ namespace fse {
 				glGenBuffers(1, &_id);
 			}
             Buffer(Buffer<T> &buffer) {
-				this->_draw = b._draw;
-				this->_id = b._id;
-				this->_size = b._size;
-				this->_type = b._type;
+				this->_draw = buffer._draw;
+				this->_id = buffer._id;
+				this->_size = buffer._size;
+				this->_type = buffer._type;
 			}
             ~Buffer() {
 				glDeleteBuffers(1, &_id);
