@@ -11,8 +11,8 @@
 
 using namespace fse::renderer;
 
-void    ObjectsToDrawCallback::addObject(std::shared_ptr<scene::object::Material>  mat,
-                                         std::shared_ptr<gl_item::Mesh>            mesh,
+void    ObjectsToDrawCallback::addObject(std::shared_ptr<fse::scene::object::Material>  mat,
+                                         std::shared_ptr<fse::gl_item::Mesh>            mesh,
                                          const glm::mat4                           &transform)
 {
   objects[mat->getShader()][mat][mesh].push_back(transform);

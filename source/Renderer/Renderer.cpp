@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-24T02:31:09+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-12-02T00:48:08+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-12T04:02:12+01:00
  */
 
 
@@ -16,7 +16,7 @@ Renderer::Renderer(Window &window) :
 {
   projection = glm::perspective<float>(45, // fov
                   (float) window.getWidth() / (float) window.getHeight(), // ratio
-                  0.1, 100.0); // near / far
+                  0.1f, 1900.0f); // near / far
 
   GLuint VertexArrayID;
   glGenVertexArrays(1, &VertexArrayID);
@@ -47,7 +47,7 @@ bool GetFirstNMessages(GLuint numMsgs)
 	std::vector<GLuint> ids(numMsgs);
 	std::vector<GLsizei> lengths(numMsgs);
 
-	GLuint numFound = glGetDebugMessageLog(numMsgs, msgData.size(), &sources[0], &types[0], &ids[0], &severities[0], &lengths[0], &msgData[0]);
+	GLuint numFound = glGetDebugMessageLog(numMsgs, (GLsizei) msgData.size(), &sources[0], &types[0], &ids[0], &severities[0], &lengths[0], &msgData[0]);
 
     if (numFound == 0)
         return false;
@@ -70,41 +70,42 @@ bool GetFirstNMessages(GLuint numMsgs)
     return true;
 }
 
-void        Renderer::render(scene::SceneManager &scene)
+void        Renderer::render(scene::SceneManager &scene, std::shared_ptr<fse::gl_item::Shader> shader, bool clear_buffer, bool flip_buffer)
 {
   const glm::mat4 &view = scene.camera->getView();
   // glm::mat4 modelView = projection * view;
-
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if (clear_buffer)
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   _object_renderer.setShadowMap(scene.getLight()->getTexture());
   for (auto node : scene.getNodes()) {
       _object_renderer.addNode(node);
   }
   static float time_i = 0;
-
+ 
   scene.getLight()->updateShadowMap(_object_renderer);
 
-  ShaderManager::getInstance().setUniformValue(time_i+=1.0/_fps.getFrameRate(), "time");
+  ShaderManager::getInstance().setUniformValue((float)(time_i+=(float)1.0/_fps.getFrameRate()), "time");
 
-  ShaderManager::getInstance().setUniformValue(projection, "projection");
-  ShaderManager::getInstance().setUniformValue(view, "view");
+  _attribute.addUniform("projection", projection);
+  _attribute.addUniform("view", view);
 
-  ShaderManager::getInstance().setUniformValue(scene.getLight()->getPosition(), "light_pos");
-  ShaderManager::getInstance().setUniformValue(scene.getLight()->getMVP(), "light_mvp");
+  _attribute.addUniform("light_pos", scene.getLight()->getPosition());
+  _attribute.addUniform("light_mvp", scene.getLight()->getMVP());
 
-  ShaderManager::getInstance().setUniformValue(scene.camera->getPosition(), "camera_position");
+  _attribute.addUniform("camera_position", scene.camera->getPosition());
 
-  glViewport(0, 0, _window.getWidth(), _window.getHeight());
+  glViewport(0, 0, (GLsizei) _window.getWidth(), (GLsizei) _window.getHeight());
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   // glEnable(GL_MULTISAMPLE);
    // glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
   // glEnable(GL_DEBUG_OUTPUT);
-  _object_renderer.drawAll();
+  _object_renderer.drawAll(_attribute, shader);
   _object_renderer.clean();
 
-  _window.flipScreen();
+  if (flip_buffer)
+	_window.flipScreen();
 
 
   _fps.update();

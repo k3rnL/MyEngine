@@ -1,8 +1,8 @@
 /**
 * @Author: danielb
 * @Date:   2017-07-22T23:22:41+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-15T20:02:21+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T03:08:06+01:00
 */
 
 #include "fse/Window.hpp"
@@ -11,17 +11,16 @@ Window::Window(size_t width, size_t height, const std::string &title)
 {
     SDL_Init(SDL_INIT_VIDEO);
 
-    _window = SDL_CreateWindow("Test SDL 2.0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+    _window = SDL_CreateWindow("Test SDL 2.0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int) width, (int) height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     std::cerr << "Surface:" << _window << std::endl;
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
 
-
-    GLenum err;
+    GLenum err;/*
     while((err = glGetError()) != GL_NO_ERROR)
     {
       std::cout << "[ERROR] gl err = " << err << "\n";
-    }
+    }*/
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);

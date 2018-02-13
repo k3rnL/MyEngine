@@ -40,7 +40,7 @@ Light::Light() {
     // glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
     _projection = glm::perspective<float>(65, // fov
                     (float) 256 / (float) 256, // ratio
-                    0.1, 100.0); // near / far
+                    0.1f, 100.0f); // near / far
 
     _view = glm::lookAt(getPosition(), getPosition() + glm::vec3(0,-1,0), glm::vec3(0,0,1));
 
@@ -61,15 +61,15 @@ void    Light::updateShadowMap(fse::renderer::ObjectRenderer &obj_renderer) {
 
     _view = glm::lookAt(getPosition(), getPosition() - glm::vec3(0,1,0), glm::vec3(0,0,-1));
 
-    ShaderManager::getInstance().useShader(_shader);
+	_shader->useProgram();
     // auto default_shader = ShaderManager::getInstance().getDefaultShader();
     // ShaderManager::getInstance().useShader(default_shader);
     // _shader->setUniformValue(depthProjectionMatrix, "proj_matrix");
     // _shader->setUniformValue(depthViewMatrix, "view_matrix");
+	Shader::AttributeHolder attr;
 
-    ShaderManager::getInstance().setUniformValue(_projection, "projection");
-    ShaderManager::getInstance().setUniformValue(_view, "view");
-    // ShaderManager::getInstance().setUniformValue(getPosition(), "camera_position");
+	attr.addUniform("projection", _projection);
+	attr.addUniform("view", _view);
 
     GLenum err;
     while((err = glGetError()) != GL_NO_ERROR)
@@ -83,16 +83,16 @@ void    Light::updateShadowMap(fse::renderer::ObjectRenderer &obj_renderer) {
     //
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
-    glViewport(0, 0, _quality, _quality);
+    glViewport(0, 0, (GLsizei) _quality, (GLsizei) _quality);
 
-    obj_renderer.drawAll(_shader);
+    obj_renderer.drawAll(attr, _shader);
     // obj_renderer.drawAll();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void        Light::setQuality(unsigned int q) {
-    _quality = std::pow(2,q);
+    _quality = (size_t) std::pow(2,q);
 }
 
 glm::mat4   Light::getMVP() {

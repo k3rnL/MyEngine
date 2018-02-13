@@ -10,7 +10,7 @@
 #ifndef FRAME_COUNTER_HPP
 #define FRAME_COUNTER_HPP
 
-#include <sys/time.h>
+#include <chrono>
 
 #include <iostream>
 
@@ -20,30 +20,24 @@ namespace fse {
         class FrameCounter
         {
         public:
-            FrameCounter() { gettimeofday(&_last_time, 0); }
+            FrameCounter() { 
+				timer = std::chrono::steady_clock::now();
+			}
 
             void    update() {
-                struct timeval  current;
-
-                _fps_count++;
-                gettimeofday(&current, 0);
-                timersub(&current, &_last_time, &current);
-                if (current.tv_sec > 0)
-                {
-                    _fps = _fps_count;
-                    _fps_count = 0;
-
-                    gettimeofday(&_last_time, 0);
-                }
+				fps = std::chrono::duration_cast<std::chrono::duration<int32_t, std::ratio<1, 60>>>(std::chrono::steady_clock::now() - timer);
+				if (fps.count() >= 1)
+				{
+					timer = std::chrono::steady_clock::now();
+					//std::cout << std::chrono::duration_cast<duration<float, std::chrono::milli>(fps).count() << "ms FPS: " << fps.count() * 60 << endl;
+				}
             }
 
-            const unsigned int    &getFrameRate() const { return (_fps); }
+            const unsigned int    getFrameRate() const { return (fps.count() * 60); }
 
         private:
-            unsigned int    _fps = 60;
-            unsigned int    _fps_count = 0;
-            struct timeval  _last_time;
-
+			std::chrono::time_point<std::chrono::steady_clock>		timer;
+			std::chrono::duration<int32_t, std::ratio<1, 60>>		fps;
         };
 
     }

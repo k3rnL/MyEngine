@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-08-19T19:54:53+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T23:29:54+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-12T17:30:44+01:00
  */
 
 
@@ -15,19 +15,19 @@
 #include <list>
 
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 #include <GL/glew.h>
 
+#include "fse/Export.hpp"
 #include "fse/GLItem/Shader.hpp"
 #include "fse/ShaderManager.hpp"
 
 namespace fse {
   namespace gl_item {
 
-    class Mesh
+    class FSE_API_EXPORT Mesh
     {
     public:
       Mesh();
@@ -47,39 +47,39 @@ namespace fse {
       std::vector<glm::vec3>      &getVertexes();
       std::vector<glm::vec3>      &getNormals();
       std::vector<glm::vec2>      &getUVs();
-      std::vector<unsigned int>   &getIndices();
+      std::vector<GLsizei>        &getIndices();
 
       void          clear();
       void          smoothNormal();
       void          genTangentSpace();
       void          genNormals();
 
-      int         getElementCount();
+      size_t         getElementCount();
 
       void        bindToShader(std::shared_ptr<gl_item::Shader> shader);
       void        detachFromShader();
 
       size_t          _nb_vertex;
 
-      
+
       glm::vec3                   _min;
       glm::vec3                   _max;
     private:
-        std::shared_ptr<Shader>     _shader;
+      std::shared_ptr<Shader>     _shader;
 
-        std::vector<glm::vec3>        _mesh_tangents;
-        std::vector<glm::vec3>        _mesh_bitangents;
+      std::vector<glm::vec3>        _mesh_tangents;
+      std::vector<glm::vec3>        _mesh_bitangents;
       std::vector<glm::vec3>        _mesh_vertexes;
-      std::vector<unsigned int>     _mesh_indices;
+      std::vector<GLsizei>		    _mesh_indices;
       std::vector<glm::vec3>        _mesh_normals;
       std::vector<glm::vec2>        _mesh_uvs;
 
-      Buffer          _buffer_vertex;
-      Buffer          _buffer_tangent;
-      Buffer          _buffer_bitangent;
-      Buffer          _buffer_indices;
-      Buffer          _buffer_normal;
-      Buffer          _buffer_uv;
+      Buffer<glm::vec3>          _buffer_vertex;
+      Buffer<glm::vec3>          _buffer_tangent;
+      Buffer<glm::vec3>          _buffer_bitangent;
+      Buffer<GLsizei>		     _buffer_indices;
+      Buffer<glm::vec3>          _buffer_normal;
+      Buffer<glm::vec2>          _buffer_uv;
 
       void            enableAttribute(GLuint buffer, GLuint attr, GLuint size, GLint buffer_type = GL_ARRAY_BUFFER);
       void            clearGPU();

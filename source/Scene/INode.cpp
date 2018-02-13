@@ -21,7 +21,9 @@ unsigned int g_count = 0;
 //     }
 // }
 
-INode::INode() : _scale(1.0, 1.0, 1.0)
+INode::INode() : _scale(1.0f, 1.0f, 1.0f),
+				 _position(0.0f, 0.0f, 0.0f),
+				 _rotation(0.0f, 0.0f, 0.0f)
 {
 
 }
@@ -35,17 +37,20 @@ INode               *INode::clone()
     node->_scale = _scale;
     return (node);
 }
-
-void                INode::draw(renderer::ObjectsToDrawCallback &callback,
+#include <glm/gtc/matrix_transform.hpp>
+void                INode::draw(fse::renderer::ObjectsToDrawCallback &callback,
                                  const glm::mat4 &transform)
 {
     glm::mat4   node_transform;
     glm::quat   quat(_rotation);
-
-    node_transform = transform * glm::translate(_position) * glm::scale(_scale) * glm::toMat4(quat);
+	glm::mat4	translation; glm::translate(translation, _position);
+	glm::mat4	scale; glm::scale(scale, _scale);
+	
+	node_transform = transform * translation * scale;// *glm::mat4_cast(quat);
     for (auto child : childs)
     {
-        child->draw(callback, node_transform);
+		child->draw(callback, transform);
+		//child->draw(callback, node_transform);
     }
 }
 

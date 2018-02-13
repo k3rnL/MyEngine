@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-07-25T00:25:33+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T02:03:05+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:50:47+01:00
  */
 
 #ifndef MATERIAL_HPP
@@ -14,6 +14,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#include "fse/Export.hpp"
 #include "fse/GLItem/Shader.hpp"
 #include "fse/GLItem/Texture.hpp"
 #include "fse/ShaderManager.hpp"
@@ -22,7 +23,7 @@ namespace fse {
   namespace scene {
     namespace object {
 
-      class Material
+      class FSE_API_EXPORT Material
       {
       public:
         Material();
@@ -38,7 +39,7 @@ namespace fse {
 
         std::shared_ptr<gl_item::Shader>     getShader();
 
-        virtual void    useMaterial();
+        virtual void    useMaterial(std::shared_ptr<gl_item::Shader> shader = 0);
 
         Material        &operator=(Material &mat);
 
@@ -46,7 +47,7 @@ namespace fse {
             std::shared_ptr<gl_item::Texture> _texture;
           std::shared_ptr<gl_item::Texture> _normal;
           size_t                            _repeat;
-          
+
           std::shared_ptr<gl_item::Shader>  _shader;
 
           glm::vec3                         _color;

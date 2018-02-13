@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-08-22T21:40:12+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:46:17+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:50:51+01:00
  */
 
 
@@ -12,11 +12,12 @@
 
 #include <memory>
 
+#include "fse/Export.hpp"
 #include "fse/GLItem/Shader.hpp"
 
 namespace fse {
 
-    class ShaderManager
+    class FSE_API_EXPORT ShaderManager
     {
     public:
         static  ShaderManager   &getInstance();

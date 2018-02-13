@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-22T23:17:54+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:58:55+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:32:28+01:00
  */
 
 #ifndef WINDOW_HPP
@@ -10,16 +10,16 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
 #include <GL/glew.h>
-#include <SDL2/SDL.h>
-#include <unistd.h>
+#include <SDL.h>
+//#include <unistd.h>
 #include <exception>
 #include <string>
 
+#include <fse/Export.hpp>
 #include <fse/GLItem/Shader.hpp>
 
-class Window
+class FSE_API_EXPORT Window
 {
 public:
     Window(size_t width = 1280, size_t height = 720, const std::string &title = "My Window");

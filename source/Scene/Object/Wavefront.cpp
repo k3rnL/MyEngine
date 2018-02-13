@@ -93,7 +93,7 @@ fse::scene::object::Object *Wavefront::load(const std::string &file)
     std::cout << "scene:" << importer.GetErrorString() << "\n";
     std::vector<std::shared_ptr<Material>>  materials;
 
-    for (int m = 0 ; m < scene->mNumMaterials ; m++)
+    for (unsigned int m = 0 ; m < scene->mNumMaterials ; m++)
     {
         aiString    path;
         aiMaterial  *material = scene->mMaterials[m];
@@ -110,13 +110,13 @@ fse::scene::object::Object *Wavefront::load(const std::string &file)
         materials.push_back(mat);
     }
 
-    for (int m = 0 ; m < scene->mNumMeshes ; m++)
+    for (unsigned int m = 0 ; m < scene->mNumMeshes ; m++)
     {
         Object *object = new Object();
         std::shared_ptr<gl_item::Mesh>   mesh_data = std::make_shared<gl_item::Mesh>();
 
         aiMesh *mesh = scene->mMeshes[m];
-        for (int v = 0 ; v < mesh->mNumVertices ; v++)
+        for (unsigned int v = 0 ; v < mesh->mNumVertices ; v++)
         {
             aiVector3D vertex = mesh->mVertices[v];
             glm::vec3 p(vertex.x, vertex.y, vertex.z);
@@ -144,10 +144,10 @@ fse::scene::object::Object *Wavefront::load(const std::string &file)
             }
         }
 
-        for (int f = 0 ; f < mesh->mNumFaces ; f++)
+        for (unsigned int f = 0 ; f < mesh->mNumFaces ; f++)
         {
 
-            for (int i = 0 ; i + 2 < mesh->mFaces[f].mNumIndices ; i++)
+            for (unsigned int i = 0 ; i + 2 < mesh->mFaces[f].mNumIndices ; i++)
             {
                 mesh_data->addFace({mesh->mFaces[f].mIndices[0],
                                     mesh->mFaces[f].mIndices[i + 1],
@@ -169,7 +169,7 @@ fse::scene::object::Object *Wavefront::load(const std::string &file)
     return (root_obj);
 }
 
-void    Wavefront::draw(renderer::ObjectsToDrawCallback &callback, const glm::mat4 &transform)
+void    Wavefront::draw(fse::renderer::ObjectsToDrawCallback &callback, const glm::mat4 &transform)
 {
     INode::draw(callback, transform);
 }

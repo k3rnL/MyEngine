@@ -74,8 +74,9 @@
  {
      glUseProgram(_programID);
  }
-
- void                Shader::setAttribute(Buffer &buffer, GLuint attr, GLuint n_component)
+ /*
+ template <typename T>
+ void                Shader::setAttribute(Buffer<T> &buffer, GLuint attr, GLuint n_component)
  {
      glEnableVertexAttribArray(attr);
      buffer.bind();
@@ -87,7 +88,7 @@
          0,                  // stride
          (void*)0            // array buffer offset
          );
- }
+ }*/
 
  void                Shader::setUniformValue(const glm::mat4 &matrix, const std::string &name)
  {
@@ -123,7 +124,7 @@
      id = glCreateShader(type);
      while (std::getline(source_file, line))
          src += line + "\n";
-
+	 
      const GLchar *gl_src = src.c_str();
      glShaderSource(id, 1, &gl_src, 0);
      glCompileShader(id);

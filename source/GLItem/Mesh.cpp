@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-08-19T20:26:24+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T23:38:42+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-01-25T23:12:10+01:00
  */
 
 
@@ -11,7 +11,7 @@
 
 using namespace fse::gl_item;
 
-Mesh::Mesh() : _buffer_indices(Buffer::ElementBuffer)
+Mesh::Mesh() : _buffer_indices(Buffer<GLsizei>::ElementBuffer)
 {
   _nb_vertex = 0;
   _min = glm::vec3(0);
@@ -33,7 +33,7 @@ Mesh::Mesh(Mesh &mesh)
 
 void    Mesh::smoothNormal()
 {
-    std::vector<unsigned int> indices = _mesh_indices;
+    std::vector<GLsizei> indices = _mesh_indices;
 
     while (indices.size()) {
         std::list<unsigned int> index_to_use;
@@ -65,7 +65,7 @@ void    Mesh::smoothNormal()
     }
 }
 
-int     Mesh::getElementCount()
+size_t     Mesh::getElementCount()
 {
     return (_mesh_indices.size());
 }
@@ -104,7 +104,7 @@ void    Mesh::genTangentSpace()
         glm::vec2 deltaUV1 = _mesh_uvs[_mesh_indices[i + 1]] - uv0;
         glm::vec2 deltaUV2 = _mesh_uvs[_mesh_indices[i + 2]] - uv0;
 
-        float r = 1. / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
         glm::vec3 tangent = glm::normalize((delta1 * deltaUV2.y - delta2 * deltaUV1.y) * r);
         glm::vec3 bitangent = glm::normalize((delta2 * deltaUV1.x - delta1 * deltaUV2.x) * r);
         _mesh_tangents[_mesh_indices[i]] = tangent;
@@ -123,12 +123,13 @@ void    Mesh::finish()
     if (_mesh_tangents.size() == 0)
         genTangentSpace();
         std::cout << "Tangent size " << _mesh_tangents.size() << "\n";
-    _buffer_vertex.send(sizeof (glm::vec3) * _mesh_vertexes.size(), &_mesh_vertexes[0]);
-    _buffer_tangent.send(sizeof (glm::vec3) * _mesh_tangents.size(), &_mesh_tangents[0]);
-    _buffer_bitangent.send(sizeof (glm::vec3) * _mesh_bitangents.size(), &_mesh_bitangents[0]);
-    _buffer_normal.send(sizeof (glm::vec3) * _mesh_normals.size(), &_mesh_normals[0]);
-    _buffer_indices.send(sizeof (glm::vec3) * _mesh_indices.size(), &_mesh_indices[0]);
-    _buffer_uv.send(sizeof (glm::vec2) * _mesh_uvs.size(), &_mesh_uvs[0]);
+
+    _buffer_vertex.send(_mesh_vertexes);
+    _buffer_tangent.send(_mesh_tangents);
+    _buffer_bitangent.send(_mesh_bitangents);
+    _buffer_normal.send(_mesh_normals);
+    _buffer_indices.send(_mesh_indices);
+    _buffer_uv.send(_mesh_uvs);
 
     _nb_vertex = _mesh_vertexes.size();
 
@@ -136,7 +137,7 @@ void    Mesh::finish()
 
 }
 
-void    Mesh::bindToShader(std::shared_ptr<gl_item::Shader> shader)
+void    Mesh::bindToShader(std::shared_ptr<Shader> shader)
 {
   shader->setAttribute(_buffer_vertex, 0, 3);
   shader->setAttribute(_buffer_normal, 1, 3);
@@ -213,9 +214,9 @@ size_t    Mesh::addUV(const glm::vec2 &uv)
 
 size_t    Mesh::addFace(const glm::vec3 &indices)
 {
-    _mesh_indices.push_back(indices.x);
-    _mesh_indices.push_back(indices.y);
-    _mesh_indices.push_back(indices.z);
+    _mesh_indices.push_back((GLsizei) indices.x);
+    _mesh_indices.push_back((GLsizei) indices.y);
+    _mesh_indices.push_back((GLsizei) indices.z);
     return (_mesh_indices.size() - 3);
 }
 
@@ -231,7 +232,7 @@ std::vector<glm::vec2>    &Mesh::getUVs() {
     return (_mesh_uvs);
 }
 
-std::vector<unsigned int> &Mesh::getIndices() {
+std::vector<GLsizei> &Mesh::getIndices() {
     return (_mesh_indices);
 }
 

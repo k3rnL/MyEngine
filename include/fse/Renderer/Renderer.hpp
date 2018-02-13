@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-24T02:18:04+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-12-01T20:23:50+01:00
+ * @Last modified by:   
+ * @Last modified time: 2018-02-12T03:55:07+01:00
  */
 
 
@@ -12,6 +12,7 @@
 
 #include <list>
 
+#include "fse/Export.hpp"
 #include "fse/Window.hpp"
 #include "fse/Scene/Object/Object.hpp"
 #include "fse/Scene/SceneManager.hpp"
@@ -22,22 +23,22 @@
 
 namespace fse {
 
-    class Renderer
+    class FSE_API_EXPORT Renderer
     {
     public:
-        Renderer(Window &window);
+        explicit Renderer(Window &window);
 
-        void    render(scene::SceneManager &scene);
+        void    render(scene::SceneManager &scene, std::shared_ptr<fse::gl_item::Shader> shader = 0, bool clear_buffer = true, bool flip_buffer = true);
 
         const utils::FrameCounter     &getFrameCounter();
 
         glm::mat4 projection;
     private:
-        Window          &_window;
-        std::shared_ptr<gl_item::Texture> _texture;
-        // gl_item::Shader                   _shader;
+        Window                                  &_window;
+        gl_item::Shader::AttributeHolder		_attribute;
+        std::shared_ptr<gl_item::Texture>       _texture;
 
-        renderer::ObjectRenderer    _object_renderer;
+        renderer::ObjectRenderer                _object_renderer;
 
         // Initial Field of View
         float initialFoV = 45.0f;

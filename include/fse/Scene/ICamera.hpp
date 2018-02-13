@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-08-14T21:45:14+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:45:43+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:50:30+01:00
  */
 
 
@@ -10,12 +10,13 @@
 #ifndef ICAMERA_HPP
 #define ICAMERA_HPP
 
+#include "fse/Export.hpp"
 #include "fse/Scene/INode.hpp"
 
 namespace fse {
     namespace scene {
 
-      class ICamera : public INode
+      class FSE_API_EXPORT ICamera : public INode
       {
       public:
         ICamera() { }

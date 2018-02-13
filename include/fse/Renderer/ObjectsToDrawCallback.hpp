@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-09-06T01:26:02+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:44:36+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:51:35+01:00
  */
 
 
@@ -14,13 +14,14 @@
 #include <map>
 #include <list>
 
+#include "fse/Export.hpp"
 #include "fse/Material.hpp"
 #include "fse/GLItem/Mesh.hpp"
 
 namespace fse {
     namespace renderer {
 
-        class ObjectsToDrawCallback
+        class FSE_API_EXPORT ObjectsToDrawCallback
         {
             friend class ObjectRenderer;
 

@@ -1,9 +1,9 @@
 /**
- * @Author: daniel_b
- * @Date:   2017-08-30T00:27:25+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T22:51:52+01:00
- */
+* @Author: daniel_b
+* @Date:   2017-08-30T00:27:25+02:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-12T04:06:45+01:00
+*/
 
 
 
@@ -13,8 +13,6 @@ using namespace fse::renderer;
 using namespace fse::gl_item;
 
 ObjectRenderer::ObjectRenderer()
-    // ObjectRenderer::ObjectRenderer(const glm::mat4 &projection) :
-    //     _projection(projection)
 {
     _shadow = 0;
     _depth = Texture::create(2048, 2048, Texture::DEPTH, Texture::DETPH_COMPONENT, Texture::FLOAT);
@@ -28,71 +26,45 @@ ObjectRenderer::ObjectRenderer()
     _depth->unbind();
 }
 
-void    ObjectRenderer::addNode(scene::INode *node)
+void    ObjectRenderer::addNode(fse::scene::INode *node)
 {
-    node->draw(_callback, glm::mat4(1.0));
+    node->draw(_callback, glm::mat4(1.0f));
 }
 
-void    ObjectRenderer::drawAll()
+void    ObjectRenderer::drawAll(fse::gl_item::Shader::AttributeHolder &attribute,
+                                std::shared_ptr<fse::gl_item::Shader> shader)
 {
     auto &objects = _callback.objects;
+	bool use_mesh_shader = shader == 0;
 
     for (auto shader_to_mat : objects)
     {
-        ShaderManager::getInstance().useShader(shader_to_mat.first);
-      // shader_to_mat.first->useProgram();
-      for (auto mat_to_obj : shader_to_mat.second)
-      {
-        mat_to_obj.first->useMaterial();
-        for (auto mesh : mat_to_obj.second)
-        {
-          mesh.first->bindToShader(ShaderManager::getInstance().getActualShader());
-          for (auto transform : mesh.second)
-          {
-            // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
-            ShaderManager::getInstance().getActualShader()->setUniformValue(transform, "model_view");
-            if (_shadow) {
-                _shadow->activate(2);
-                ShaderManager::getInstance().getActualShader()->setUniformValue(2, "shadow_map");
+		if (use_mesh_shader) {
+			shader = shader_to_mat.first;
+		}
+		shader->useProgram();
+		attribute.apply(shader);
+        for (auto mat_to_obj : shader_to_mat.second) {
+            mat_to_obj.first->useMaterial(shader);
+            for (auto mesh : mat_to_obj.second)
+            {
+                mesh.first->bindToShader(shader);
+                for (auto transform : mesh.second)
+                {
+                    shader->setUniformValue(transform, "model_view");
+                    if (_shadow) {
+                        _shadow->activate(2);
+                        shader->setUniformValue(2, "shadow_map");
+                    }
+                    glDrawElements(GL_TRIANGLES, (GLsizei) mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
+                }
+                mesh.first->detachFromShader();
             }
-            glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
-          }
-          mesh.first->detachFromShader();
         }
-      }
     }
 }
 
-void    ObjectRenderer::drawAll(std::shared_ptr<gl_item::Shader> shader)
-{
-    auto &objects = _callback.objects;
-
-    for (auto shader_to_mat : objects)
-    {
-      ShaderManager::getInstance().useShader(shader);
-      for (auto mat_to_obj : shader_to_mat.second)
-      {
-        // mat_to_obj.first->useMaterial();
-        for (auto mesh : mat_to_obj.second)
-        {
-            mesh.first->bindToShader(ShaderManager::getInstance().getActualShader());
-          for (auto transform : mesh.second)
-          {
-            // shaders.getActualShader()->setUniformValue(glm::vec3(200, 100, 100), "mt_data.diffuse_color");
-            ShaderManager::getInstance().getActualShader()->setUniformValue(transform, "model_view");
-            if (_shadow) {
-                _shadow->activate(2);
-                ShaderManager::getInstance().getActualShader()->setUniformValue(2, "shadow_map");
-            }
-            glDrawElements(GL_TRIANGLES, mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
-          }
-          mesh.first->detachFromShader();
-        }
-      }
-    }
-}
-
-void    ObjectRenderer::setShadowMap(std::shared_ptr<gl_item::Texture> texture) {
+void    ObjectRenderer::setShadowMap(std::shared_ptr<fse::gl_item::Texture> texture) {
     _shadow = texture;
 }
 

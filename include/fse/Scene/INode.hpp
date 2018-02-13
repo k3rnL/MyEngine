@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-07-31T04:18:19+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T23:56:05+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:50:37+01:00
  */
 
 
@@ -14,6 +14,7 @@
 
 #include <glm/glm.hpp>
 
+#include "fse/Export.hpp"
 #include "fse/ShaderManager.hpp"
 #include "fse/Renderer/ObjectsToDrawCallback.hpp"
 
@@ -22,7 +23,7 @@ extern unsigned int g_count;
 namespace fse {
     namespace scene {
 
-        class INode
+        class FSE_API_EXPORT INode
         {
         public:
             INode();

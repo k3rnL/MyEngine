@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:45:18+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:51:02+01:00
  */
 
 #ifndef OBJECT_HPP
@@ -12,12 +12,12 @@
 #include <memory>
 
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 #include <GL/glew.h>
 
+#include "fse/Export.hpp"
 #include "fse/Material.hpp"
 #include "fse/Scene/INode.hpp"
 #include "fse/GLItem/Shader.hpp"
@@ -27,7 +27,7 @@ namespace fse {
     namespace scene {
         namespace object {
 
-            class Object : public INode
+            class FSE_API_EXPORT Object : public INode
             {
                 friend class Wavefront;
             public:

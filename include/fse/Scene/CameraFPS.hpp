@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-08-16T16:18:48+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:45:31+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:58:58+01:00
  */
 
 
@@ -10,14 +10,16 @@
 #ifndef CAMERAFPS_HPP
 #define CAMERAFPS_HPP
 
-#include <glm/gtx/transform.hpp>
+#include <cmath>
+
+#include "glm/gtc/matrix_transform.hpp"
 
 #include "fse/Scene/ICamera.hpp"
 
 namespace fse {
     namespace scene {
 
-      class CameraFPS : public ICamera
+      class FSE_API_EXPORT CameraFPS : public ICamera
       {
       public:
         CameraFPS();

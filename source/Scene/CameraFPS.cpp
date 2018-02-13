@@ -13,10 +13,10 @@ using namespace fse::scene;
 
 CameraFPS::CameraFPS()
 {
-  _horizontal_angle = M_PI;
+  _horizontal_angle = (float) M_PI;
   _vertical_angle = 0;
 
-  _mouse_speed = 0.20;
+  _mouse_speed = 0.20f;
   _move_speed = 4;
 
   mouseInput(0, 0, 0);
@@ -24,10 +24,12 @@ CameraFPS::CameraFPS()
 
 void          CameraFPS::mouseInput(const int x_relative, const int y_relative, const float deltaT)
 {
-  _horizontal_angle -= _mouse_speed * x_relative * deltaT;
-  _vertical_angle -= _mouse_speed * y_relative * deltaT;
+  if (x_relative != 0)
+	  _horizontal_angle -= _mouse_speed * x_relative * deltaT;
+  if (y_relative != 0)
+	  _vertical_angle -= _mouse_speed * y_relative * deltaT;
 
-  _vertical_angle = glm::clamp((double) _vertical_angle, -M_PI / 2., M_PI + M_PI / 2);
+  _vertical_angle = (float) glm::clamp((double) _vertical_angle, -M_PI / 2., M_PI + M_PI / 2);
 
   _direction = glm::vec3(cos(_vertical_angle) * sin(_horizontal_angle),
                         sin(_vertical_angle),

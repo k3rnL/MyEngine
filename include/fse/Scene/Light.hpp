@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-11-13T02:45:30+01:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-15T15:57:31+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:50:24+01:00
  */
 
 
@@ -12,6 +12,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
+#include "fse/Export.hpp"
 #include "fse/Scene/INode.hpp"
 #include "fse/GLItem/Texture.hpp"
 #include "fse/Renderer/ObjectRenderer.hpp"
@@ -19,7 +20,7 @@
 namespace fse {
     namespace scene {
 
-        class Light : public INode
+        class FSE_API_EXPORT Light : public INode
         {
         public:
              Light();

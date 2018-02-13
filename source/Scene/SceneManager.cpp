@@ -125,7 +125,7 @@ ray_result  *ray_recurs(INode *node, glm::vec3 &orig, glm::vec3 &dir) {
 
 object::Object              *SceneManager::launchRay(int x_screen, int y_screen, glm::mat4 &proj)
 {
-    float x = (2.0f * x_screen) / 1540.0 - 1.0;
+    float x = (2.0f * x_screen) / 1540.0f - 1.0f;
     float y = 1.0f - (2.0f * y_screen) / 1024;
     // glm::vec4 ray_clip(x, y, -1, 1);
     glm::vec4 ray_clip(1, 1, -1, 1);
@@ -161,6 +161,7 @@ object::Object              *SceneManager::launchRay(int x_screen, int y_screen,
         result_data->obj->getPosition() += glm::vec3(0,1,0);
     }
     delete result_data;
+	return (0);
 }
 
 void                        SceneManager::addChild(INode *node)

@@ -5,24 +5,28 @@
  * @Last modified time: 2017-11-16T06:05:22+01:00
  */
 
-
+/*
 
 #include "fse/GLItem/Buffer.hpp"
 
 using namespace fse::gl_item;
 
-Buffer::Buffer(BufferType type, BufferDrawType draw_type)
+template <class T>
+Buffer<T>::Buffer(BufferType type, BufferDrawType draw_type)
 {
     _type = type;
     _draw = draw_type;
+	_elem_size = sizeof(T);
      glGenBuffers(1, &_id);
 }
 
-Buffer::~Buffer() {
+template <class T>
+Buffer<T>::~Buffer() {
     glDeleteBuffers(1, &_id);
 }
 
-Buffer::Buffer(Buffer &b)
+template <class T>
+Buffer<T>::Buffer(Buffer &b)
 {
     this->_draw = b._draw;
     this->_id = b._id;
@@ -30,33 +34,45 @@ Buffer::Buffer(Buffer &b)
     this->_type = b._type;
 }
 
-void    Buffer::send(GLuint size, void *data)
+template <class T>
+void    Buffer<T>::send(std::vector<T> &data)
 {
-    _size = size;
+    _size = (GLuint) sizeof(T) * data.size();
     bind();
     glBufferData(_type,
-                 size,
-                 data,
+                 _size,
+                 data.data(),
                  _draw);
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		std::cerr << "[ERROR] Error when sending data to GPU (" << err << ")\n";
+	}
     unbind();
 }
 
-void    Buffer::bind() {
+template <class T>
+void    Buffer<T>::bind() {
     glBindBuffer(_type, _id);
 }
 
-void    Buffer::unbind() {
+template <class T>
+void    Buffer<T>::unbind() {
     glBindBuffer(_type, 0);
 }
 
-GLuint  Buffer::getSize() {
+template <class T>
+GLuint  Buffer<T>::getSize() {
     return (_size);
 }
 
-Buffer  &Buffer::operator=(Buffer &b) {
+template <class T>
+Buffer<T>  &Buffer<T>::operator=(Buffer<T> &b) {
     this->_draw = b._draw;
     // this->_id = b._id;
+	this->_elem_size = b._elem_size;
     this->_size = b._size;
     this->_type = b._type;
     return (*this);
 }
+*/

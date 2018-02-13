@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-07-31T04:39:05+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-20T23:35:14+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-05T02:57:54+01:00
  */
 
 
@@ -23,7 +23,7 @@
 namespace fse {
     namespace scene {
 
-        class SceneManager
+        class FSE_API_EXPORT SceneManager
         {
         public:
             SceneManager();

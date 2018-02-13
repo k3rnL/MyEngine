@@ -25,9 +25,9 @@
 
      texture = std::make_shared<Texture>();
      texture->bind();
-     texture->_size.x = x;
-     texture->_size.y = y;
-     glTexImage2D(GL_TEXTURE_2D, 0, in_format, x, y, 0, format, type, 0);
+     texture->_size.x = (float) x;
+     texture->_size.y = (float) y;
+     glTexImage2D(GL_TEXTURE_2D, 0, in_format, (GLsizei) x, (GLsizei) y, 0, format, type, 0);
      return (texture);
  }
 
@@ -43,8 +43,8 @@
      }
      texture->activate(0);
      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-     texture->_size.x = x;
-     texture->_size.y = y;
+     texture->_size.x = (float) x;
+     texture->_size.y = (float) y;
 
      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

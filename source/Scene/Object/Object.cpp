@@ -8,6 +8,9 @@
 
 #include "fse/Scene/Object/Object.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+	#include <glm/ext.hpp>
+
 using namespace fse::scene::object;
 
 Object::Object()
@@ -42,13 +45,15 @@ void            Object::setPosition(const glm::vec3 &position)
     _position = position;
 }
 
-void                Object::draw(renderer::ObjectsToDrawCallback &callback,
+void                Object::draw(fse::renderer::ObjectsToDrawCallback &callback,
                                  const glm::mat4 &transform)
 {
     glm::mat4   node_transform;
     glm::quat   quat(_rotation);
+	glm::mat4	translation = glm::translate(_position);
+	glm::mat4	scale = glm::scale(_scale);
 
-    node_transform = transform * glm::translate(_position) * glm::scale(_scale) * glm::toMat4(quat);
+	node_transform = transform * translation * scale * glm::orientate4(getRotation());
     callback.addObject(_material, _mesh, node_transform);
 
     for (auto child : childs)

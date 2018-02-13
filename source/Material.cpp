@@ -1,8 +1,8 @@
 /**
  * @Author: daniel_b
  * @Date:   2017-07-25T02:33:19+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-19T20:34:52+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-01-25T02:48:23+01:00
  */
 
 #include "fse/Material.hpp"
@@ -34,7 +34,7 @@ void          Material::setTexture(const std::string &file)
     _texture = gl_item::Texture::load(file);
 }
 
-void          Material::setTexture(std::shared_ptr<gl_item::Texture> texture) {
+void          Material::setTexture(std::shared_ptr<fse::gl_item::Texture> texture) {
     _texture = texture;
 }
 
@@ -51,33 +51,35 @@ void      Material::setShader(std::shared_ptr<Shader> shader) {
   _shader = shader;
 }
 
-void      Material::useMaterial()
+void      Material::useMaterial(std::shared_ptr<fse::gl_item::Shader> shader)
 {
-    _shader->setUniformValue(_color, "mt_data.diffuse_color");
-    _shader->setUniformValue((int)_repeat, "mt_data.repeat");
+	if (shader == 0)
+		shader = _shader;
+    shader->setUniformValue(_color, "mt_data.diffuse_color");
+    shader->setUniformValue((int)_repeat, "mt_data.repeat");
 
   if (_texture)
   {
       _texture->activate(0);
       _texture->bind();
-      _shader->setUniformValue(0, "diffuse_map");
-      _shader->setUniformValue(1, "mt_data.diffuse_map");
+      shader->setUniformValue(0, "diffuse_map");
+      shader->setUniformValue(1, "mt_data.diffuse_map");
 
   }
   else
   {
-    _shader->setUniformValue(0, "mt_data.diffuse_map");
+    shader->setUniformValue(0, "mt_data.diffuse_map");
   }
 
   if (_normal)
   {
       _normal->activate(1);
       _normal->bind();
-      _shader->setUniformValue(1, "normal_map");
-      _shader->setUniformValue(1, "mt_data.normal_map");
+      shader->setUniformValue(1, "normal_map");
+      shader->setUniformValue(1, "mt_data.normal_map");
   }
   else
-    _shader->setUniformValue(0, "mt_data.normal_map");
+    shader->setUniformValue(0, "mt_data.normal_map");
 }
 
 std::shared_ptr<Shader>    Material::getShader()
