@@ -68,12 +68,14 @@ GLuint GenerateFBO(unsigned int width, unsigned int height){
 fse::scene::object::Object   *ObjectPicker::pickObject(const glm::mat4 &projection, const glm::mat4 &view, int x, int y) {
 	fse::gl_item::Shader::AttributeHolder attr;
 
+	id_found = 0;
 	shader->useProgram();
 	attr.addUniform("projection", projection);
 	attr.addUniform("view", view);
 	attr.apply(shader);
+	glClearColor(0, 0, 0, 1);
 	drawAll(attr, shader);
-	return (0);
+	return (objects[id_found]);
 }
 
 ObjectPicker::ObjectPicker(unsigned int width, unsigned int height) : width(width), height(height)
@@ -89,8 +91,12 @@ ObjectPicker::~ObjectPicker() {
 void    ObjectPicker::onDrawBegin() {
     glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer);
 	glViewport(0, 0, width, height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-    id = 0;
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
+    id = 50;
 }
 
 void    ObjectPicker::onPreDrawItem(std::shared_ptr<fse::gl_item::Shader> shader,
@@ -108,6 +114,5 @@ void    ObjectPicker::onDrawFinished() {
     glReadBuffer((GLenum)GL_COLOR_ATTACHMENT0);
     glReadPixels(width/2, height/2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) &pixel);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    std::cout << "Color = " << (pixel & 0xff0000 >> 24) << "\n"; 
+	id_found = (pixel & 0xff00) >> 8;
 }

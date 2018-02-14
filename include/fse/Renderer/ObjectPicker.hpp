@@ -18,7 +18,7 @@ namespace fse {
             ~ObjectPicker();
             scene::object::Object   *pickObject(const glm::mat4 &projection, const glm::mat4 &view, int x, int y);
 
-        //private:
+        private:
             virtual void onDrawBegin();
             virtual void onPreDrawItem(std::shared_ptr<gl_item::Shader> shader, std::shared_ptr<fse::scene::object::Material> material, std::shared_ptr<gl_item::Mesh> mesh, scene::object::Object *object, glm::mat4 const &transform);
             virtual void onDrawFinished();
@@ -26,6 +26,7 @@ namespace fse {
             GLuint          frame_buffer;
             std::map<unsigned int, scene::object::Object *> objects;
             unsigned int    id;
+			unsigned int    id_found;
 
             std::shared_ptr<gl_item::Shader>    shader;
             unsigned int width;
