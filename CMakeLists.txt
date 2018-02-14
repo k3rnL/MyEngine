@@ -27,6 +27,8 @@ endif()
 include_directories(${ASSIMP_INCLUDE_DIRS})
 target_link_libraries(fse ${ASSIMP_LIBRARIES})
 message("${ASSIMP_INCLUDE_DIRS}")
+
+list(APPEND CMAKE_PREFIX_PATH ${GLEW_LOCATION})
 find_package(GLEW REQUIRED)
 if (GLEW_FOUND)
   include_directories(${GLEW_INCLUDE_DIR})
@@ -40,6 +42,6 @@ endif()
 
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(fse ${GLEW_LIBRARIES})
+target_link_libraries(fse ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${ASSIMP_LIBRARIES})
 
 SET_TARGET_PROPERTIES (fse PROPERTIES DEFINE_SYMBOL  "COMPILING_DLL" )
