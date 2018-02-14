@@ -2,7 +2,7 @@
 * @Author: daniel_b
 * @Date:   2017-08-30T00:27:25+02:00
  * @Last modified by:
- * @Last modified time: 2018-02-12T04:06:45+01:00
+ * @Last modified time: 2018-02-14T05:21:53+01:00
 */
 
 
@@ -26,7 +26,7 @@ ObjectRenderer::ObjectRenderer()
     _depth->unbind();
 }
 
-void    ObjectRenderer::addNode(fse::scene::INode *node)
+void    ObjectRenderer::addNode(fse::scene::object::Object *node)
 {
     node->draw(_callback, glm::mat4(1.0f));
 }
@@ -34,9 +34,10 @@ void    ObjectRenderer::addNode(fse::scene::INode *node)
 void    ObjectRenderer::drawAll(fse::gl_item::Shader::AttributeHolder &attribute,
                                 std::shared_ptr<fse::gl_item::Shader> shader)
 {
-    auto &objects = _callback.objects;
+    auto &objects = _callback.objects_to_draw;
 	bool use_mesh_shader = shader == 0;
 
+    onDrawBegin();
     for (auto shader_to_mat : objects)
     {
 		if (use_mesh_shader) {
@@ -49,19 +50,21 @@ void    ObjectRenderer::drawAll(fse::gl_item::Shader::AttributeHolder &attribute
             for (auto mesh : mat_to_obj.second)
             {
                 mesh.first->bindToShader(shader);
-                for (auto transform : mesh.second)
+                for (auto transform_and_obj : mesh.second)
                 {
-                    shader->setUniformValue(transform, "model_view");
+                    shader->setUniformValue(std::get<0>(transform_and_obj), "model_view");
                     if (_shadow) {
                         _shadow->activate(2);
                         shader->setUniformValue(2, "shadow_map");
                     }
+					onPreDrawItem(shader, mat_to_obj.first, mesh.first, (scene::object::Object *) std::get<1>(transform_and_obj), std::get<0>(transform_and_obj));
                     glDrawElements(GL_TRIANGLES, (GLsizei) mesh.first->getElementCount(), GL_UNSIGNED_INT, 0);
                 }
                 mesh.first->detachFromShader();
             }
         }
     }
+    onDrawFinished();
 }
 
 void    ObjectRenderer::setShadowMap(std::shared_ptr<fse::gl_item::Texture> texture) {
@@ -70,5 +73,5 @@ void    ObjectRenderer::setShadowMap(std::shared_ptr<fse::gl_item::Texture> text
 
 void    ObjectRenderer::clean()
 {
-    _callback.objects.clear();
+    _callback.objects_to_draw.clear();
 }

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-07-31T04:18:19+02:00
  * @Last modified by:
- * @Last modified time: 2018-02-05T02:50:37+01:00
+ * @Last modified time: 2018-02-14T04:38:02+01:00
  */
 
 
@@ -21,6 +21,7 @@
 extern unsigned int g_count;
 
 namespace fse {
+
     namespace scene {
 
         class FSE_API_EXPORT INode

@@ -2,7 +2,7 @@
  * @Author: daniel_b
  * @Date:   2017-09-06T01:26:02+02:00
  * @Last modified by:
- * @Last modified time: 2018-02-05T02:51:35+01:00
+ * @Last modified time: 2018-02-14T04:16:58+01:00
  */
 
 
@@ -26,9 +26,10 @@ namespace fse {
             friend class ObjectRenderer;
 
         public:
-            void        addObject(std::shared_ptr<scene::object::Material>  mat,
-                                  std::shared_ptr<gl_item::Mesh>            mesh,
-                                  const glm::mat4                           &transform);
+            virtual void addObject(std::shared_ptr<scene::object::Material>  mat,
+                                   std::shared_ptr<gl_item::Mesh>            mesh,
+                                   const glm::mat4                           &transform,
+                                   void										 *node);
 
         private:
 
@@ -38,10 +39,10 @@ namespace fse {
                 std::shared_ptr<scene::object::Material>,
                 std::map<
                   std::shared_ptr<gl_item::Mesh>,
-                  std::list<glm::mat4>
+                  std::list<std::tuple<glm::mat4, void *> >
                 >
               >
-            > objects;
+            > objects_to_draw;
 
         };
 

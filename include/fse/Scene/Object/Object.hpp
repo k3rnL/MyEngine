@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-24T01:15:02+02:00
  * @Last modified by:
- * @Last modified time: 2018-02-05T02:51:02+01:00
+ * @Last modified time: 2018-02-14T04:38:32+01:00
  */
 
 #ifndef OBJECT_HPP

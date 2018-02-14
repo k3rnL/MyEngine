@@ -79,7 +79,7 @@ void        Renderer::render(scene::SceneManager &scene, std::shared_ptr<fse::gl
 
   _object_renderer.setShadowMap(scene.getLight()->getTexture());
   for (auto node : scene.getNodes()) {
-      _object_renderer.addNode(node);
+      _object_renderer.addNode((scene::object::Object *) node);
   }
   static float time_i = 0;
  

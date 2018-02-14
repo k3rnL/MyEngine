@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-24T01:16:33+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-13T00:47:21+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-14T04:17:17+01:00
  */
 
 
@@ -54,7 +54,7 @@ void                Object::draw(fse::renderer::ObjectsToDrawCallback &callback,
 	glm::mat4	scale = glm::scale(_scale);
 
 	node_transform = transform * translation * scale * glm::orientate4(getRotation());
-    callback.addObject(_material, _mesh, node_transform);
+    callback.addObject(_material, _mesh, node_transform, this);
 
     for (auto child : childs)
     {

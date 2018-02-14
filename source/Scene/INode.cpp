@@ -37,16 +37,18 @@ INode               *INode::clone()
     node->_scale = _scale;
     return (node);
 }
-#include <glm/gtc/matrix_transform.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/ext.hpp>
+
 void                INode::draw(fse::renderer::ObjectsToDrawCallback &callback,
                                  const glm::mat4 &transform)
 {
     glm::mat4   node_transform;
-    glm::quat   quat(_rotation);
 	glm::mat4	translation; glm::translate(translation, _position);
 	glm::mat4	scale; glm::scale(scale, _scale);
 	
-	node_transform = transform * translation * scale;// *glm::mat4_cast(quat);
+	node_transform = transform * translation * scale * glm::orientate4(getRotation());
     for (auto child : childs)
     {
 		child->draw(callback, transform);
