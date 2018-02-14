@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
- * @Last modified by:   daniel_b
- * @Last modified time: 2017-11-16T06:08:59+01:00
+ * @Last modified by:
+ * @Last modified time: 2018-02-14T02:16:13+01:00
  */
 
  #include "fse/GLItem/Shader.hpp"
@@ -24,7 +24,7 @@
      _programID = glCreateProgram();
 
      GLuint computeID = compile(compute, GL_COMPUTE_SHADER);
-     _attached_shader[GL_COMPUTE_SHADER] = computeID;
+     _attached_shader[GL_COMPUTE_SHADER] = std::make_tuple(computeID, compute);
 
      link();
  }
@@ -36,22 +36,47 @@
      GLuint vertexID = compile(vertex, GL_VERTEX_SHADER);
      GLuint fragmentID = compile(fragment, GL_FRAGMENT_SHADER);
 
-     _attached_shader[GL_VERTEX_SHADER] = vertexID;
-     _attached_shader[GL_FRAGMENT_SHADER] = fragmentID;
+     _attached_shader[GL_VERTEX_SHADER] = std::make_tuple(vertexID, vertex);
+     _attached_shader[GL_FRAGMENT_SHADER] = std::make_tuple(fragmentID, fragment);
 
      link();
  }
 
+ void				Shader::updateShader() {
+	 auto		old_shaders = _attached_shader;
+	 GLuint		old_program = _programID;
+
+	 _attached_shader.clear();
+	 try 
+	 {
+		 for (auto shader : old_shaders) {
+			 addShader(std::get<1>(shader.second), (ShaderType) shader.first);
+		 }
+		 _programID = glCreateProgram();
+		 link();
+
+		 for (auto old_shader : old_shaders) {
+			 glDeleteShader(std::get<0>(old_shader));
+		 }
+		 glDeleteProgram(old_program);
+	 }
+	 catch (const std::exception&)
+	 {
+		 _programID = old_program;
+		 _attached_shader = old_shaders;
+		 std::cerr << "[WARNING] Cannot update shader due to compilation/linkage error, previous version is used to prevent crashes." << std::endl;
+	 }
+ }
+
  void                Shader::addShader(const std::string &file, const fse::gl_item::Shader::ShaderType &type)
  {
-     _attached_shader[type] = compile(file, type);
+     _attached_shader[type] = std::make_tuple(compile(file, type), file);
  }
 
  void                Shader::link()
  {
      for (auto shader : _attached_shader) {
-         glAttachShader(_programID, shader.second);
-         std::cout << "Attached " << shader.first << " at " << shader.second << '\n';
+         glAttachShader(_programID, std::get<0>(shader.second));
      }
      glLinkProgram(_programID);
 
@@ -124,7 +149,7 @@
      id = glCreateShader(type);
      while (std::getline(source_file, line))
          src += line + "\n";
-	 
+
      const GLchar *gl_src = src.c_str();
      glShaderSource(id, 1, &gl_src, 0);
      glCompileShader(id);

@@ -2,7 +2,7 @@
  * @Author: danielb
  * @Date:   2017-07-23T01:38:03+02:00
  * @Last modified by:
- * @Last modified time: 2018-02-12T06:36:38+01:00
+ * @Last modified time: 2018-02-14T02:15:56+01:00
  */
 
 #ifndef SHADER_HPP
@@ -63,6 +63,8 @@ namespace fse {
 
             void    addShader(const std::string &file, const ShaderType &type);
 
+            void    updateShader();
+
             void    link();
 
             class Attribute
@@ -121,7 +123,7 @@ namespace fse {
             };
 
         private:
-            std::map<GLenum, GLuint>    _attached_shader;
+            std::map<GLenum, std::tuple<GLuint, std::string> > _attached_shader;
             GLuint      _programID;
 
             GLuint      compile(const std::string &source, GLenum type);
