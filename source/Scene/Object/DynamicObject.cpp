@@ -1,0 +1,100 @@
+/**
+ * @Date:   2018-02-14T12:18:30+01:00
+ * @Last modified time: 2018-02-14T12:18:30+01:00
+ */
+
+#include "fse/Scene/Object/DynamicObject.hpp"
+
+using namespace fse::scene::object;
+
+DynamicObject::~DynamicObject() {
+	delete body;
+	delete shape;
+}
+
+DynamicObject::DynamicObject() : motion(*this) {
+	shape = 0;
+	body = 0;
+}
+
+DynamicObject::DynamicObject(const Object &object) : motion(*this) {
+	shape = 0;
+	body = 0;
+	setMesh(object.getMesh());
+}
+
+void          DynamicObject::setPosition(const glm::vec3 &position) {
+	INode::setPosition(position);
+	body->getWorldTransform().setOrigin(btVector3(position.x, position.y, position.z));
+	body->activate(true);
+}
+
+void          DynamicObject::setScale(const glm::vec3 &s) {
+	INode::setScale(s);
+	shape->setLocalScaling(btVector3(s.x, s.y, s.z));
+	body->activate(true);
+}
+
+void	DynamicObject::setMesh(std::shared_ptr<fse::gl_item::Mesh> mesh) {
+	btConvexHullShape *new_shape = new btConvexHullShape((btScalar *)&mesh->getVertexes()[0], mesh->getVertexes().size(), 12);
+	
+	/*for (auto v : mesh->getVertexes()) {
+		new_shape->addPoint(btVector3(v.x, v.y, v.z));
+	}*/
+
+	/*/create a hull approximation
+	btShapeHull* hull = new btShapeHull(&shape);
+	btScalar margin = originalConvexShape->getMargin();
+	hull->buildHull(margin);
+	btConvexHullShape* simplifiedConvexShape = new btConvexHullShape(hull->getVertexPointer(), hull->numVertices());*/
+
+	new_shape->setLocalScaling(btVector3(getScale().x, getScale().y, getScale().z));
+	if (shape)
+		delete shape;
+	shape = new_shape;
+
+	if (!body) {
+		btRigidBody::btRigidBodyConstructionInfo
+			rigidBodyCI(0, &motion, shape, btVector3(0, 0, 0));
+		body = new btRigidBody(rigidBodyCI);
+	}
+	
+	body->setCollisionShape(shape);
+	btScalar mass = 1;
+	btVector3 fallInertia(0, 0, 0);
+	shape->calculateLocalInertia(mass, fallInertia);
+	body->setMassProps(1, fallInertia);
+
+	this->_mesh = mesh;
+}
+
+btVector3 quatToEuler(btQuaternion quat)
+{
+	float  heading, attitude, bank;
+	btQuaternion q1;
+	q1[0] = quat.getX();
+	q1[1] = quat.getY();
+	q1[2] = quat.getZ();
+	q1[3] = quat.getW();
+	double test = q1[0] * q1[1] + q1[2] * q1[3];
+	if (test > 0.499) { // singularity at north pole
+		heading = 2 * atan2(q1[0], q1[3]);
+		attitude = M_PI / 2;
+		bank = 0;
+		return btVector3(0, 0, 0);
+	}
+	if (test < -0.499) { // singularity at south pole
+		heading = -2 * atan2(q1[0], q1[3]);
+		attitude = -M_PI / 2;
+		bank = 0;
+		return  btVector3(0, 0, 0);
+	}
+	double sqx = q1[0] * q1[0];
+	double sqy = q1[1] * q1[1];
+	double sqz = q1[2] * q1[2];
+	heading = atan2(2 * q1[1] * q1[3] - 2 * q1[0] * q1[2], 1 - 2 * sqy - 2 * sqz);
+	attitude = asin(2 * test);
+	bank = atan2(2 * q1[0] * q1[3] - 2 * q1[1] * q1[2], 1 - 2 * sqx - 2 * sqz);
+	btVector3 vec(bank, heading, attitude);
+	return vec;
+}

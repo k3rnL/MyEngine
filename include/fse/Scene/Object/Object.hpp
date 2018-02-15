@@ -32,6 +32,7 @@ namespace fse {
                 friend class Wavefront;
             public:
                 Object();
+				Object(std::shared_ptr<gl_item::Mesh> mesh);
 
                 virtual ~Object();
 
@@ -45,23 +46,15 @@ namespace fse {
 
                 virtual void                setPosition(const glm::vec3 &pos);
 
-                std::shared_ptr<gl_item::Mesh> getMesh() { return (_mesh); }
+				virtual std::shared_ptr<gl_item::Mesh>	getMesh() const	{ return (_mesh); }
+				virtual void							setMesh(std::shared_ptr<gl_item::Mesh> mesh)
+																		{ _mesh = mesh; }
 
             protected:
 
               std::shared_ptr<fse::gl_item::Mesh>  _mesh;
-
-              GLuint          _buffer_vertex_id;
-              GLuint          _buffer_normal_id;
-              GLuint          _buffer_uv_id;
-              GLsizei         _buffer_size;
-
-              size_t          _nb_vertex;
-
               std::shared_ptr<Material>        _material;
 
-            private:
-              void              enableAttribute(GLuint buffer, GLuint attr, GLuint size);
             };
 
             typedef std::list<Object *> ObjectList;
