@@ -36,11 +36,11 @@ sudo cp build/libfse.so /usr/lib/
 On Windows you will need to have all dependencies installed/build in your environment (or -DVAR_NAME="")
 
 Those variables needs to be set:
-    - SDL2_PATH
-    - ASSIMP_ROOT_DIR
-    - GLM_ROOT_DIR
-    - GLEW_LOCATION
-    - BULLET_ROOT
+  - SDL2_PATH
+  - ASSIMP_ROOT_DIR
+  - GLM_ROOT_DIR
+  - GLEW_LOCATION
+  - BULLET_ROOT
 
 Use CMake GUI or open the project in a shell and type:
 ```
