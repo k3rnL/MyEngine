@@ -31,13 +31,6 @@ sudo cp include /usr/
 sudo cp build/libfse.so /usr/lib/
 ```
 
-# Use
-
-To link the library use
-```
--lfse
-```
-
 # Windows
 
 On Windows you will need to have all dependencies installed/build in your environment (or -DVAR_NAME="")
@@ -59,7 +52,7 @@ cmake .. -G "Visual Studio 15 Win64" -DSDL2_PATH="..."
 Finally open the generated project on Visual Studio to compile the library.
 
 Two file will be generated, the dll and it's import library :
-    - fse.dll
-    - fse.lib
+- fse.dll
+- fse.lib
 
 Erwan Daniel
