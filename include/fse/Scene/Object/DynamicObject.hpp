@@ -20,15 +20,22 @@ namespace fse {
             class DynamicObject : public Object
             {
             public:
-				DynamicObject();
-				DynamicObject(const Object &object);
+				DynamicObject(float mass = 10);
+				DynamicObject(const Object &object, float mass = 10);
                 virtual ~DynamicObject();
 
 				virtual void          setPosition(const glm::vec3 &position);
 				virtual void          setScale(const glm::vec3 &scale);
 
+				virtual void			addForce(const glm::vec3 &force);
+
+				virtual void			wakeOnMovement();
+				virtual void			wakeUp();
+				virtual bool			isWake();
+
 				virtual void	setMesh(std::shared_ptr<gl_item::Mesh> mesh);
             private:
+				float					mass;
 
 				btConvexHullShape		*shape;
 				btRigidBody				*body;
@@ -47,7 +54,7 @@ namespace fse {
 						const btVector3 &pos = tr.getOrigin();
 						node._position = glm::vec3(pos[0], pos[1], pos[2]);
 						btVector3 euler = quatToEuler(tr.getRotation());
-						node.setRotation(glm::vec3(euler[0], euler[1], euler[2]));
+						node.setRotation(glm::vec3(euler[0], euler[2], euler[1]));
 					}
 
                 private:

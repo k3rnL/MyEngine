@@ -17,10 +17,19 @@ DynamicScene::DynamicScene() : dispatcher(&collisionConfiguration), dynamicsWorl
 		groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
 	btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
 	dynamicsWorld.addRigidBody(groundRigidBody);
+	dynamicsWorld.setDebugDrawer(&debug_drawer);
 }
 
 DynamicScene::~DynamicScene() {
 
+}
+
+void        DynamicScene::addChild(INode *node) {
+	object::DynamicObject                  *obj = dynamic_cast<object::DynamicObject *>(node);
+
+	nodes.push_back(node);
+	if (obj)
+		dynamicsWorld.addRigidBody(obj->body);
 }
 
 object::DynamicObject        *DynamicScene::addObject(std::string const &file) {
@@ -35,6 +44,7 @@ object::DynamicObject        *DynamicScene::addObject(std::string const &file) {
 	return (obj);
 }
 
+
 object::DynamicObject        *DynamicScene::createObject(std::string const &file) {
 	object::Object *obj = SceneManager::createObject(file);
 	object::DynamicObject *dyn_obj = new object::DynamicObject(*obj);
@@ -43,6 +53,20 @@ object::DynamicObject        *DynamicScene::createObject(std::string const &file
 	return dyn_obj;
 }
 
+object::DynamicObject        *DynamicScene::createObject(std::string const &file, float mass) {
+	object::Object *obj = SceneManager::createObject(file);
+	object::DynamicObject *dyn_obj = new object::DynamicObject(*obj, mass);
+
+	delete obj;
+	return dyn_obj;
+}
+
+void	DynamicScene::drawPhysicsScene(const glm::mat4 &projection) {
+	debug_drawer.setView(camera->getView(), projection);
+	dynamicsWorld.debugDrawWorld();
+}
+
 void	DynamicScene::update(float deltaT) {
 	dynamicsWorld.stepSimulation(deltaT);
+	//dynamicsWorld.getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 }

@@ -12,27 +12,49 @@ DynamicObject::~DynamicObject() {
 	delete shape;
 }
 
-DynamicObject::DynamicObject() : motion(*this) {
+DynamicObject::DynamicObject(float mass) : motion(*this) {
 	shape = 0;
 	body = 0;
+	this->mass = mass;
 }
 
-DynamicObject::DynamicObject(const Object &object) : motion(*this) {
+DynamicObject::DynamicObject(const Object &object, float mass) : motion(*this) {
 	shape = 0;
 	body = 0;
+	this->mass = mass;
 	setMesh(object.getMesh());
+}
+
+void			DynamicObject::addForce(const glm::vec3 &force) {
+	if (body)
+		body->applyForce(btVector3(force.x, force.y, force.z), btVector3(0, 0, 0));
 }
 
 void          DynamicObject::setPosition(const glm::vec3 &position) {
 	INode::setPosition(position);
 	body->getWorldTransform().setOrigin(btVector3(position.x, position.y, position.z));
-	body->activate(true);
 }
 
 void          DynamicObject::setScale(const glm::vec3 &s) {
 	INode::setScale(s);
 	shape->setLocalScaling(btVector3(s.x, s.y, s.z));
 	body->activate(true);
+}
+
+void	DynamicObject::wakeOnMovement() {
+	if (body)
+		body->forceActivationState(WANTS_DEACTIVATION);
+}
+
+void	DynamicObject::wakeUp() {
+	if (body)
+		body->forceActivationState(ACTIVE_TAG);
+}
+
+bool	DynamicObject::isWake() {
+	if (body)
+		return (body->isActive());
+	return (false);
 }
 
 void	DynamicObject::setMesh(std::shared_ptr<fse::gl_item::Mesh> mesh) {
@@ -47,7 +69,7 @@ void	DynamicObject::setMesh(std::shared_ptr<fse::gl_item::Mesh> mesh) {
 	btScalar margin = originalConvexShape->getMargin();
 	hull->buildHull(margin);
 	btConvexHullShape* simplifiedConvexShape = new btConvexHullShape(hull->getVertexPointer(), hull->numVertices());*/
-
+	new_shape->setMargin(0);
 	new_shape->setLocalScaling(btVector3(getScale().x, getScale().y, getScale().z));
 	if (shape)
 		delete shape;
@@ -60,10 +82,9 @@ void	DynamicObject::setMesh(std::shared_ptr<fse::gl_item::Mesh> mesh) {
 	}
 	
 	body->setCollisionShape(shape);
-	btScalar mass = 1;
 	btVector3 fallInertia(0, 0, 0);
 	shape->calculateLocalInertia(mass, fallInertia);
-	body->setMassProps(1, fallInertia);
+	body->setMassProps(mass, fallInertia);
 
 	this->_mesh = mesh;
 }
