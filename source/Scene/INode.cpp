@@ -80,7 +80,7 @@ glm::vec3   &INode::getScale() {
     return (_scale);
 }
 
-std::list<INode *>    &INode::getChilds() {
+const std::list<INode *>    &INode::getChilds() const {
     return childs;
 }
 
