@@ -16,7 +16,7 @@ GLuint GenerateColorTexture(unsigned int width, unsigned int height){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8UI, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8UI, width, height, 0, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, 0);
     return (texture_color);
 }
 
@@ -94,7 +94,7 @@ void    ObjectPicker::onDrawBegin() {
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
-    id = 0;
+    id = 1;
 }
 
 void    ObjectPicker::onPreDrawItem(std::shared_ptr<fse::gl_item::Shader> shader,
@@ -103,16 +103,18 @@ void    ObjectPicker::onPreDrawItem(std::shared_ptr<fse::gl_item::Shader> shader
                                     fse::scene::object::Object *object,
                                     glm::mat4 const &transform)
 {
-    shader->setUniformValue((int)id, "id");
+    shader->setUniformValue(id, "id");
     objects[id++] = object;
 }
 
 void    ObjectPicker::onDrawFinished() {
     unsigned int pixel;
     glReadBuffer((GLenum)GL_COLOR_ATTACHMENT0);
-    glReadPixels(width/2, height/2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) &pixel);
+    glReadPixels(width/2, height/2, 1, 1, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, (GLvoid*) &pixel);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	id_found =  (pixel & 0x0000ff00) >> 8;
-	id_found += (pixel & 0x00ff0000) >> 16;
-	id_found += (pixel & 0xff000000) >> 24;
+	std::cout << "R=" << ((pixel & 0xff000000) >> 24) << " G=" << ((pixel & 0x00ff0000) >> 16) << " B=" << ((pixel & 0x0000ff00 ) >> 8) << " A=" << (pixel & 0x000000ff) << "\n";
+	id_found =  (pixel & 0x00ff0000) >> 16;
+	id_found += (pixel & 0x0000ff00);
+	id_found += (pixel & 0x000000ff) << 16;
+	std::cout << "Id=" << id_found << " pixel= " << pixel << "\n";
 }
