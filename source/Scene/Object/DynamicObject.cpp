@@ -23,6 +23,27 @@ DynamicObject::DynamicObject(const Object &object, float mass) : motion(*this) {
 	body = 0;
 	this->mass = mass;
 	setMesh(object.getMesh());
+	for (auto child : object.getChilds()) {
+		Object *c = dynamic_cast<Object *>(child);
+		if (c != 0)
+			addChild(new DynamicObject(*c, mass));
+	}
+}
+
+void			DynamicObject::registerOnWorld(fse::scene::DynamicWorld *world) {
+	world->registerObject(this);
+	for (auto child : getChilds()) {
+		DynamicObject *o = dynamic_cast<DynamicObject *>(child);
+		if (o) o->registerOnWorld(world);
+	}
+}
+
+void			DynamicObject::unregisterOnWorld(fse::scene::DynamicWorld *world) {
+	world->unregisterObject(this);
+	for (auto child : getChilds()) {
+		DynamicObject *o = dynamic_cast<DynamicObject *>(child);
+		if (o) o->unregisterOnWorld(world);
+	}
 }
 
 void			DynamicObject::addForce(const glm::vec3 &force) {
@@ -87,35 +108,4 @@ void	DynamicObject::setMesh(std::shared_ptr<fse::gl_item::Mesh> mesh) {
 	body->setMassProps(mass, fallInertia);
 
 	this->_mesh = mesh;
-}
-
-btVector3 quatToEuler(btQuaternion quat)
-{
-	float  heading, attitude, bank;
-	btQuaternion q1;
-	q1[0] = quat.getX();
-	q1[1] = quat.getY();
-	q1[2] = quat.getZ();
-	q1[3] = quat.getW();
-	double test = q1[0] * q1[1] + q1[2] * q1[3];
-	if (test > 0.499) { // singularity at north pole
-		heading = 2 * atan2(q1[0], q1[3]);
-		attitude = M_PI / 2;
-		bank = 0;
-		return btVector3(0, 0, 0);
-	}
-	if (test < -0.499) { // singularity at south pole
-		heading = -2 * atan2(q1[0], q1[3]);
-		attitude = -M_PI / 2;
-		bank = 0;
-		return  btVector3(0, 0, 0);
-	}
-	double sqx = q1[0] * q1[0];
-	double sqy = q1[1] * q1[1];
-	double sqz = q1[2] * q1[2];
-	heading = atan2(2 * q1[1] * q1[3] - 2 * q1[0] * q1[2], 1 - 2 * sqy - 2 * sqz);
-	attitude = asin(2 * test);
-	bank = atan2(2 * q1[0] * q1[3] - 2 * q1[1] * q1[2], 1 - 2 * sqx - 2 * sqz);
-	btVector3 vec(bank, heading, attitude);
-	return vec;
 }
