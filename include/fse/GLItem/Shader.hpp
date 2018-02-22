@@ -45,7 +45,8 @@ namespace fse {
             void    setUniformValue(const glm::mat4 &matrix, const std::string &name);
             void    setUniformValue(const glm::vec3 &vec, const std::string &name);
             void    setUniformValue(const int value, const std::string &name);
-            void    setUniformValue(const float value, const std::string &name);
+            void    setUniformValue(const unsigned int value, const std::string &name);
+			void    setUniformValue(const float value, const std::string &name);
 
 			template <typename T>
             void    setAttribute(Buffer<T> &buffer, GLuint attr, GLuint n_component) {

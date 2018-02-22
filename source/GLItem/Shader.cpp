@@ -134,6 +134,12 @@
    glProgramUniform1i(_programID, id, value);
  }
 
+ void                Shader::setUniformValue(const unsigned int value, const std::string &name)
+ {
+	 GLuint id = glGetUniformLocation(_programID, name.c_str());
+	 glProgramUniform1ui(_programID, id, value);
+ }
+
  void                Shader::setUniformValue(const float value, const std::string &name)
  {
    GLuint id = glGetUniformLocation(_programID, name.c_str());
