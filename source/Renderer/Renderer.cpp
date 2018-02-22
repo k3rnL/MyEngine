@@ -8,6 +8,7 @@
 
 
 #include "fse/Renderer/Renderer.hpp"
+#include "fse/Scene/DynamicScene.hpp"
 
 using namespace fse;
 

@@ -15,7 +15,7 @@ First you need to install all dependencies :
 
 ```
 sudo apt update
-sudo apt install libgles2-mesa-dev libsdl2-dev libglm-dev libglew-dev libassimp-dev cmake
+sudo apt install libgles2-mesa-dev libsdl2-dev libglm-dev libglew-dev libassimp-dev libbullet-dev cmake
 ```
 
 Now you can configure the project :
@@ -40,6 +40,7 @@ Those variables needs to be set:
   - ASSIMP_ROOT_DIR
   - GLM_ROOT_DIR
   - GLEW_LOCATION
+  - BULLET_ROOT
 
 Use CMake GUI or open the project in a shell and type:
 ```

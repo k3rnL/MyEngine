@@ -20,28 +20,24 @@ SceneManager::~SceneManager()
 
 }
 
-fse::scene::object::Object          *SceneManager::addWavefront(const std::string &file)
+fse::scene::object::Object          *SceneManager::addObject(const std::string &file)
 {
     object::Object                  *obj;
 
-    if (nodes_data.find(file) != nodes_data.end())
-        obj = (object::Wavefront *) nodes_data.find(file)->second->clone();
+    if (mesh_catalog.find(file) != mesh_catalog.end())
+        obj = new object::Object(mesh_catalog.find(file)->second);
     else
-    {
-      obj = createWavefront(file);
-      std::cout << "Create a new " << file << "\n";
-    }
+		obj = createObject(file);
     nodes.push_back(obj);
     return (obj);
 }
 
-fse::scene::object::Object           *SceneManager::createWavefront(const std::string &file)
+fse::scene::object::Object           *SceneManager::createObject(const std::string &file)
 {
     object::Object                   *obj;
 
     obj = object::Wavefront::load(file);
-    nodes_data[file] = obj;
-    nodes.push_back(obj);
+	mesh_catalog[file] = obj->getMesh();
     return (obj);
 }
 

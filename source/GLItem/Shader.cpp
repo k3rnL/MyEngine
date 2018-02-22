@@ -85,12 +85,13 @@
      if (error != GL_TRUE)
      {
          std::cerr << "Cannot link shader.\n";
-         int log_length = 0;
-         glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &log_length);
-         std::string error_msg;
-         error_msg.resize(log_length + 1);
- 		    glGetShaderInfoLog(_programID, log_length, NULL, &error_msg[0]);
-         std::cerr << error_msg << "\n";
+		 GLint maxLength = 0;
+		 glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &maxLength);
+
+		 // The maxLength includes the NULL character
+		 std::vector<GLchar> infoLog(maxLength);
+		 glGetProgramInfoLog(_programID, maxLength, &maxLength, &infoLog[0]);
+         std::cerr << &infoLog[0] << "\n";
          throw std::exception();
      }
  }
@@ -131,6 +132,12 @@
  {
    GLuint id = glGetUniformLocation(_programID, name.c_str());
    glProgramUniform1i(_programID, id, value);
+ }
+
+ void                Shader::setUniformValue(const unsigned int value, const std::string &name)
+ {
+	 GLuint id = glGetUniformLocation(_programID, name.c_str());
+	 glProgramUniform1ui(_programID, id, value);
  }
 
  void                Shader::setUniformValue(const float value, const std::string &name)

@@ -43,7 +43,7 @@ namespace fse {
             virtual glm::vec3     &getScale();
 
             virtual void          addChild(INode *child);
-            std::list<INode *>    &getChilds();
+            const std::list<INode *>    &getChilds() const;
 
         protected:
 

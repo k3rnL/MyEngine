@@ -15,19 +15,18 @@ using namespace fse::scene::object;
 
 Object::Object()
 {
-    _buffer_vertex_id = 0;
-    _buffer_normal_id = 0;
-    _buffer_uv_id = 0;
     _material = std::make_shared<Material>();
     _mesh = 0;
 }
 
+Object::Object(std::shared_ptr<fse::gl_item::Mesh> mesh) {
+	_material = std::make_shared<Material>();
+	_mesh = mesh;
+}
+
 Object::~Object()
 {
-    if (_buffer_vertex_id)
-        glDeleteBuffers(_buffer_size, &_buffer_vertex_id);
-    if (_buffer_normal_id)
-        glDeleteBuffers(_buffer_size, &_buffer_normal_id);
+
 }
 
 fse::scene::INode       *Object::clone()
@@ -62,39 +61,6 @@ void                Object::draw(fse::renderer::ObjectsToDrawCallback &callback,
     }
 }
 
-// void            Object::draw(ShaderManager &shaders, const glm::mat4 &projection, const glm::mat4 &view, const glm::mat4 &parent_transform, const glm::vec3 &cam_pos)
-// {
-//     glm::mat4   transform;
-//     glm::quat   quat(_rotation);
-//
-//     transform = parent_transform * glm::translate(_position) * glm::toMat4(quat);
-//
-//     shaders.useDefaultProgram();
-//     // glUseProgram(_material->getShader().getProgram());
-//     _material->applyMaterial(shaders.getActualShader());
-//
-//     // enableAttribute(_buffer_vertex_id, 0, 3);
-//     // enableAttribute(_buffer_normal_id, 1, 3);
-//     // enableAttribute(_buffer_uv_id, 2, 2);
-//     _mesh->bindToShader();
-//
-//     // _material->getShader().setUniformValue(projection, "projection");
-//     // _material->getShader().setUniformValue(view, "view");
-//     shaders.getActualShader()->setUniformValue(transform, "model_view");
-//     shaders.getActualShader()->setUniformValue(glm::toMat4(quat), "model_rotation");
-//
-//
-//     // _material.getShader().setUniformVertex(cam_pos, "camera_position");
-//     // Draw the triangle !
-//     glDrawArrays(GL_TRIANGLES, 0, _mesh->_nb_vertex); // 3 indices starting at 0 -> 1 triangle
-//     // glDisableVertexAttribArray(0);
-//     // glDisableVertexAttribArray(1);
-//     // glDisableVertexAttribArray(2);
-//     _mesh->detachFromShader();
-//
-//     // INode::draw(shaders, projection, view, parent_transform, cam_pos);
-// }
-
 std::shared_ptr<Material>    Object::getMaterial()
 {
     return (_material);
@@ -103,18 +69,4 @@ std::shared_ptr<Material>    Object::getMaterial()
 void    Object::applyMaterial(std::shared_ptr<Material> mat)
 {
   _material = mat;
-}
-
-void    Object::enableAttribute(GLuint buffer, GLuint attr, GLuint size)
-{
-  glEnableVertexAttribArray(attr);
-  glBindBuffer(GL_ARRAY_BUFFER, buffer);
-  glVertexAttribPointer(
-      attr,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-      size,                  // size
-      GL_FLOAT,           // type
-      GL_FALSE,           // normalized?
-      0,                  // stride
-      (void*)0            // array buffer offset
-      );
 }
