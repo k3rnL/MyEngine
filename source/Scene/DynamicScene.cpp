@@ -29,28 +29,26 @@ void        DynamicScene::addChild(INode *node) {
 
 	nodes.push_back(node);
 	if (obj)
-		dynamicsWorld.addRigidBody(obj->body);
+		obj->registerOnWorld(this);
 }
 
-object::DynamicObject        *DynamicScene::addObject(std::string const &file) {
+object::DynamicObject        *DynamicScene::addObject(std::string const &file, float mass) {
 	object::DynamicObject                  *obj;
 
 	if (mesh_catalog.find(file) != mesh_catalog.end())
 		obj = new object::DynamicObject(mesh_catalog.find(file)->second);
 	else
-		obj = createObject(file);
-	nodes.push_back(obj);
-	dynamicsWorld.addRigidBody(obj->body);
+		obj = createObject(file, mass);
+	addChild(obj);
 	return (obj);
 }
 
+object::Object        *DynamicScene::addObject(std::string const &file) {
+	return SceneManager::addObject(file);
+}
 
-object::DynamicObject        *DynamicScene::createObject(std::string const &file) {
-	object::Object *obj = SceneManager::createObject(file);
-	object::DynamicObject *dyn_obj = new object::DynamicObject(*obj);
-
-	delete obj;
-	return dyn_obj;
+object::Object        *DynamicScene::createObject(std::string const &file) {
+	return SceneManager::createObject(file);
 }
 
 object::DynamicObject        *DynamicScene::createObject(std::string const &file, float mass) {
@@ -69,4 +67,12 @@ void	DynamicScene::drawPhysicsScene(const glm::mat4 &projection) {
 void	DynamicScene::update(float deltaT) {
 	dynamicsWorld.stepSimulation(deltaT);
 	//dynamicsWorld.getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+}
+
+void	DynamicScene::registerObject(object::DynamicObject *obj) {
+	dynamicsWorld.addRigidBody(obj->body);
+}
+
+void	DynamicScene::unregisterObject(object::DynamicObject *obj) {
+	dynamicsWorld.removeRigidBody(obj->body);
 }

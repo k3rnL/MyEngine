@@ -14,7 +14,7 @@
 namespace fse {
     namespace scene {
 
-        class FSE_API_EXPORT DynamicScene : public SceneManager
+        class FSE_API_EXPORT DynamicScene : public SceneManager, public DynamicWorld
         {
         public:
             DynamicScene();
@@ -22,11 +22,14 @@ namespace fse {
 
 			virtual void						addChild(INode *node);
 
-			virtual object::DynamicObject       *addObject(std::string const &file);
-			virtual object::DynamicObject       *createObject(std::string const &file);
+			virtual object::Object				*addObject(std::string const &file);
+			virtual object::DynamicObject       *addObject(std::string const &file, float mass);
+			virtual object::Object				*createObject(std::string const &file);
 			virtual object::DynamicObject		*createObject(std::string const &file, float mass);
 
 			virtual void						update(float deltaT);
+			virtual void						registerObject(object::DynamicObject *obj);
+			virtual void						unregisterObject(object::DynamicObject *obj);
 
 			void								drawPhysicsScene(const glm::mat4 &projection);
 
