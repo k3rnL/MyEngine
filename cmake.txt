@@ -1,6 +1,6 @@
 @Date:   2018-01-25T01:42:02+01:00
-@Last modified time: 2018-02-14T12:13:39+01:00
+@Last modified time: 2018-02-24T03:14:45+01:00
 
 
 
-cmake .. -DSDL2_PATH="C:\Users\k3rnL\Downloads\SDL2-2.0.7" -DASSIMP_ROOT_DIR="C:\Program Files\Assimp" -DGLM_ROOT_DIR="C:\Users\k3rnL\Downloads\glm-0.9.9-a2" -DGLEW_LOCATION="C:\Users\k3rnL\Downloads\glew-2.1.0" -DBULLET_ROOT="C:\Users\k3rnL\Downloads\bullet-2.82-r2704\bullet-2.82-r2704" -G "Visual Studio 15 2017 Win64"
+cmake .. -DSDL2_PATH="C:\Users\k3rnL\Downloads\SDL2-2.0.7" -DASSIMP_ROOT_DIR="C:\Program Files\Assimp" -DGLM_ROOT_DIR="C:\Users\k3rnL\Downloads\glm-0.9.9-a2" -DGLEW_LOCATION="C:\Users\k3rnL\Downloads\glew-2.1.0" -DBULLET_ROOT="C:\Users\k3rnL\Downloads\bullet-2.82-r2704\bullet-2.82-r2704" -DFREETYPE_DIR="C:\Users\k3rnL\Downloads\freetype-2.9.tar\freetype-2.9" -G "Visual Studio 15 2017 Win64"

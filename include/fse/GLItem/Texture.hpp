@@ -36,6 +36,7 @@ namespace fse {
                                   DEPTH16 = GL_DEPTH_COMPONENT16,
                                   DEPTH24 = GL_DEPTH_COMPONENT24,
                                   DEPTH32 = GL_DEPTH_COMPONENT32,
+								  RED8 = GL_RED,
                                   RGB8 = GL_RGB8,
                                   RGB10 = GL_RGB10,
                                   RGBA32F = GL_RGBA32F
@@ -57,10 +58,14 @@ namespace fse {
             void    unbind();
             void    activate(int slot);
             GLuint  getId();
-            void    loadImage(std::string const &name);
 
-            glm::vec2   _size;
+			void	data(void *buffer);
+
+            glm::vec2   size;
         private:
+			InternalFormat _in_format;
+			Format			_format;
+			Type			_type;
             GLuint      _id;
         };
 

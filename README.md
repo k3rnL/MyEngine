@@ -41,6 +41,7 @@ Those variables needs to be set:
   - GLM_ROOT_DIR
   - GLEW_LOCATION
   - BULLET_ROOT
+  - FREETYPE_DIR
 
 Use CMake GUI or open the project in a shell and type:
 ```

@@ -12,9 +12,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
-//#include <unistd.h>
+#include <functional>
 #include <exception>
 #include <string>
+#include <list>
 
 #include <fse/Export.hpp>
 #include <fse/GLItem/Shader.hpp>
@@ -35,9 +36,17 @@ public:
 
     void                setTitle(const std::string &title);
 
+	void				setResizable(bool resize);
+	void				captureMouse(bool capture);
+	void				setOnMouseClick(std::function<void(int x, int y)> callback);
+
     void                close();
+	bool				isOpen();
+	void				makeContextCurrent();
 
 private:
+	std::function<void(int, int)>	onClick;
+	static std::map<Uint32, std::list<SDL_Event>>	event_stack;
     SDL_Window         *_window;
     SDL_GLContext       _context;
     size_t              _width;

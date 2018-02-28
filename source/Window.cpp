@@ -7,6 +7,8 @@
 
 #include "fse/Window.hpp"
 
+std::map<Uint32, std::list<SDL_Event>>	Window::event_stack;
+
 Window::Window(size_t width, size_t height, const std::string &title)
 {
     SDL_Init(SDL_INIT_VIDEO);
@@ -15,7 +17,6 @@ Window::Window(size_t width, size_t height, const std::string &title)
     std::cerr << "Surface:" << _window << std::endl;
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
-
     GLenum err;/*
     while((err = glGetError()) != GL_NO_ERROR)
     {
@@ -37,9 +38,44 @@ Window::Window(size_t width, size_t height, const std::string &title)
     _height = height;
 }
 
+void			Window::captureMouse(bool c) {
+	SDL_SetRelativeMouseMode(c ? SDL_TRUE : SDL_FALSE);
+}
+
+void			Window::makeContextCurrent() {
+	SDL_GL_MakeCurrent(_window, _context);
+}
+
+void			Window::setOnMouseClick(std::function<void(int, int)> fct) {
+	onClick = fct;
+}
+
+void			Window::setResizable(bool r) {
+	SDL_SetWindowResizable(_window, r ? SDL_TRUE : SDL_FALSE);
+}
+
+bool			Window::isOpen() {
+	return _window ? true : false;
+}
+
 bool            Window::pollEvent(SDL_Event &event)
 {
-    return (SDL_PollEvent(&event));
+	if (event_stack[SDL_GetWindowID(_window)].size() > 0) {
+		event = event_stack[SDL_GetWindowID(_window)].front();
+		event_stack[SDL_GetWindowID(_window)].pop_front();
+	}
+	else if (!SDL_PollEvent(&event))
+		return false;
+	if (event.window.windowID != SDL_GetWindowID(_window)) {
+		event_stack[event.window.windowID].push_back(event);
+		return (pollEvent(event));
+	}
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		if (event.button.button == SDL_BUTTON_LEFT)
+			if (onClick)
+				onClick(event.motion.x, _height - event.motion.y);
+	}
+    return (true);
 }
 
 void            Window::flipScreen()
@@ -64,7 +100,7 @@ void            Window::close()
 {
     SDL_GL_DeleteContext(_context);
     SDL_DestroyWindow(_window);
-    SDL_Quit();
+	_window = 0;
 }
 
 void Window::loop()

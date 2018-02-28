@@ -128,6 +128,12 @@
    glProgramUniform3fv(_programID, id, 1, &vec[0]);
  }
 
+ void                Shader::setUniformValue(const glm::vec4 &vec, const std::string &name)
+ {
+	 GLuint id = glGetUniformLocation(_programID, name.c_str());
+	 glProgramUniform4fv(_programID, id, 1, &vec[0]);
+ }
+
  void                Shader::setUniformValue(const int value, const std::string &name)
  {
    GLuint id = glGetUniformLocation(_programID, name.c_str());
