@@ -1,6 +1,6 @@
 /**
  * @Date:   2018-02-25T21:08:21+01:00
- * @Last modified time: 2018-02-25T21:08:45+01:00
+ * @Last modified time: 2018-02-28T16:50:13+01:00
  */
 
 #ifndef FSE_UI_BUTTON_HPP
@@ -20,7 +20,7 @@ namespace fse {
 			virtual ~Button();
 
 			virtual void	onClick(int x, int y);
-
+ 
 			void			setOnMouseClick(std::function<void(int, int)> function);
 		private:
 			std::function<void(int, int)>	onClickCallback;
