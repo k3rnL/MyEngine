@@ -23,8 +23,8 @@ void	LayoutHorizontal::resizeChilds() {
 			s.x = glm::clamp(s.x, .0f, c->getMaximumSize().x);
 		if (c->getMaximumSize().y > 0)
 			s.y = glm::clamp(s.y, .0f, c->getMaximumSize().y);
-		position.x += s.x;
 		c->setPos(position);
 		c->setSize(s);
+		position.x += s.x;
 	}
 }

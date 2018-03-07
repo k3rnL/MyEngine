@@ -15,12 +15,14 @@ DynamicObject::~DynamicObject() {
 DynamicObject::DynamicObject(float mass) : motion(*this) {
 	shape = 0;
 	body = 0;
+	world = 0;
 	this->mass = mass;
 }
 
 DynamicObject::DynamicObject(const Object &object, float mass) : motion(*this) {
 	shape = 0;
 	body = 0;
+	world = 0;
 	this->mass = mass;
 	setMesh(object.getMesh());
 	for (auto child : object.getChilds()) {
@@ -58,7 +60,19 @@ void          DynamicObject::setPosition(const glm::vec3 &position) {
 
 void          DynamicObject::setScale(const glm::vec3 &s) {
 	INode::setScale(s);
-	shape->setLocalScaling(btVector3(s.x, s.y, s.z));
+	if (world)
+		world->removeRigidBody(body);
+	if (body)
+		body->setCollisionShape(0);
+	if (shape) {
+		shape->setLocalScaling(btVector3(s.x, s.y, s.z));
+		shape->recalcLocalAabb();
+	}
+	if (body) body->setCollisionShape(shape);
+	if (world) {
+		world->addRigidBody(body);
+		world->updateSingleAabb(body);
+	}
 	body->activate(true);
 }
 

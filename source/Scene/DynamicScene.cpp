@@ -71,8 +71,10 @@ void	DynamicScene::update(float deltaT) {
 
 void	DynamicScene::registerObject(object::DynamicObject *obj) {
 	dynamicsWorld.addRigidBody(obj->body);
+	obj->world = &dynamicsWorld;
 }
 
 void	DynamicScene::unregisterObject(object::DynamicObject *obj) {
 	dynamicsWorld.removeRigidBody(obj->body);
+	obj->world = 0;
 }

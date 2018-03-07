@@ -43,6 +43,7 @@ namespace fse {
 
 				btConvexHullShape		*shape;
 				btRigidBody				*body;
+				btDynamicsWorld			*world;
 
                 class MotionState : public btMotionState
                 {
