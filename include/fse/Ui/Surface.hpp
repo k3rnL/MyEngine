@@ -10,9 +10,9 @@
 #include <list>
 
 #include "fse/Export.hpp"
-#include "fse/GLitem/Texture.hpp"
-#include "fse/GLitem/Shader.hpp"
-#include "fse/GLitem/Mesh.hpp"
+#include "fse/GLItem/Texture.hpp"
+#include "fse/GLItem/Shader.hpp"
+#include "fse/GLItem/Mesh.hpp"
 
 namespace fse {
     namespace ui {
