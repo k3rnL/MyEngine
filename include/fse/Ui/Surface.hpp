@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 
 #include <list>
+#include <typeindex>
 
 #include "fse/Export.hpp"
 #include "fse/GLitem/Texture.hpp"
@@ -22,26 +23,92 @@ namespace fse {
 			Surface();
 			virtual ~Surface() {}
 
-			virtual void	setSize(const glm::vec2 &size);
-			virtual void	setMaximumSize(const glm::vec2 &max);
-			virtual void	setPos(const glm::vec2 &pos);
             virtual void    setBackground(const glm::vec4 &color);
 
-			virtual const glm::vec2		&getMaximumSize() const;
 
-            virtual void    draw();
 
 			virtual void	onClick(int x, int y);
 
 			virtual void	addSurface(Surface *surface);
 
-			enum Behavior {
-				FILL,
-				CENTERED,
-				DEFAULT
+			class Bound {
+			public:
+				glm::vec2 pos;
+				glm::vec2 size;
 			};
 
-			virtual void	setBehavior(Behavior behavior);
+			virtual void    draw();
+			virtual void	setBound(const Bound &bound);
+
+			class Behavior {
+			public:
+				virtual ~Behavior() {}
+				virtual Bound	transform(Bound &parent_bound) = 0;
+			};
+
+			class Fill : public Behavior {
+			public:
+				virtual Bound	transform(Bound &parent_bound) {
+					return (parent_bound);
+				}
+			};
+
+			class FitTo : public Behavior {
+			public:
+				virtual ~FitTo() {}
+				FitTo(const glm::vec2 &size) : mSize(size) {}
+
+				virtual Bound	transform(Bound &parent_bound) {
+					Bound b = parent_bound;
+					if (mSize.x > 0)
+						b.size.x = mSize.x;
+					if (mSize.y > 0)
+						b.size.y = mSize.y;
+					return (b);
+				}
+
+				const glm::vec2		mSize;
+			};
+
+			class RelativePosition : public Behavior {
+			public:
+				virtual ~RelativePosition() {}
+				RelativePosition(const glm::vec2 &position) : mPos(position) {}
+
+				virtual Bound	transform(Bound &parent_bound) {
+					Bound b = parent_bound;
+					b.pos += mPos;
+					return (b);
+				}
+
+				const glm::vec2		mPos;
+			};
+
+			class AbsolutePosition : public Behavior {
+			public:
+				virtual ~AbsolutePosition() {}
+				AbsolutePosition(const glm::vec2 &position) : mPos(position) {}
+
+				virtual Bound	transform(Bound &parent_bound) {
+					Bound b = parent_bound;
+					b.pos = mPos;
+					return (b);
+				}
+
+				const glm::vec2		mPos;
+			};
+
+			template <class T>
+			FSE_API_EXPORT T	*getBehavior() {
+				return (T *)behaviors[typeid T];
+			}
+
+			template <class T>
+			FSE_API_EXPORT void	setBehavior(T *behavior) {
+				behaviors[typeid (T)] = behavior;
+			}
+
+			Bound	getSurface();
 
         protected:
 			static  std::shared_ptr<gl_item::Shader> 	shader;
@@ -49,13 +116,12 @@ namespace fse {
 			std::list<Surface *>						childs;
 			std::shared_ptr<gl_item::Mesh>				mesh;
 
-			glm::vec2		_real_pos;
-            glm::vec2       pos, size, max_size;
             glm::vec4       color;
 
-			Behavior		behavior;
+			Bound			bound;
 
-			virtual void	validate(const glm::vec2 &min, const glm::vec2 &max, bool validate_childs = true);
+			std::map < std::type_index, Behavior * > behaviors;
+
         };
 
     }

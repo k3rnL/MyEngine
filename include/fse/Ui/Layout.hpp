@@ -16,11 +16,6 @@ namespace fse {
 		public:
 			virtual ~Layout();
 
-			virtual void			resizeChilds() = 0;
-		protected:
-			virtual void			validate(const glm::vec2 &pos, const glm::vec2 &size, bool validate_childs = true);
-
-
 		};
 
     } /* ui */

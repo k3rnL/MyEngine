@@ -11,20 +11,16 @@ LayoutHorizontal::~LayoutHorizontal() {
 
 }
 
-void	LayoutHorizontal::resizeChilds() {
+void	LayoutHorizontal::setBound(const Bound &bound) {
+	this->bound = bound;
 	if (!childs.size())
 		return;
-
-	glm::vec2 size(size.x / childs.size(), size.y);
+	Bound frame = getSurface();
 	glm::vec2 position(0, 0);
 	for (auto c : childs) {
-		glm::vec2 s = size;
-		if (c->getMaximumSize().x > 0)
-			s.x = glm::clamp(s.x, .0f, c->getMaximumSize().x);
-		if (c->getMaximumSize().y > 0)
-			s.y = glm::clamp(s.y, .0f, c->getMaximumSize().y);
-		c->setPos(position);
-		c->setSize(s);
-		position.x += s.x;
+		c->setBound(frame);
+		Bound f = c->getSurface();
+		frame.pos.x += f.size.x;
+		frame.size.x -= f.size.x;
 	}
 }
