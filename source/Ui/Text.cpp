@@ -19,7 +19,7 @@ Text::Text() {
 		shader = std::make_shared<fse::gl_item::Shader>("shader/text.vert", "shader/text.frag");
 	texture = gl_item::Texture::create(0, 0, fse::gl_item::Texture::InternalFormat::RED8, fse::gl_item::Texture::RED, fse::gl_item::Texture::Type::UNSIGNED_BYTE);
 	texture->setMipMapLevel(0);
-	setBehavior(FILL);
+	setBehavior(new Fill());
 	setBackground(glm::vec4(0, 0, 0, 0));
 	text_color = glm::vec4(0, 0, 0, 1);
 }
@@ -38,18 +38,18 @@ Text::~Text() {
 
 void	Text::draw() {
 	Surface::draw();
-	glm::vec2 pos = this->_real_pos;
+	Bound bound = getSurface();
 	for (auto c : text) {
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 			//pos.x += size.y * 0.75;
 			continue;
 		}
-		int bottom = size.y - face->glyph->bitmap_top;
+		int bottom = bound.size.y - face->glyph->bitmap_top;
 		int sizey = face->glyph->bitmap.rows;
-		int posy = pos.y + face->glyph->bitmap_top - sizey;
-		int posx = pos.x + face->glyph->bitmap_left;
+		int posy = bound.pos.y + face->glyph->bitmap_top - sizey;
+		int posx = bound.pos.x + face->glyph->bitmap_left;
 		int maxx = face->glyph->bitmap.width;
-		glViewport(posx, posy + size.y * 0.25, maxx, sizey);
+		glViewport(posx, posy + bound.size.y * 0.25, maxx, sizey);
 		texture->size.x = face->glyph->bitmap.width;
 		texture->size.y = face->glyph->bitmap.rows;
 		texture->data(face->glyph->bitmap.buffer);
@@ -61,7 +61,7 @@ void	Text::draw() {
 		shader->setUniformValue(0, "font");
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-		pos.x += face->glyph->advance.x >> 6;
+		bound.pos.x += face->glyph->advance.x >> 6;
 	}
 }
 
@@ -82,7 +82,6 @@ void	Text::setFont(const std::string &file) {
 }
 
 void	Text::setSize(const glm::vec2 &size) {
-	Surface::setSize(size);
-	//FT_Set_Char_Size(face, 0, size.y * 32, 300, 300);
+	setBehavior(new FitTo(glm::vec2(0, size.y)));
 	FT_Set_Pixel_Sizes(face, 0, size.y);
 }

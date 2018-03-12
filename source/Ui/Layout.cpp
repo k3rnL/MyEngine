@@ -10,9 +10,3 @@ using namespace fse::ui;
 Layout::~Layout() {
 
 }
-
-void	Layout::validate(const glm::vec2 &min, const glm::vec2 &max, bool validate_childs) {
-	Surface::validate(min, max, false);
-	resizeChilds();
-	Surface::validate(min, max, validate_childs);
-}
