@@ -1,6 +1,6 @@
 /**
  * @Date:   2018-02-24T06:47:52+01:00
- * @Last modified time: 2018-02-24T06:47:52+01:00
+ * @Last modified time: 2018-03-12T21:21:51+01:00
  */
 
 #include "fse/Ui/Text.hpp"
@@ -39,6 +39,7 @@ Text::~Text() {
 void	Text::draw() {
 	Surface::draw();
 	Bound bound = getSurface();
+	FT_Set_Pixel_Sizes(face, 0, bound.size.y);
 	for (auto c : text) {
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 			//pos.x += size.y * 0.75;
