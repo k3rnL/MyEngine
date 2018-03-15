@@ -60,14 +60,11 @@ void    Surface::setBackground(const glm::vec4 &color) {
     this->color = color;
 }
 
-void    Surface::draw() {
+void    Surface::draw(Drawer &drawer) {
 	Bound bound = getSurface();
-    shader->useProgram();
-	mesh->bindToShader(shader);
-	shader->setUniformValue(color, "color");
-	glViewport(bound.pos.x, bound.pos.y, bound.size.x, bound.size.y);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	drawer.drawRect(bound.pos, bound.size, color);
 	for (auto c : childs) {
-		c->draw();
+		c->draw(drawer);
 	}
 }

@@ -22,6 +22,25 @@ Text::Text() {
 	setBehavior(new Fill());
 	setBackground(glm::vec4(0, 0, 0, 0));
 	text_color = glm::vec4(0, 0, 0, 1);
+
+	vertexes.push_back(glm::vec3(-1, -1, 0));
+	vertexes.push_back(glm::vec3(1, -1, 0));
+	vertexes.push_back(glm::vec3(1, 1, 0));
+	vertexes.push_back(glm::vec3(-1, 1, 0));
+
+
+	static glm::vec2 uvs[] = {
+		glm::vec2(0, 0),
+		glm::vec2(1, 0),
+		glm::vec2(1, 1),
+		glm::vec2(0, 1)
+	};
+
+	vertex_buffer.send(vertexes);
+	uv_buffer.send(uvs, 4);
+
+	shader->setAttribute(vertex_buffer, 0, 3);
+	shader->setAttribute(uv_buffer, 1, 2);
 }
 
 Text::Text(const std::string &txt) {
@@ -36,8 +55,8 @@ Text::~Text() {
 	delete ft;
 }
 
-void	Text::draw() {
-	Surface::draw();
+void	Text::draw(Drawer &drawer) {
+	Surface::draw(drawer);
 	Bound bound = getSurface();
 	FT_Set_Pixel_Sizes(face, 0, bound.size.y);
 	for (auto c : text) {
@@ -47,16 +66,23 @@ void	Text::draw() {
 		}
 		int bottom = bound.size.y - face->glyph->bitmap_top;
 		int sizey = face->glyph->bitmap.rows;
-		int posy = bound.pos.y + face->glyph->bitmap_top - sizey;
+		int posy = bound.pos.y - face->glyph->bitmap_top + bound.size.y * 0.75;
 		int posx = bound.pos.x + face->glyph->bitmap_left;
-		int maxx = face->glyph->bitmap.width;
-		glViewport(posx, posy + bound.size.y * 0.25, maxx, sizey);
+		int sizex = face->glyph->bitmap.width;
+		vertexes[0] = glm::vec3( posx / drawer.getSize().x * 2.0 - 1,           posy / drawer.getSize().y * 2.0 - 1, 0);
+		vertexes[1] = glm::vec3((posx + sizex) / drawer.getSize().x * 2.0 - 1,  posy / drawer.getSize().y * 2.0 - 1, 0);
+		vertexes[2] = glm::vec3((posx + sizex) / drawer.getSize().x * 2.0 - 1,  (posy + sizey) / drawer.getSize().y * 2.0 - 1, 0);
+		vertexes[3] = glm::vec3( posx / drawer.getSize().x * 2.0 - 1,           (posy + sizey) / drawer.getSize().y * 2.0 - 1, 0);
+		vertex_buffer.send(vertexes);
+
+		shader->useProgram();
+		shader->setAttribute(vertex_buffer, 0, 3);
+		//drawer.viewPort({ posx, posy + bound.size.y * 0.25 }, { maxx, sizey });
 		texture->size.x = face->glyph->bitmap.width;
 		texture->size.y = face->glyph->bitmap.rows;
 		texture->data(face->glyph->bitmap.buffer);
 
-		shader->useProgram();
-		mesh->bindToShader(shader);
+		//mesh->bindToShader(shader);
 		texture->activate(0);
 		shader->setUniformValue(text_color, "color");
 		shader->setUniformValue(0, "font");

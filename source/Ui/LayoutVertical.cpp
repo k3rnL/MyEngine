@@ -19,6 +19,7 @@ void	LayoutVertical::setBound(const Bound &bound) {
 	glm::vec2 position(0, 0);
 	for (auto c : childs) {
 		c->setBound(frame);
+		//c->bound;
 		Bound f = c->getSurface();
 		frame.pos.y += f.size.y;
 		frame.size.y -= f.size.y;

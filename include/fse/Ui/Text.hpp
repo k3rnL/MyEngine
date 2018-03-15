@@ -32,13 +32,16 @@ namespace fse {
 			void				setFont(const std::string &file);
 			void				setTextColor(const glm::vec4 &color);
 
-			virtual void    draw();
+			virtual void		draw(Drawer &drawer);
 
 		private:
 			static FT_Library					*ft;
 			FT_Face								face;
 			std::shared_ptr<gl_item::Texture>	texture;
 			static std::shared_ptr<gl_item::Shader>	shader;
+			gl_item::Buffer<glm::vec3>				vertex_buffer;
+			gl_item::Buffer<glm::vec2>				uv_buffer;
+			std::vector<glm::vec3>					vertexes;
 			std::string							text;
 			glm::vec4							text_color;
         };
