@@ -15,6 +15,8 @@
 #include "fse/GLItem/Shader.hpp"
 #include "fse/GLItem/Mesh.hpp"
 
+#include "fse/Ui/Drawer.hpp"
+
 namespace fse {
     namespace ui {
 
@@ -37,7 +39,7 @@ namespace fse {
 				glm::vec2 size;
 			};
 
-			virtual void    draw();
+			virtual void    draw(Drawer &drawer);
 			virtual void	setBound(const Bound &bound);
 
 			class Behavior {
@@ -96,6 +98,24 @@ namespace fse {
 				}
 
 				const glm::vec2		mPos;
+			};
+
+			class Margin : public Behavior {
+			public:
+				virtual ~Margin() {}
+				Margin(int top, int left, int bottom, int right) : mMargin(top, left, bottom, right) {}
+				Margin(int all) : mMargin(all) {}
+
+				virtual Bound	transform(Bound &parent_bound) {
+					Bound b = parent_bound;
+					b.pos.x += mMargin.x;
+					b.pos.y += mMargin.y;
+					b.size.y -= mMargin.z + mMargin.x;
+					b.size.x -= mMargin.w + mMargin.y;
+					return (b);
+				}
+
+				const glm::vec4		mMargin;
 			};
 
 			template <class T>
