@@ -55,12 +55,16 @@ namespace fse {
 			}
 
             void    send(std::vector<T> &data) {
-				_size = (GLuint) (sizeof(T) * data.size());
+				send(data.data(), data.size());
+			}
+
+			void	send(T *data, size_t size) {
+				_size = (GLuint)(sizeof(T) * size);
 				bind();
 				glBufferData(_type,
-						     _size,
-							 data.data(),
-							 _draw);
+					_size,
+					data,
+					_draw);
 				unbind();
 			}
 
