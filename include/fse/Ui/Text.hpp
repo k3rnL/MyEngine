@@ -1,6 +1,6 @@
 /**
  * @Date:   2018-02-24T06:47:40+01:00
- * @Last modified time: 2018-03-12T21:21:58+01:00
+ * @Last modified time: 2018-03-15T18:57:07+01:00
  */
 
 #ifndef FSE_UI_TEXT_HPP
@@ -24,15 +24,15 @@ namespace fse {
 			Text(const std::string &txt);
 			virtual ~Text();
 
-			virtual void		setSize(const glm::vec2 &size);
+			virtual void		   setSize(const glm::vec2 &size);
 
-			void				setText(const std::string &text);
-			const std::string	&getText() const;
+			void				       setText(const std::string &text);
+			const std::string	 &getText() const;
 
-			void				setFont(const std::string &file);
-			void				setTextColor(const glm::vec4 &color);
+			void				       setFont(const std::string &file);
+			void				       setTextColor(const glm::vec4 &color);
 
-			virtual void		draw(Drawer &drawer);
+			virtual void		   draw(Drawer &drawer);
 
 		private:
 			static FT_Library					*ft;

@@ -1,6 +1,6 @@
 /**
  * @Date:   2018-02-24T06:47:52+01:00
- * @Last modified time: 2018-03-12T21:21:51+01:00
+ * @Last modified time: 2018-03-15T10:14:38+01:00
  */
 
 #include "fse/Ui/Text.hpp"
@@ -64,7 +64,7 @@ void	Text::draw(Drawer &drawer) {
 			//pos.x += size.y * 0.75;
 			continue;
 		}
-		int bottom = bound.size.y - face->glyph->bitmap_top;
+
 		int sizey = face->glyph->bitmap.rows;
 		int posy = bound.pos.y - face->glyph->bitmap_top + bound.size.y * 0.75;
 		int posx = bound.pos.x + face->glyph->bitmap_left;

@@ -1,6 +1,6 @@
 /**
  * @Date:   2018-02-23T00:46:33+01:00
- * @Last modified time: 2018-03-12T19:55:55+01:00
+ * @Last modified time: 2018-03-16T20:51:33+01:00
  */
 #ifndef FSE_UI_SURFACE_HPP
 #define FSE_UI_SURFACE_HPP
@@ -32,6 +32,9 @@ namespace fse {
 			virtual void	onClick(int x, int y);
 
 			virtual void	addSurface(Surface *surface);
+
+      std::shared_ptr<gl_item::Shader>  getShader() { return shader; }
+      void                              setShader(std::shared_ptr<gl_item::Shader> shader) { this->shader = shader; }
 
 			class Bound {
 			public:
@@ -131,8 +134,8 @@ namespace fse {
 			Bound	getSurface();
 
         protected:
-			static  std::shared_ptr<gl_item::Shader> 	shader;
-
+			static  std::shared_ptr<gl_item::Shader> 	default_shader;
+      std::shared_ptr<gl_item::Shader>          shader;
 			std::list<Surface *>						childs;
 			std::shared_ptr<gl_item::Mesh>				mesh;
 

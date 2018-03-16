@@ -1,18 +1,18 @@
 /**
  * @Date:   2018-02-23T01:01:21+01:00
- * @Last modified time: 2018-02-23T01:04:24+01:00
+ * @Last modified time: 2018-03-16T20:52:10+01:00
  */
 
 #include "fse/Ui/Surface.hpp"
 
 using namespace fse::ui;
 
-std::shared_ptr<fse::gl_item::Shader> Surface::shader = 0;
+std::shared_ptr<fse::gl_item::Shader> Surface::default_shader = 0;
 
 Surface::Surface() {
-	if (shader == 0)
-		shader = std::make_shared<fse::gl_item::Shader>("shader/ui.vert", "shader/ui.frag");
-
+	if (default_shader == 0)
+		default_shader = std::make_shared<fse::gl_item::Shader>("shader/ui.vert", "shader/ui.frag");
+	shader = default_shader;
 	mesh = std::make_shared<fse::gl_item::Mesh>();
 
 	mesh->addVertex(glm::vec3(-1, -1, 0));
