@@ -1,6 +1,6 @@
 /**
  * @Date:   2018-03-13T00:21:28+01:00
- * @Last modified time: 2018-03-13T00:22:07+01:00
+ * @Last modified time: 2018-03-16T21:08:21+01:00
  */
 
 #ifndef FSE_UI_DRAWER_HPP
@@ -13,7 +13,7 @@
 
 namespace fse {
     namespace ui {
-        
+
 		class FSE_API_EXPORT Drawer {
 		public:
 			Drawer(const glm::vec2 &size);
@@ -22,6 +22,9 @@ namespace fse {
 			void	viewPort(const glm::vec2 &pos, const glm::vec2 &size);
 
 			const glm::vec2		&getSize() { return size;  }
+
+      std::shared_ptr<gl_item::Shader>   getShader() { return shader; }
+      void  setShader(std::shared_ptr<gl_item::Shader> shader) { this->shader = shader; }
 
 		private:
 			std::shared_ptr<gl_item::Shader> 		shader;
