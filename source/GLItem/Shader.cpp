@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-23T01:44:16+02:00
- * @Last modified by:
- * @Last modified time: 2018-02-14T02:16:13+01:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2018-03-15T18:59:29+01:00
  */
 
  #include "fse/GLItem/Shader.hpp"
@@ -47,7 +47,7 @@
 	 GLuint		old_program = _programID;
 
 	 _attached_shader.clear();
-	 try 
+	 try
 	 {
 		 for (auto shader : old_shaders) {
 			 addShader(std::get<1>(shader.second), (ShaderType) shader.first);
@@ -120,6 +120,12 @@
  {
    GLuint id = glGetUniformLocation(_programID, name.c_str());
    glProgramUniformMatrix4fv(_programID, id, 1, GL_FALSE, &matrix[0][0]);
+ }
+
+ void                Shader::setUniformValue(const glm::vec2 &vec, const std::string &name)
+ {
+   GLuint id = glGetUniformLocation(_programID, name.c_str());
+   glProgramUniform2fv(_programID, id, 1, &vec[0]);
  }
 
  void                Shader::setUniformValue(const glm::vec3 &vec, const std::string &name)

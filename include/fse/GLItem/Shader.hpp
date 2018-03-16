@@ -1,8 +1,8 @@
 /**
  * @Author: danielb
  * @Date:   2017-07-23T01:38:03+02:00
- * @Last modified by:
- * @Last modified time: 2018-02-14T02:15:56+01:00
+ * @Last modified by:   daniel_b
+ * @Last modified time: 2018-03-15T18:57:28+01:00
  */
 
 #ifndef SHADER_HPP
@@ -44,7 +44,8 @@ namespace fse {
 
             void    setUniformValue(const glm::mat4 &matrix, const std::string &name);
 			void    setUniformValue(const glm::vec4 &vec, const std::string &name);
-			void    setUniformValue(const glm::vec3 &vec, const std::string &name);
+      void    setUniformValue(const glm::vec3 &vec, const std::string &name);
+			void    setUniformValue(const glm::vec2 &vec, const std::string &name);
             void    setUniformValue(const int value, const std::string &name);
             void    setUniformValue(const unsigned int value, const std::string &name);
 			void    setUniformValue(const float value, const std::string &name);
