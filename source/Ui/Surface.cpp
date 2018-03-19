@@ -26,33 +26,38 @@ Surface::Surface() {
 	mesh->finish();
 }
 
-Surface::Bound	Surface::getSurface() {
-	Bound new_bound = bound;
+void	Surface::update() {
+	bound = parent_bound;
+	frame = bound;
 	for (auto behavior : behaviors) {
-		new_bound = behavior.second->transform(new_bound);
+		behavior.second->transform(bound, frame);
 	}
-	return (new_bound);
 }
 
 void	Surface::addSurface(Surface *surface) {
 	childs.push_back(surface);
-	surface->setBound(getSurface());
+	surface->setBoundary(getFrame());
 }
 
-void	Surface::setBound(const Bound &b) {
-	bound = b;
-	Bound surface = getSurface();
+Surface::Bound	&Surface::getFrame() {
+	return (frame);
+}
+
+Surface::Bound	&Surface::getBound() {
+	return bound;
+}
+
+void	Surface::setBoundary(const Bound &b) {
+	parent_bound = b;
+	update();
 	for (auto s : childs) {
-		s->setBound(surface);
+		s->setBoundary(frame);
 	}
 }
 
 void	Surface::onClick(int x, int y) {
 	for (auto c : childs) {
-		const Bound surface = c->getSurface();
-			if (surface.pos.x < x && surface.pos.x + surface.size.x > x)
-			if (surface.pos.y < y && surface.pos.y + surface.size.y > y)
-				c->onClick(x, y);
+		c->onClick(x, y);
 	}
 }
 
@@ -61,9 +66,8 @@ void    Surface::setBackground(const glm::vec4 &color) {
 }
 
 void    Surface::draw(Drawer &drawer) {
-	Bound bound = getSurface();
 
-	drawer.drawRect(bound.pos, bound.size, color);
+	drawer.drawRect(frame.pos, frame.size, color);
 	for (auto c : childs) {
 		c->draw(drawer);
 	}

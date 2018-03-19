@@ -43,18 +43,18 @@ namespace fse {
 			};
 
 			virtual void    draw(Drawer &drawer);
-			virtual void	setBound(const Bound &bound);
 
 			class Behavior {
 			public:
 				virtual ~Behavior() {}
-				virtual Bound	transform(Bound &parent_bound) = 0;
+				virtual void	transform(Bound &parent_bound, Bound &frame) = 0;
 			};
 
 			class Fill : public Behavior {
 			public:
-				virtual Bound	transform(Bound &parent_bound) {
-					return (parent_bound);
+				virtual void	transform(Bound &parent_bound, Bound &frame) {
+					frame.pos = parent_bound.pos;
+					frame.size = parent_bound.size;
 				}
 			};
 
@@ -63,13 +63,13 @@ namespace fse {
 				virtual ~FitTo() {}
 				FitTo(const glm::vec2 &size) : mSize(size) {}
 
-				virtual Bound	transform(Bound &parent_bound) {
-					Bound b = parent_bound;
+				virtual void	transform(Bound &parent_bound, Bound &frame) {
+					Bound &b = parent_bound;
 					if (mSize.x > 0)
 						b.size.x = mSize.x;
 					if (mSize.y > 0)
 						b.size.y = mSize.y;
-					return (b);
+					frame = b;
 				}
 
 				const glm::vec2		mSize;
@@ -80,10 +80,8 @@ namespace fse {
 				virtual ~RelativePosition() {}
 				RelativePosition(const glm::vec2 &position) : mPos(position) {}
 
-				virtual Bound	transform(Bound &parent_bound) {
-					Bound b = parent_bound;
-					b.pos += mPos;
-					return (b);
+				virtual void	transform(Bound &parent_bound, Bound &frame) {
+					frame.pos += mPos;
 				}
 
 				const glm::vec2		mPos;
@@ -94,10 +92,8 @@ namespace fse {
 				virtual ~AbsolutePosition() {}
 				AbsolutePosition(const glm::vec2 &position) : mPos(position) {}
 
-				virtual Bound	transform(Bound &parent_bound) {
-					Bound b = parent_bound;
-					b.pos = mPos;
-					return (b);
+				virtual void	transform(Bound &parent_bound, Bound &frame) {
+					parent_bound.pos = mPos;
 				}
 
 				const glm::vec2		mPos;
@@ -109,13 +105,12 @@ namespace fse {
 				Margin(int top, int left, int bottom, int right) : mMargin(top, left, bottom, right) {}
 				Margin(int all) : mMargin(all) {}
 
-				virtual Bound	transform(Bound &parent_bound) {
-					Bound b = parent_bound;
+				virtual void	transform(Bound &parent_bound, Bound &frame) {
+					Bound &b = frame;
 					b.pos.x += mMargin.x;
 					b.pos.y += mMargin.y;
 					b.size.y -= mMargin.z + mMargin.x;
 					b.size.x -= mMargin.w + mMargin.y;
-					return (b);
 				}
 
 				const glm::vec4		mMargin;
@@ -131,7 +126,11 @@ namespace fse {
 				behaviors[typeid (T)] = behavior;
 			}
 
-			Bound	getSurface();
+			virtual Bound	&getFrame();
+			virtual Bound	&getBound();
+			virtual void	setBoundary(const Bound &bound);
+
+			virtual void update();
 
         protected:
 			static  std::shared_ptr<gl_item::Shader> 	default_shader;
@@ -142,6 +141,8 @@ namespace fse {
             glm::vec4       color;
 
 			Bound			bound;
+			Bound			parent_bound;
+			Bound			frame;
 
 			std::map < std::type_index, Behavior * > behaviors;
 
