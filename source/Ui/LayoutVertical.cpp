@@ -11,16 +11,16 @@ LayoutVertical::~LayoutVertical() {
 
 }
 
-void	LayoutVertical::setBound(const Bound &bound) {
-	this->bound = bound;
+void	LayoutVertical::setBoundary(const Bound &bound) {
+	Surface::setBoundary(bound);
 	if (!childs.size())
 		return;
-	Bound frame = getSurface();
+	Bound frame = getFrame();
 	glm::vec2 position(0, 0);
 	for (auto c : childs) {
-		c->setBound(frame);
+		c->setBoundary(frame);
 		//c->bound;
-		Bound f = c->getSurface();
+		Bound f = c->getBound();
 		frame.pos.y += f.size.y;
 		frame.size.y -= f.size.y;
 	}

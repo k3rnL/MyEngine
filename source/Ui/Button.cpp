@@ -12,7 +12,10 @@ Button::~Button() {
 }
 
 void	Button::onClick(int x, int y) {
-	onClickCallback(x, y);
+	const Bound &surface = getFrame();
+	if (surface.pos.x < x && surface.pos.x + surface.size.x > x)
+		if (surface.pos.y < y && surface.pos.y + surface.size.y > y)
+			onClickCallback(x, y);
 }
 
 void			Button::setOnMouseClick(std::function<void(int, int)> fct) {

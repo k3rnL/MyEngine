@@ -11,15 +11,15 @@ LayoutHorizontal::~LayoutHorizontal() {
 
 }
 
-void	LayoutHorizontal::setBound(const Bound &bound) {
-	this->bound = bound;
+void	LayoutHorizontal::setBoundary(const Bound &bound) {
+	Surface::setBoundary(bound);
 	if (!childs.size())
 		return;
-	Bound frame = getSurface();
+	Bound frame = getFrame();
 	glm::vec2 position(0, 0);
 	for (auto c : childs) {
-		c->setBound(frame);
-		Bound f = c->getSurface();
+		c->setBoundary(frame);
+		Bound f = c->getBound();
 		frame.pos.x += f.size.x;
 		frame.size.x -= f.size.x;
 	}

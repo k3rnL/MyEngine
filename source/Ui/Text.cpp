@@ -57,7 +57,7 @@ Text::~Text() {
 
 void	Text::draw(Drawer &drawer) {
 	Surface::draw(drawer);
-	Bound bound = getSurface();
+	Bound bound = getFrame();
 	FT_Set_Pixel_Sizes(face, 0, bound.size.y);
 	for (auto c : text) {
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {

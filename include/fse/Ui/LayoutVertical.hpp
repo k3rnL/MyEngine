@@ -16,7 +16,7 @@ namespace fse {
 		public:
 			virtual ~LayoutVertical();
 
-			virtual void	setBound(const Bound &bound);
+			virtual void	setBoundary(const Bound &bound);
         };
 
     } /* ui */
