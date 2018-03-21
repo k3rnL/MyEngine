@@ -30,6 +30,7 @@ namespace fse {
 
 
 			virtual void	onClick(int x, int y);
+			virtual void	onClickReleased(int x, int y);
 
 			virtual void	addSurface(Surface *surface);
 

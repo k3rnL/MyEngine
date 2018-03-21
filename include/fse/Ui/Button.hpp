@@ -17,13 +17,24 @@ namespace fse {
 		class FSE_API_EXPORT Button : public Surface
 		{
 		public:
+			Button();
 			virtual ~Button();
 
 			virtual void	onClick(int x, int y);
+			virtual void	onClickReleased(int x, int y);
  
+			bool			isPressed();
+
 			void			setOnMouseClick(std::function<void(int, int)> function);
+			void			setOnMouseClickReleased(std::function<void(int, int)> function);
+
+			virtual void    draw(Drawer &drawer);
+
 		private:
+			bool							mPressed;
+
 			std::function<void(int, int)>	onClickCallback;
+			std::function<void(int, int)>	onClickReleasedCallback;
 		};
 
     } /* ui */

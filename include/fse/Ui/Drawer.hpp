@@ -19,6 +19,7 @@ namespace fse {
 			Drawer(const glm::vec2 &size);
 
 			void	drawRect(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color);
+			void	drawRoundedRect(const glm::vec2 &pos, const glm::vec2 &size, const int corner, const glm::vec4 &color);
 			void	viewPort(const glm::vec2 &pos, const glm::vec2 &size);
 
 			const glm::vec2		&getSize() { return size;  }
@@ -27,7 +28,10 @@ namespace fse {
       void  setShader(std::shared_ptr<gl_item::Shader> shader) { this->shader = shader; }
 
 		private:
+			gl_item::Shader::AttributeHolder		attribute;
 			std::shared_ptr<gl_item::Shader> 		shader;
+
+
 			gl_item::Buffer<glm::vec3>				vertex_buffer;
 			gl_item::Buffer<glm::vec2>				uv_buffer;
 			std::vector<glm::vec3>					vertexes;

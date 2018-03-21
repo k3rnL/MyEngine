@@ -39,6 +39,7 @@ public:
 	void				setResizable(bool resize);
 	void				captureMouse(bool capture);
 	void				setOnMouseClick(std::function<void(int x, int y)> callback);
+	void				setOnMouseClickReleased(std::function<void(int x, int y)> callback);
 
     void                close();
 	bool				isOpen();
@@ -46,6 +47,7 @@ public:
 
 private:
 	std::function<void(int, int)>	onClick;
+	std::function<void(int, int)>	onClickReleased;
 	static std::map<Uint32, std::list<SDL_Event>>	event_stack;
     SDL_Window         *_window;
     SDL_GLContext       _context;

@@ -61,6 +61,12 @@ void	Surface::onClick(int x, int y) {
 	}
 }
 
+void	Surface::onClickReleased(int x, int y) {
+	for (auto c : childs) {
+		c->onClickReleased(x, y);
+	}
+}
+
 void    Surface::setBackground(const glm::vec4 &color) {
     this->color = color;
 }

@@ -50,6 +50,10 @@ void			Window::setOnMouseClick(std::function<void(int, int)> fct) {
 	onClick = fct;
 }
 
+void			Window::setOnMouseClickReleased(std::function<void(int, int)> fct) {
+	onClickReleased = fct;
+}
+
 void			Window::setResizable(bool r) {
 	SDL_SetWindowResizable(_window, r ? SDL_TRUE : SDL_FALSE);
 }
@@ -73,9 +77,14 @@ bool            Window::pollEvent(SDL_Event &event)
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
 		if (event.button.button == SDL_BUTTON_LEFT)
 			if (onClick)
-				onClick(event.motion.x, _height - event.motion.y);
+				onClick(event.motion.x, event.motion.y);
 	}
-    return (true);
+	if (event.type == SDL_MOUSEBUTTONUP) {
+		if (event.button.button == SDL_BUTTON_LEFT)
+			if (onClickReleased)
+				onClickReleased(event.motion.x, event.motion.y);
+	}
+	return (true);
 }
 
 void            Window::flipScreen()

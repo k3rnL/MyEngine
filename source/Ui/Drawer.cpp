@@ -29,6 +29,10 @@ Drawer::Drawer(const glm::vec2 &size) :
 	vertex_buffer.send(vertexes);
 	uv_buffer.send(uvs, 4);
 
+	attribute.addUniform("color", glm::vec4(0));
+	attribute.addUniform("screen_size", size);
+	attribute.addUniform("dimension", size);
+	attribute.addUniform("corner", 0);
 }
 
 void	Drawer::drawRect(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color) {
@@ -38,8 +42,28 @@ void	Drawer::drawRect(const glm::vec2 &pos, const glm::vec2 &size, const glm::ve
 	vertexes[3] = glm::vec3(pos.x / this->size.x * 2.0 - 1, (pos.y + size.y) / this->size.y * 2.0 - 1, 0);
 	vertex_buffer.send(vertexes);
 	shader->useProgram();
+	attribute.apply(shader);
 	shader->setUniformValue(color, "color");
 	shader->setUniformValue(size, "dimension");
+	shader->setAttribute(vertex_buffer, 0, 3);
+	shader->setAttribute(uv_buffer, 1, 2);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
+void	Drawer::drawRoundedRect(const glm::vec2 &pos,
+								const glm::vec2 &size, 
+								const int corner,
+								const glm::vec4 &color) {
+	vertexes[0] = glm::vec3(pos.x / this->size.x * 2.0 - 1, pos.y / this->size.y * 2.0 - 1, 0);
+	vertexes[1] = glm::vec3((pos.x + size.x) / this->size.x * 2.0 - 1, pos.y / this->size.y * 2.0 - 1, 0);
+	vertexes[2] = glm::vec3((pos.x + size.x) / this->size.x * 2.0 - 1, (pos.y + size.y) / this->size.y * 2.0 - 1, 0);
+	vertexes[3] = glm::vec3(pos.x / this->size.x * 2.0 - 1, (pos.y + size.y) / this->size.y * 2.0 - 1, 0);
+	vertex_buffer.send(vertexes);
+	shader->useProgram();
+	attribute.apply(shader);
+	shader->setUniformValue(color, "color");
+	shader->setUniformValue(size, "dimension");
+	shader->setUniformValue(corner, "corner");
 	shader->setAttribute(vertex_buffer, 0, 3);
 	shader->setAttribute(uv_buffer, 1, 2);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);

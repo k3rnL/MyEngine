@@ -34,6 +34,8 @@ namespace fse {
 
 			virtual void		   draw(Drawer &drawer);
 
+			void					setCentered(bool centered);
+
 		private:
 			static FT_Library					*ft;
 			FT_Face								face;
@@ -44,6 +46,11 @@ namespace fse {
 			std::vector<glm::vec3>					vertexes;
 			std::string							text;
 			glm::vec4							text_color;
+
+			bool	mCentered;
+
+			int		text_size;
+			void	computeSize();
         };
 
     } /* ui */

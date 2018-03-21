@@ -41,6 +41,11 @@ Text::Text() {
 
 	shader->setAttribute(vertex_buffer, 0, 3);
 	shader->setAttribute(uv_buffer, 1, 2);
+
+	setFont("Font/Roboto-Regular.ttf");
+	text_size = 0;
+
+	mCentered = false;
 }
 
 Text::Text(const std::string &txt) {
@@ -55,15 +60,31 @@ Text::~Text() {
 	delete ft;
 }
 
+void	Text::computeSize() {
+	int x = 0;
+	for (auto c : text) {
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+			continue;
+		}
+		x += face->glyph->advance.x >> 6;
+	}
+	text_size = x;
+}
+
 void	Text::draw(Drawer &drawer) {
 	Surface::draw(drawer);
 	Bound bound = getFrame();
+	computeSize();
+	if (mCentered && bound.size.x > text_size)
+		bound.pos.x += (bound.size.x - text_size) / 2;
 	FT_Set_Pixel_Sizes(face, 0, bound.size.y);
 	for (auto c : text) {
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 			//pos.x += size.y * 0.75;
 			continue;
 		}
+		if (bound.pos.x + (face->glyph->advance.x >> 6) > bound.pos.x + text_size)
+			return;
 
 		int sizey = face->glyph->bitmap.rows;
 		int posy = bound.pos.y - face->glyph->bitmap_top + bound.size.y * 0.75;
@@ -111,4 +132,8 @@ void	Text::setFont(const std::string &file) {
 void	Text::setSize(const glm::vec2 &size) {
 	setBehavior(new FitTo(glm::vec2(0, size.y)));
 	FT_Set_Pixel_Sizes(face, 0, size.y);
+}
+
+void	Text::setCentered(bool c) {
+	mCentered = c;
 }
