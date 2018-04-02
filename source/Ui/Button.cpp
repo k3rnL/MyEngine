@@ -44,9 +44,9 @@ void			Button::setOnMouseClickReleased(std::function<void(int, int)> fct) {
 void    Button::draw(Drawer &drawer) {
 
 	if (!mPressed)
-		drawer.drawRoundedRect(frame.pos, frame.size, getFrame().size.y/2, color);
+		drawer.drawRoundedRectWithBorder(frame.pos, frame.size, getFrame().size.y/2, 2, color, color * glm::vec4(0.25, 0.25, 0.25, 1));
 	else
-		drawer.drawRoundedRect(frame.pos, frame.size, getFrame().size.y / 2, color * glm::vec4(0.85,0.85,0.85,1));
+		drawer.drawRoundedRectWithBorder(frame.pos, frame.size, getFrame().size.y / 2, 2, color * glm::vec4(0.85, 0.85, 0.85, 1), color * glm::vec4(0.25, 0.25, 0.25, 1));
 	for (auto c : childs) {
 		c->draw(drawer);
 	}

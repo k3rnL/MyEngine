@@ -135,7 +135,7 @@ namespace fse {
 
         protected:
 			static  std::shared_ptr<gl_item::Shader> 	default_shader;
-      std::shared_ptr<gl_item::Shader>          shader;
+			std::shared_ptr<gl_item::Shader>          shader;
 			std::list<Surface *>						childs;
 			std::shared_ptr<gl_item::Mesh>				mesh;
 
