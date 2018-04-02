@@ -20,6 +20,7 @@ namespace fse {
 
 			void	drawRect(const glm::vec2 &pos, const glm::vec2 &size, const glm::vec4 &color);
 			void	drawRoundedRect(const glm::vec2 &pos, const glm::vec2 &size, const int corner, const glm::vec4 &color);
+			void	drawRoundedRectWithBorder(const glm::vec2 &pos, const glm::vec2 &size, const int corner, const int border, const glm::vec4 &color, const glm::vec4 &border_color);
 			void	viewPort(const glm::vec2 &pos, const glm::vec2 &size);
 
 			const glm::vec2		&getSize() { return size;  }
