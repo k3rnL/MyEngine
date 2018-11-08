@@ -3,4 +3,4 @@
 
 
 
-cmake .. -DSDL2_PATH="C:\Users\k3rnL\Downloads\SDL2-2.0.7" -DASSIMP_ROOT_DIR="C:\Program Files\Assimp" -DGLM_ROOT_DIR="C:\Users\k3rnL\Downloads\glm-0.9.9-a2" -DGLEW_LOCATION="C:\Users\k3rnL\Downloads\glew-2.1.0" -DBULLET_ROOT="C:\Users\k3rnL\Downloads\bullet-2.82-r2704\bullet-2.82-r2704" -G "Visual Studio 15 2017 Win64"
+cmake .. -DSDL2_PATH="C:\Users\Erwan\Documents\Workspace\Computer Graphics\Library\SDL2-2.0.8" -DASSIMP_ROOT_DIR="C:\Users\Erwan\Documents\Workspace\Computer Graphics\Library\assimp-3.3.1" -DGLM_ROOT_DIR="C:\Users\Erwan\Documents\Workspace\Computer Graphics\Library\glm" -DGLEW_LOCATION="C:\Users\Erwan\Documents\Workspace\Computer Graphics\Library\glew-2.1.0" -DBULLET_ROOT="C:\Users\Erwan\Documents\Workspace\Computer Graphics\Computer Graphics\Library\bullet3-2.87" -G "Visual Studio 15 2017 Win64"
